@@ -220,81 +220,40 @@ const toTitleCase = function (str) {
   });
   return result.join("");
 };
-//its not case sensitive - it has to be - DO IT!!!!
-const createRelevanceScores = function (searchKeywords, rawDataBase) {
-  rawDataBase.forEach((job) => {
-    job.relevancePoints = 0;
-  });
-  if (searchKeywords.length === 0 || rawDataBase.length === 0) return;
-  const points = {
-    title: 10_000,
-    experience: 2000,
-    location: 2000,
-    requirements: 500,
-    niceToHave: 350,
-    responsabilities: 500,
-    salary: 0,
-  };
-  searchKeywords.forEach((keyword) => {
-    const keywordVariations = [
-      keyword,
-      keyword[0].toUpperCase() + keyword.slice(1),
-      keyword.toUpperCase(),
-    ];
-    const regex = new RegExp(keywordVariations.join("|"));
-    rawDataBase.forEach((el) => {
-      let pointsTotal = 0;
-      for (let prop in el) {
-        if (typeof el[prop] === "string") {
-          if (el[prop].match(regex)) {
-            pointsTotal += points[prop];
-          }
-        } else {
-          const stringElement = String(el[prop]);
-          if (stringElement.match(regex)) {
-            pointsTotal += points[prop];
-          }
-        }
-      }
-      el.relevancePoints += pointsTotal;
-    });
-  });
-};
 
-const displayJobResults = function (jobsArr) {
-  const searchResultsContainer = document.querySelector(".search-results");
-  searchResultsContainer.innerHTML = "";
-  jobsArr.forEach((job) => {
-    let html = `
-    <div data-jobid = ${job.ID} data-relevancescore = ${
-      job.relevancePoints
-    } class="search-result">
-    <img
-    src="img/favicon.png"
-    class="result-omnifood-logo"
-    alt="omnifood logo"
-    />
-    <div class="result-overview">
-    <p class="overview-date-posted">${job.datePosted}</p>
-    <p class="overview-job-title">${toTitleCase(job.title)}</p>
-    <p class="overview-salary">${job.salary.slice(
-      0,
-      job.salary.indexOf("k") + 1
-    )}</p>
-          <p class="overview-location">${toTitleCase(job.location)}</p>
-          </div>
-          <div class="result-buttons">
-          <div class="save-job">
-          <ion-icon name="heart-outline"></ion-icon>
-          <p>Save Job</p>
-          </div>
-          <button class="quick-apply">Quick apply</button>
-          </div>
-          </div>
-          `;
-    searchResultsContainer.insertAdjacentHTML("afterbegin", html);
-  });
+//preparing the data for display
+const prepareData = function () {
+  const randomInt = function (min, max) {
+    const correctedMIn = min - 1;
+    return Math.floor(Math.random() * (max - correctedMIn) + min);
+  };
+  const generateDate = function () {
+    let newDate = new Date();
+    newDate.setDate(randomInt(1, 29));
+    newDate.setMonth(newDate.getMonth() - 1);
+    let options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return Intl.DateTimeFormat("default", options)
+      .format(newDate)
+      .replace(",", "");
+  };
+
+  //add a ID for each job
+  const addDate = function (location) {
+    location.forEach((el) => (el.datePosted = generateDate()));
+  };
+  addDate(database);
+  const createID = function (jobsArr) {
+    jobsArr.forEach((el) => {
+      el.ID = randomInt(10_000, 99_999);
+    });
+  };
+  createID(database);
 };
+prepareData();
 
 const createSearchCriteria = function () {
   const firstPage = document.querySelector(".section-first-interaction");
@@ -377,12 +336,81 @@ const filterDatabase = function (searchCriteriaObj) {
   });
   return allCriteriaFilteredDatabase;
 };
-const showMainPage = function () {
-  const firstFrame = document.querySelector(".section-first-interaction");
-  const resultsSection = document.querySelector(".section-main-content");
-  firstFrame.classList.add("hidden");
-  resultsSection.classList.remove("hidden");
+const createRelevanceScores = function (searchKeywords, rawDataBase) {
+  rawDataBase.forEach((job) => {
+    job.relevancePoints = 0;
+  });
+  if (searchKeywords.length === 0 || rawDataBase.length === 0) return;
+  const points = {
+    title: 10_000,
+    experience: 2000,
+    location: 2000,
+    requirements: 500,
+    niceToHave: 350,
+    responsabilities: 500,
+    salary: 0,
+  };
+  searchKeywords.forEach((keyword) => {
+    const keywordVariations = [
+      keyword,
+      keyword[0].toUpperCase() + keyword.slice(1),
+      keyword.toUpperCase(),
+    ];
+    const regex = new RegExp(keywordVariations.join("|"));
+    rawDataBase.forEach((el) => {
+      let pointsTotal = 0;
+      for (let prop in el) {
+        if (typeof el[prop] === "string") {
+          if (el[prop].match(regex)) {
+            pointsTotal += points[prop];
+          }
+        } else {
+          const stringElement = String(el[prop]);
+          if (stringElement.match(regex)) {
+            pointsTotal += points[prop];
+          }
+        }
+      }
+      el.relevancePoints += pointsTotal;
+    });
+  });
 };
+
+const displayJobResults = function (jobsArr) {
+  const searchResultsContainer = document.querySelector(".search-results");
+  searchResultsContainer.innerHTML = "";
+  jobsArr.forEach((job) => {
+    let html = `
+    <div data-jobid = ${job.ID} data-relevancescore = ${
+      job.relevancePoints
+    } class="search-result">
+    <img
+    src="img/favicon.png"
+    class="result-omnifood-logo"
+    alt="omnifood logo"
+    />
+    <div class="result-overview">
+    <p class="overview-date-posted">${job.datePosted}</p>
+    <p class="overview-job-title">${toTitleCase(job.title)}</p>
+    <p class="overview-salary">${job.salary.slice(
+      0,
+      job.salary.indexOf("k") + 1
+    )}</p>
+          <p class="overview-location">${toTitleCase(job.location)}</p>
+          </div>
+          <div class="result-buttons">
+          <div class="save-job">
+          <ion-icon name="heart-outline"></ion-icon>
+          <p>Save Job</p>
+          </div>
+          <button class="quick-apply">Quick apply</button>
+          </div>
+          </div>
+          `;
+    searchResultsContainer.insertAdjacentHTML("afterbegin", html);
+  });
+};
+
 const syncSearchInputField = function () {
   const firstPageSearchField = document.querySelector(
     ".first-interaction-search-field"
@@ -390,6 +418,7 @@ const syncSearchInputField = function () {
   const mainSearchField = document.querySelector(".main-search-field");
   mainSearchField.value = firstPageSearchField.value;
 };
+
 const jobSearch = function () {
   const searchCriteria = createSearchCriteria();
   const resultRawData = filterDatabase(searchCriteria);
@@ -402,45 +431,49 @@ const jobSearch = function () {
   syncSearchInputField();
 };
 
-//preparing the data for display
-const prepareData = function () {
-  const randomInt = function (min, max) {
-    const correctedMIn = min - 1;
-    return Math.floor(Math.random() * (max - correctedMIn) + min);
-  };
-  const generateDate = function () {
-    let newDate = new Date();
-    newDate.setDate(randomInt(1, 29));
-    newDate.setMonth(newDate.getMonth() - 1);
-    let options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return Intl.DateTimeFormat("default", options)
-      .format(newDate)
-      .replace(",", "");
-  };
-
-  //add a ID for each job
-  const addDate = function (location) {
-    location.forEach((el) => (el.datePosted = generateDate()));
-  };
-  addDate(database);
-  const createID = function (jobsArr) {
-    jobsArr.forEach((el) => {
-      el.ID = randomInt(10_000, 99_999);
-    });
-  };
-  createID(database);
+const showMainPage = function () {
+  const firstFrame = document.querySelector(".section-first-interaction");
+  const resultsSection = document.querySelector(".section-main-content");
+  firstFrame.classList.add("hidden");
+  resultsSection.classList.remove("hidden");
 };
-prepareData();
+
 // displayJobResults(database);
 const firstPageSearch = function () {
   const searchBtn = document.querySelector(".btn-search");
   searchBtn.addEventListener("click", jobSearch);
 };
 firstPageSearch();
+
+const sortResults = function () {
+  const resultsContainer = document.querySelector(".search-results");
+  const results = Array.from(document.querySelectorAll(".search-result"));
+  console.log(results);
+  const sortByDate = function (a, b) {
+    const aDate = new Date(a.childNodes[3].childNodes[1].innerText);
+    const bDate = new Date(b.childNodes[3].childNodes[1].innerText);
+    return bDate - aDate;
+  };
+  const sortBySalary = function (a, b) {
+    const aFullSalary = a.childNodes[3].childNodes[5].innerText;
+    const bFullSalary = b.childNodes[3].childNodes[5].innerText;
+    const aExtracredSalary = Number(
+      aFullSalary.slice(2, aFullSalary.indexOf("-"))
+    );
+    const bExtractedSalary = Number(
+      bFullSalary.slice(2, bFullSalary.indexOf("-"))
+    );
+    console.log(aExtracredSalary);
+    return bExtractedSalary - aExtracredSalary;
+  };
+  const sortByRelevance = function (a, b) {
+    const aRelevance = a.dataset.relevancescore;
+    const bRelevance = b.dataset.relevancescore;
+    return bRelevance - aRelevance;
+  };
+  results.sort(sortByRelevance);
+  results.forEach((el) => resultsContainer.append(el));
+};
 
 const mainContentFunctionality = function () {
   //common vars
@@ -555,36 +588,6 @@ mainContentFunctionality();
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") jobSearch();
 });
-
-const sortResults = function () {
-  const resultsContainer = document.querySelector(".search-results");
-  const results = Array.from(document.querySelectorAll(".search-result"));
-  console.log(results);
-  const sortByDate = function (a, b) {
-    const aDate = new Date(a.childNodes[3].childNodes[1].innerText);
-    const bDate = new Date(b.childNodes[3].childNodes[1].innerText);
-    return bDate - aDate;
-  };
-  const sortBySalary = function (a, b) {
-    const aFullSalary = a.childNodes[3].childNodes[5].innerText;
-    const bFullSalary = b.childNodes[3].childNodes[5].innerText;
-    const aExtracredSalary = Number(
-      aFullSalary.slice(2, aFullSalary.indexOf("-"))
-    );
-    const bExtractedSalary = Number(
-      bFullSalary.slice(2, bFullSalary.indexOf("-"))
-    );
-    console.log(aExtracredSalary);
-    return bExtractedSalary - aExtracredSalary;
-  };
-  const sortByRelevance = function (a, b) {
-    const aRelevance = a.dataset.relevancescore;
-    const bRelevance = b.dataset.relevancescore;
-    return bRelevance - aRelevance;
-  };
-  results.sort(sortByRelevance);
-  results.forEach((el) => resultsContainer.append(el));
-};
 
 //create revelance score
 

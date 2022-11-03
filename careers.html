@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/favicon.png" />
+    <link rel="stylesheet" href="careers.css" />
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="careers-queries.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script defer src="careers.js"></script>
+    <title>Omnifood &mdash; Careers</title>
+  </head>
+  <body>
+    <header class="header">
+      <a href="#">
+        <img class="logo" alt="Omnifood logo" src="img/omnifood-logo.png" />
+      </a>
+
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li><a class="main-nav-link" href="#how">How it works</a></li>
+          <li><a class="main-nav-link" href="#meals">Meals</a></li>
+          <li>
+            <a class="main-nav-link" href="#testimonials">Testimonials</a>
+          </li>
+          <li><a class="main-nav-link" href="#pricing">Pricing</a></li>
+          <li><a class="main-nav-link nav-cta" href="#cta">Try for free</a></li>
+        </ul>
+      </nav>
+
+      <button class="btn-mobile-nav">
+        <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
+        <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
+      </button>
+    </header>
+
+    <section class="section-first-interaction">
+      <div class="first-interaction-container container">
+        <div class="first-interaction-search-panel">
+          <h1>Help people eat healthier</h1>
+          <p>Join our mission and let's grow together</p>
+          <input
+            type="text"
+            class="first-interaction-search-field"
+            placeholder="What job are you looking for..."
+          />
+          <button class="btn-search">Search</button>
+        </div>
+        <img class="first-interaction-img" src="people-working.jpg" />
+      </div>
+    </section>
+
+    <main class="section-main-content hidden">
+      <div class="search-panel">
+        <input
+          type="text"
+          class="main-search-field"
+          placeholder="Keywords..."
+        />
+        <ion-icon class="clean-search-field" name="close-outline"></ion-icon>
+        <button class="btn-search-main">Search</button>
+      </div>
+      <section class="main-body">
+        <div class="filters-and-results">
+          <div class="filters">
+            <div class="filters-overview">
+              <div class="filter-name">
+                <p>Filters</p>
+                <ion-icon name="chevron-up-outline"></ion-icon>
+              </div>
+              <div class="applied-filters">
+                <div class="applied-filter">
+                  <p>Software</p>
+                  <ion-icon
+                    class="clean-search-field"
+                    name="close-outline"
+                  ></ion-icon>
+                </div>
+              </div>
+              <button class="remove-filters">Remove filters</button>
+            </div>
+            <div class="city-filters filter-container">
+              <div class="filter-name">
+                <p>City</p>
+                <ion-icon name="chevron-up-outline"></ion-icon>
+              </div>
+              <ul class="filters-list">
+                <li class="individual-filter">
+                  <input type="checkbox" name="remote" id="location-remote" />
+                  <label for="location-remote">Remote</label>
+                </li>
+                <li class="individual-filter">
+                  <input
+                    type="checkbox"
+                    name="San-Francisco"
+                    id="location-San-Francisco"
+                  />
+                  <label for="location-San-Francisco">San Francisco</label>
+                </li>
+              </ul>
+            </div>
+            <div class="category-filters filter-container">
+              <div class="filter-name">
+                <p>Category</p>
+                <ion-icon name="chevron-up-outline"></ion-icon>
+              </div>
+              <ul class="filters-list">
+                <li class="individual-filter">
+                  <input
+                    type="checkbox"
+                    name="management"
+                    id="category-management"
+                  />
+                  <label for="category-management">Management</label>
+                </li>
+                <li class="individual-filter">
+                  <input
+                    type="checkbox"
+                    name="information-technology"
+                    id="category-information-technology"
+                  />
+                  <label for="category-information-technology"
+                    >Information Technology</label
+                  >
+                </li>
+                <li class="individual-filter">
+                  <input
+                    type="checkbox"
+                    name="human-resources"
+                    id="category-human-resources"
+                  />
+                  <label for="category-human-resources">Human Resources</label>
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="finance" id="category-finance" />
+                  <label for="category-finance">Finance</label>
+                </li>
+                <li class="individual-filter">
+                  <input
+                    type="checkbox"
+                    name="marketing"
+                    id="category-marketing"
+                  />
+                  <label for="category-marketing">Marketing</label>
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="sales" id="category-sales" />
+                  <label for="category-sales">Sales</label>
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="others" id="category-others" />
+                  <label for="category-others">Others</label>
+                </li>
+              </ul>
+            </div>
+            <div class="experience-filters filter-container">
+              <div class="filter-name">
+                <p>Experience</p>
+                <ion-icon name="chevron-up-outline"></ion-icon>
+              </div>
+              <ul class="filters-list">
+                <li class="individual-filter">
+                  <input type="checkbox" name="none" id="experience-none" />
+                  <label for="experience-none">No Experience</label>
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="entry" id="experience-entry" />
+                  <label for="experience-entry"
+                    >Entry-Level ( &lt; 2 years )</label
+                  >
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="mid" id="experience-mid" />
+                  <label for="experience-mid">Mid-Level ( 2-5 years )</label>
+                </li>
+                <li class="individual-filter">
+                  <input type="checkbox" name="senior" id="experience-senior" />
+                  <label for="experience-senior">Senior ( &gt; 5 years )</label>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="other-filters">
+            <div class="popular-filters">
+              <p>Popular filters :</p>
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-left"
+                name="chevron-back-outline"
+              ></ion-icon>
+              <div class="popular-filters-carousel">
+                <p>Remote</p>
+                <p>Information Technology</p>
+                <p>Entry-Level</p>
+                <p>Management</p>
+                <p>Human Resources</p>
+              </div>
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-left"
+                name="chevron-forward-outline"
+              ></ion-icon>
+            </div>
+            <p class="results-number"><strong>12</strong> results</p>
+            <div class="sort-results">
+              <button class="date">Date</button>
+              <button class="relevance">Relevance</button>
+              <button class="salary">Salary</button>
+              <button class="ascending-filter-arr-mobile">
+                <ion-icon name="chevron-down-outline"></ion-icon>
+              </button>
+
+              <button class="ascending">
+                Ascending
+                <ion-icon
+                  class="ascending-filter-arr"
+                  name="chevron-down-outline"
+                ></ion-icon>
+              </button>
+              <button class="descending">Descending</button>
+            </div>
+          </div>
+          <div class="search-results">
+            <!-- <div class="search-result">
+              <img
+                src="img/favicon.png"
+                class="result-omnifood-logo"
+                alt="omnifood logo"
+              />
+              <div class="result-overview">
+                <p class="overview-date-posted">12 October 2022</p>
+                <p class="overview-job-title">React Developer</p>
+                <p class="overview-salary">$ 80-120k</p>
+                <p class="overview-location">Remote</p>
+              </div>
+              <div class="result-buttons">
+                <div class="save-job">
+                  <ion-icon name="heart-outline"></ion-icon>
+                  <p>Save Job</p>
+                </div>
+                <button class="quick-apply">Quick apply</button>
+              </div>
+            </div>
+            <div class="search-result">
+              <img
+                src="img/favicon.png"
+                class="result-omnifood-logo"
+                alt="onmifood logo"
+              />
+              <div class="result-overview">
+                <p class="overview-date-posted">12 October 2022</p>
+                <p class="overview-job-title">React Developer</p>
+                <p class="overview-salary">$ 80-120k</p>
+                <p class="overview-location">Remote</p>
+              </div>
+              <div class="result-buttons">
+                <div class="save-job">
+                  <ion-icon name="heart-outline"></ion-icon>
+                  <p>Save Job</p>
+                </div>
+                <button class="quick-apply">Quick apply</button>
+              </div>
+            </div>
+            <div class="search-result">
+              <img
+                src="img/favicon.png"
+                class="result-omnifood-logo"
+                alt="onmifood logo"
+              />
+              <div class="result-overview">
+                <p class="overview-date-posted">12 October 2022</p>
+                <p class="overview-job-title">React Developer</p>
+                <p class="overview-salary">$ 80-120k</p>
+                <p class="overview-location">Remote</p>
+              </div>
+              <div class="result-buttons">
+                <div class="save-job">
+                  <ion-icon name="heart-outline"></ion-icon>
+                  <p>Save Job</p>
+                </div>
+                <button class="quick-apply">Quick apply</button>
+              </div>
+            </div>
+            <div class="search-result">
+              <img
+                src="img/favicon.png"
+                class="result-omnifood-logo"
+                alt="onmifood logo"
+              />
+              <div class="result-overview">
+                <p class="overview-date-posted">12 October 2022</p>
+                <p class="overview-job-title">React Developer</p>
+                <p class="overview-salary">$ 80-120k</p>
+                <p class="overview-location">Remote</p>
+              </div>
+              <div class="result-buttons">
+                <div class="save-job">
+                  <ion-icon name="heart-outline"></ion-icon>
+                  <p>Save Job</p>
+                </div>
+                <button class="quick-apply">Quick apply</button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="result-fully-displayed hidden">
+          <!-- <div class="result-summary">
+            <div class="date-posted-wrapper">
+              <p>Job full details</p>
+              <p>Posted on 12 October 2022</p>
+            </div>
+            <h1 class="full-screen-job-title">React Developer</h1>
+            <div class="full-screen-salary">
+              <ion-icon name="cash-outline"></ion-icon>
+              <p><strong>$ 80-120k</strong> / year</p>
+            </div>
+            <div class="full-screen-experience">
+              <ion-icon name="briefcase-outline"></ion-icon>
+              <p>Mid-Level ( 2-5 years )</p>
+            </div>
+            <div class="full-screen-location">
+              <ion-icon name="location-outline"></ion-icon>
+              <p>Remote</p>
+            </div>
+          </div> -->
+          <div class="result-full-details-container">
+            <div class="full-screen-nav-btns">
+              <div class="close-and-share-btns">
+                <ion-icon
+                  class="full-screen-close-btn"
+                  name="close-outline"
+                ></ion-icon>
+                <ion-icon
+                  class="full-screen-share-btn"
+                  name="share-social-outline"
+                ></ion-icon>
+              </div>
+              <div class="next-prev-btns">
+                <ion-icon
+                  class="full-screen-previous-result-btn"
+                  name="chevron-back-outline"
+                ></ion-icon>
+                <ion-icon
+                  class="full-screen-next-result-btn"
+                  name="chevron-forward-outline"
+                ></ion-icon>
+              </div>
+            </div>
+            <div class="full-screen-separating-line"></div>
+            <div class="result-full-details">
+              <h3>Responsabilities</h3>
+              <ul class="full-screen-result-responsabilities"></ul>
+              <h3>Requirements</h3>
+              <ul class="full-screen-result-requirements-must-have"></ul>
+              <h3>Nice to have</h3>
+              <ul class="full-screen-result-requirements-nice-to-have"></ul>
+              <h3>Benefits</h3>
+              <ul class="full-screen-result-benefits">
+                <li>
+                  Attractive salary package according to your experience,
+                  including individual performance bonus and seniority bonus;
+                </li>
+                <li>Bonus for internal recommendations;</li>
+                <li>Meal tickets;</li>
+                <li>
+                  Private health insurance, including dental services and
+                  psychological consultations;
+                </li>
+                <li>Flexible working hours (core-hours system);</li>
+                <li>Access to over 600 sports centers in the 7Card network;</li>
+                <li>Online language courses: English and French;</li>
+                <li>Access to the e-learning platform;</li>
+                <li>
+                  Access to technical training programs / workshops, as well as
+                  other technical events (both as a participant and as a
+                  speaker);
+                </li>
+                <li>
+                  Development opportunities through involvement in internship &
+                  mentoring programs;
+                </li>
+                <li>Access to soft-skills programs and workshops;</li>
+                <li>Access to various internal events and team-buildings;</li>
+                <li>
+                  Access to international opportunities for career development
+                  with challenging and exciting projects in a dynamic
+                  international working environment;
+                </li>
+                <li>
+                  2 paid days off offered for involvement in volunteering
+                  activities.
+                </li>
+              </ul>
+            </div>
+            <div class="full-screen-apply-btn-wrapper">
+              <button class="full-screen-apply-btn">APPLY NOW</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -213,81 +213,79 @@ let database = [
 
 //general helper functions
 const toTitleCase = function (str) {
-  let result = Array.from(str.toLowerCase().trim());
-  result[0] = result[0].toUpperCase();
-  result.forEach((el, i) => {
-    if (el === " ") result[i + 1] = result[i + 1].toUpperCase();
+  const charArray = Array.from(str.trim().toLowerCase());
+  const capitalizeNextCharacter = function (currentCharIndex) {
+    const nextCharIndex = currentCharIndex + 1;
+    charArray[nextCharIndex] = charArray[nextCharIndex].toUpperCase();
+  };
+  charArray[0] = charArray[0].toUpperCase();
+  charArray.forEach((char, i) => {
+    if (char === " ") capitalizeNextCharacter(i);
   });
-  return result.join("");
+  return charArray.join("");
 };
 
 //preparing the data for display
-const prepareData = function () {
+const addJobMissingInfo = function (jobsArray) {
   const randomInt = function (min, max) {
-    const correctedMIn = min - 1;
-    return Math.floor(Math.random() * (max - correctedMIn) + min);
+    const correctedMin = min - 1;
+    return Math.floor(Math.random() * (max - correctedMin) + min);
   };
   const generateDate = function () {
-    let newDate = new Date();
-    newDate.setDate(randomInt(1, 29));
-    newDate.setMonth(newDate.getMonth() - 1);
+    let newDateObj = new Date();
+    newDateObj.setDate(randomInt(1, 29));
+    newDateObj.setMonth(newDateObj.getMonth() - 1);
     let options = {
       year: "numeric",
       month: "long",
       day: "numeric",
     };
     return Intl.DateTimeFormat("default", options)
-      .format(newDate)
+      .format(newDateObj)
       .replace(",", "");
   };
-
-  //add a ID for each job
-  const addDate = function (location) {
-    location.forEach((el) => (el.datePosted = generateDate()));
-  };
-  addDate(database);
-  const createID = function (jobsArr) {
-    jobsArr.forEach((el) => {
-      el.ID = randomInt(10_000, 99_999);
+  const addIdsAndpublishingDates = function (jobsArray) {
+    jobsArray.forEach((job) => {
+      job.publishingDateStr = generateDate();
+      job.ID = randomInt(10_000, 99_999);
     });
   };
-  createID(database);
+  addIdsAndpublishingDates(jobsArray);
 };
-prepareData();
+addJobMissingInfo(database);
 
 const createSearchCriteria = function () {
   const firstPage = document.querySelector(".section-first-interaction");
-  const inputSearch = firstPage.classList.contains("hidden")
+  const searchInputField = firstPage.classList.contains("hidden")
     ? document.querySelector(".main-search-field")
     : document.querySelector(".first-interaction-search-field");
-  const inputChecklistFilters = document.querySelectorAll(
+  const filtersCheckboxes = document.querySelectorAll(
     "input[type ='checkbox']"
   );
-  const result = {
+  const SearchCriteriaObj = {
     location: [],
     category: [],
     experience: [],
   };
-  result.keywords = inputSearch.value
+  SearchCriteriaObj.keywords = searchInputField.value
     .toLowerCase()
     .trim()
     .split(" ")
     .filter((el) => el !== "");
-  inputChecklistFilters.forEach((el) => {
-    if (el.checked) {
-      const filter = el.id.slice(0, el.id.indexOf("-"));
-      const value = el.name;
-      result[filter].push(value);
+  filtersCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const filterCategory = checkbox.id.slice(0, checkbox.id.indexOf("-"));
+      const filterName = checkbox.name;
+      SearchCriteriaObj[filterCategory].push(filterName);
     }
   });
-  console.log(result);
-  return result;
+  return SearchCriteriaObj;
 };
 //dummy search
 
 // regex to search with the AND logic
 
-// const createKeywordRegEx = function (keywordsInput) {
+// const createKeywordsRegEx = function (keywordsInput) {
 //   let result = new RegExp(
 //     keywordsInput.reduce((prev, curr, currIndex) => {
 //       if (currIndex == 1) return `(?=.*${prev})` + `(?=.*${curr})`;
@@ -299,49 +297,59 @@ const createSearchCriteria = function () {
 
 // regex to search with the OR logic
 
-const createKeywordRegEx = function (keywordsInput) {
+const createKeywordsRegEx = function (keywordsArr) {
   const result =
-    keywordsInput.length === 1 ? keywordsInput[0] : keywordsInput.join("|");
+    keywordsArr.length === 1 ? keywordsArr[0] : keywordsArr.join("|");
   return new RegExp(result);
 };
 const filterDatabase = function (searchCriteriaObj) {
-  //check if all fields are empty/uncheked
-  if (Object.values(searchCriteriaObj).every((value) => value.length == 0))
-    return database;
-  let keywordsRegex = createKeywordRegEx(searchCriteriaObj.keywords);
-  const keywordsFilteredDatabase = database
-    .map((el) => JSON.stringify(el))
-    .filter((el) => el.toLowerCase().match(keywordsRegex))
-    .map((el) => JSON.parse(el));
+  const noSearchCriteria = Object.values(searchCriteriaObj).every(
+    (value) => value.length == 0
+  );
+  if (noSearchCriteria) return database;
+  let keywordsRegex = createKeywordsRegEx(searchCriteriaObj.keywords);
+  const jobsFilteredByKeywords = database
+    .map((job) => JSON.stringify(job))
+    .filter((job) => job.toLowerCase().match(keywordsRegex))
+    .map((job) => JSON.parse(job));
   //check if all filters are unckecked -
-  if (
-    Object.entries(searchCriteriaObj).every((value) => {
-      if (value[0] == "keywords") return true;
-      else return value[1].length == 0;
-    })
-  )
-    return keywordsFilteredDatabase;
-  // if no results - i should trow some error or smth
-  if (keywordsFilteredDatabase.length == 0) return;
-  const allCriteriaFilteredDatabase = keywordsFilteredDatabase.filter((el) => {
-    for (let filter in searchCriteriaObj) {
-      console.log(searchCriteriaObj[filter]);
-      console.log(el[filter]);
-      if (filter == "keywords") continue;
-      if (searchCriteriaObj[filter].length != 0) {
-        if (!searchCriteriaObj[filter].includes(el[filter])) return false;
+  const noFiltersToApply = Object.entries(searchCriteriaObj).every((value) => {
+    if (value[0] == "keywords") return true;
+    else return value[1].length == 0;
+  });
+  if (noFiltersToApply) return jobsFilteredByKeywords;
+  const jobsArrayIsEmpty = jobsFilteredByKeywords.length == 0;
+  if (jobsArrayIsEmpty) return;
+  const jobsFilteredByAllCriteria = jobsFilteredByKeywords.filter((job) => {
+    for (let criterion in searchCriteriaObj) {
+      if (criterion == "keywords") continue;
+      const criterionIsNotEmpty = searchCriteriaObj[criterion].length != 0;
+      if (criterionIsNotEmpty) {
+        const jobDoesNotMeetTheCriterion = !searchCriteriaObj[
+          criterion
+        ].includes(job[criterion]);
+        if (jobDoesNotMeetTheCriterion) return false;
       }
     }
     return true;
   });
-  return allCriteriaFilteredDatabase;
+  return jobsFilteredByAllCriteria;
 };
+//
+//
+//
+//here i stopped refactoring for cleaner code - must continue
+//
+//
+//
 const createRelevanceScores = function (searchKeywords, rawDataBase) {
   rawDataBase.forEach((job) => {
     job.relevancePoints = 0;
   });
-  if (searchKeywords.length === 0 || rawDataBase.length === 0) return;
-  const points = {
+  const noKeywords = searchKeywords.length === 0;
+  const databaseIsEmpty = rawDataBase.length === 0;
+  if (noKeywords || databaseIsEmpty) return;
+  const sectionPointsPairs = {
     title: 10_000,
     experience: 2000,
     location: 2000,
@@ -357,21 +365,21 @@ const createRelevanceScores = function (searchKeywords, rawDataBase) {
       keyword.toUpperCase(),
     ];
     const regex = new RegExp(keywordVariations.join("|"));
-    rawDataBase.forEach((el) => {
-      let pointsTotal = 0;
-      for (let prop in el) {
-        if (typeof el[prop] === "string") {
-          if (el[prop].match(regex)) {
-            pointsTotal += points[prop];
+    rawDataBase.forEach((job) => {
+      let totalPoints = 0;
+      for (let section in job) {
+        if (typeof job[section] === "string") {
+          if (job[section].match(regex)) {
+            totalPoints += sectionPointsPairs[section];
           }
         } else {
-          const stringElement = String(el[prop]);
+          const stringElement = String(job[section]);
           if (stringElement.match(regex)) {
-            pointsTotal += points[prop];
+            totalPoints += sectionPointsPairs[section];
           }
         }
       }
-      el.relevancePoints += pointsTotal;
+      job.relevancePoints += totalPoints;
     });
   });
 };
@@ -390,7 +398,7 @@ const displayJobResults = function (jobsArr) {
     alt="omnifood logo"
     />
     <div class="result-overview">
-    <p class="overview-date-posted">${job.datePosted}</p>
+    <p class="overview-date-posted">${job.publishingDateStr}</p>
     <p class="overview-job-title">${toTitleCase(job.title)}</p>
     <p class="overview-salary">${job.salary.slice(
       0,
@@ -512,7 +520,7 @@ const mainContentFunctionality = function () {
         <div class="result-summary">
           <div class="date-posted-wrapper">
             <p>Job full details</p>
-            <p>Posted on ${resultToExpand.datePosted}</p>
+            <p>Posted on ${resultToExpand.publishingDateStr}</p>
           </div>
           <h1 class="full-screen-job-title">${toTitleCase(
             resultToExpand.title

@@ -211,7 +211,6 @@ let database = [
   },
 ];
 
-//general helper functions
 const toTitleCase = function (str) {
   const charArray = Array.from(str.trim().toLowerCase());
   const capitalizeNextCharacter = function (currentCharIndex) {
@@ -225,7 +224,6 @@ const toTitleCase = function (str) {
   return charArray.join("");
 };
 
-//preparing the data for display
 const addJobMissingInfo = function (jobsArray) {
   const randomInt = function (min, max) {
     const correctedMin = min - 1;
@@ -281,21 +279,6 @@ const createSearchCriteria = function () {
   });
   return SearchCriteriaObj;
 };
-//dummy search
-
-// regex to search with the AND logic
-
-// const createKeywordsRegEx = function (keywordsInput) {
-//   let result = new RegExp(
-//     keywordsInput.reduce((prev, curr, currIndex) => {
-//       if (currIndex == 1) return `(?=.*${prev})` + `(?=.*${curr})`;
-//       else return prev + `(?=.*${curr})`;
-//     })
-//   );
-//   return result;
-// };
-
-// regex to search with the OR logic
 
 const createKeywordsRegEx = function (keywordsArr) {
   const result =
@@ -335,13 +318,7 @@ const filterDatabase = function (searchCriteriaObj) {
   });
   return jobsFilteredByAllCriteria;
 };
-//
-//
-//
-//here i stopped refactoring for cleaner code - must continue
-//
-//
-//
+
 const createRelevanceScores = function (searchKeywords, rawDataBase) {
   rawDataBase.forEach((job) => {
     job.relevancePoints = 0;
@@ -367,15 +344,15 @@ const createRelevanceScores = function (searchKeywords, rawDataBase) {
     const regex = new RegExp(keywordVariations.join("|"));
     rawDataBase.forEach((job) => {
       let totalPoints = 0;
-      for (let section in job) {
-        if (typeof job[section] === "string") {
-          if (job[section].match(regex)) {
-            totalPoints += sectionPointsPairs[section];
+      for (let detail in job) {
+        if (typeof job[detail] === "string") {
+          if (job[detail].match(regex)) {
+            totalPoints += sectionPointsPairs[detail];
           }
         } else {
-          const stringElement = String(job[section]);
+          const stringElement = String(job[detail]);
           if (stringElement.match(regex)) {
-            totalPoints += sectionPointsPairs[section];
+            totalPoints += sectionPointsPairs[detail];
           }
         }
       }
@@ -441,22 +418,14 @@ const jobSearch = function () {
 
 const showMainPage = function () {
   const firstFrame = document.querySelector(".section-first-interaction");
-  const resultsSection = document.querySelector(".section-main-content");
+  const mainPage = document.querySelector(".section-main-content");
   firstFrame.classList.add("hidden");
-  resultsSection.classList.remove("hidden");
+  mainPage.classList.remove("hidden");
 };
-
-// displayJobResults(database);
-const firstPageSearch = function () {
-  const searchBtn = document.querySelector(".btn-search");
-  searchBtn.addEventListener("click", jobSearch);
-};
-firstPageSearch();
 
 const sortResults = function () {
   const resultsContainer = document.querySelector(".search-results");
-  const results = Array.from(document.querySelectorAll(".search-result"));
-  console.log(results);
+  const resultsArray = Array.from(document.querySelectorAll(".search-result"));
   const sortByDate = function (a, b) {
     const aDate = new Date(a.childNodes[3].childNodes[1].innerText);
     const bDate = new Date(b.childNodes[3].childNodes[1].innerText);
@@ -465,58 +434,35 @@ const sortResults = function () {
   const sortBySalary = function (a, b) {
     const aFullSalary = a.childNodes[3].childNodes[5].innerText;
     const bFullSalary = b.childNodes[3].childNodes[5].innerText;
-    const aExtracredSalary = Number(
+    const aExtractedSalary = Number(
       aFullSalary.slice(2, aFullSalary.indexOf("-"))
     );
     const bExtractedSalary = Number(
       bFullSalary.slice(2, bFullSalary.indexOf("-"))
     );
-    console.log(aExtracredSalary);
-    return bExtractedSalary - aExtracredSalary;
+    return bExtractedSalary - aExtractedSalary;
   };
   const sortByRelevance = function (a, b) {
     const aRelevance = a.dataset.relevancescore;
     const bRelevance = b.dataset.relevancescore;
     return bRelevance - aRelevance;
   };
-  results.sort(sortByRelevance);
-  results.forEach((el) => resultsContainer.append(el));
+  resultsArray.sort(sortByRelevance);
+  resultsArray.forEach((el) => resultsContainer.append(el));
 };
 
-const mainContentFunctionality = function () {
-  //common vars
-  const nav = document.querySelector(".header");
-  const jobFullDetails = document.querySelector(".result-fully-displayed");
-  const searchPanel = document.querySelector(".search-panel");
-  const filtersAndResults = document.querySelector(".filters-and-results");
-  const searchResultsContainer = document.querySelector(".search-results");
-  const closeBtn = document.querySelector(".full-screen-close-btn");
-  const mainSearchBtn = document.querySelector(".btn-search-main");
-
-  //common halper functions
-  const toggleVisibility = function () {
-    nav.classList.toggle("hidden");
-    searchPanel.classList.toggle("hidden");
-    filtersAndResults.classList.toggle("hidden");
-    jobFullDetails.classList.toggle("hidden");
+const buildExpandedResult = function (source, id) {
+  const expandedResultContainer = document.querySelector(
+    ".result-fully-displayed"
+  );
+  const resultToExpand = source.find((el) => el.ID == id);
+  const experienceGlossary = {
+    none: "No Experience",
+    entry: "Entry-Level ( &lt; 2 years )",
+    mid: "Mid-Level ( 2-5 years )",
+    senior: "Senior ( &gt; 5 years )",
   };
-  const addListItem = function (source, containerClass) {
-    const container = document.querySelector(containerClass);
-    container.innerHTML = "";
-    source.forEach((el) => {
-      let html = `<li>${el}</li>`;
-      container.insertAdjacentHTML("afterbegin", html);
-    });
-  };
-  const buildExpandedResult = function (source, id) {
-    const resultToExpand = source.find((el) => el.ID == id);
-    const experienceGlossary = {
-      none: "No Experience",
-      entry: "Entry-Level ( &lt; 2 years )",
-      mid: "Mid-Level ( 2-5 years )",
-      senior: "Senior ( &gt; 5 years )",
-    };
-    let resultSummaryHTML = `
+  let resultSummaryHTML = `
         <div class="result-summary">
           <div class="date-posted-wrapper">
             <p>Job full details</p>
@@ -541,97 +487,79 @@ const mainContentFunctionality = function () {
             <p>${toTitleCase(resultToExpand.location)}</p>
           </div>
         </div>`;
-    jobFullDetails.insertAdjacentHTML("afterbegin", resultSummaryHTML);
-    //add responsability
+  expandedResultContainer.insertAdjacentHTML("afterbegin", resultSummaryHTML);
 
-    addListItem(
-      resultToExpand.responsabilities,
-      ".full-screen-result-responsabilities"
-    );
-    addListItem(
-      resultToExpand.requirements,
-      ".full-screen-result-requirements-must-have"
-    );
-    addListItem(
-      resultToExpand.niceToHave,
-      ".full-screen-result-requirements-nice-to-have"
-    );
+  const addListItems = function (source, containerClass) {
+    const listContainer = document.querySelector(containerClass);
+    listContainer.innerHTML = "";
+    source.forEach((listItem) => {
+      let listItemHTML = `<li>${listItem}</li>`;
+      listContainer.insertAdjacentHTML("afterbegin", listItemHTML);
+    });
   };
-  // buildExpandedResult(database, database[4].ID);
-  const expandResult = function (e) {
-    if (
-      e.target.classList.contains("result-omnifood-logo") ||
-      e.target.classList.contains("overview-job-title")
-    ) {
-      const id = e.target.closest(".search-result").dataset.jobid;
-      buildExpandedResult(database, id);
-      toggleVisibility();
-    }
-  };
+  addListItems(
+    resultToExpand.responsabilities,
+    ".full-screen-result-responsabilities"
+  );
+  addListItems(
+    resultToExpand.requirements,
+    ".full-screen-result-requirements-must-have"
+  );
+  addListItems(
+    resultToExpand.niceToHave,
+    ".full-screen-result-requirements-nice-to-have"
+  );
+};
 
-  const resetFullDetailsWindow = function () {
-    const elmToRemove = document.querySelector(".result-summary");
-    elmToRemove.remove();
-    const elmToEmptyOut = [
-      document.querySelector(".full-screen-result-responsabilities"),
-      document.querySelector(".full-screen-result-requirements-must-have"),
-      document.querySelector(".full-screen-result-requirements-nice-to-have"),
-    ];
-    elmToEmptyOut.forEach((elm) => (elm.innerHTML = ""));
-  };
-  // open job full details
-  const closeExpandedResultWindow = function () {
+const toggleVisibility = function () {
+  const navigation = document.querySelector(".header");
+  const expandedResult = document.querySelector(".result-fully-displayed");
+  const searchPanel = document.querySelector(".search-panel");
+  const filtersAndResults = document.querySelector(".filters-and-results");
+  navigation.classList.toggle("hidden");
+  searchPanel.classList.toggle("hidden");
+  filtersAndResults.classList.toggle("hidden");
+  expandedResult.classList.toggle("hidden");
+};
+
+// buildExpandedResult(database, database[4].ID);
+const expandResult = function (e) {
+  const logoWasClicked = e.target.classList.contains("result-omnifood-logo");
+  const jobTitleWasClicked = e.target.classList.contains("overview-job-title");
+  if (logoWasClicked || jobTitleWasClicked) {
+    const id = e.target.closest(".search-result").dataset.jobid;
+    buildExpandedResult(database, id);
     toggleVisibility();
-    resetFullDetailsWindow();
-  };
+  }
+};
+
+const resetFullDetailsWindow = function () {
+  const elmToRemove = document.querySelector(".result-summary");
+  elmToRemove.remove();
+  const elmToEmptyOut = [
+    document.querySelector(".full-screen-result-responsabilities"),
+    document.querySelector(".full-screen-result-requirements-must-have"),
+    document.querySelector(".full-screen-result-requirements-nice-to-have"),
+  ];
+  elmToEmptyOut.forEach((elm) => (elm.innerHTML = ""));
+};
+const closeExpandedResultWindow = function () {
+  toggleVisibility();
+  resetFullDetailsWindow();
+};
+
+const addEventListeners = function () {
+  const searchResultsContainer = document.querySelector(".search-results");
+  const closeBtn = document.querySelector(".full-screen-close-btn");
+  const mainSearchBtn = document.querySelector(".btn-search-main");
+  const firstPageSearchBtn = document.querySelector(".btn-search");
+
   mainSearchBtn.addEventListener("click", jobSearch);
   searchResultsContainer.addEventListener("click", expandResult);
-  //close job full details
-
   closeBtn.addEventListener("click", closeExpandedResultWindow);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") jobSearch();
+  });
+  firstPageSearchBtn.addEventListener("click", jobSearch);
 };
-mainContentFunctionality();
-
-//need to put these in order, i dont feel like it rn
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") jobSearch();
-});
-
-//create revelance score
-
-//sort by relevance
-
-// const createRelevanceScore = function (searchKeywords, rawDataBase) {
-//   const points = {
-//     title: 10_000,
-//     experience: 2000,
-//     location: 2000,
-//     requirements: 500,
-//     niceToHave: 350,
-//     responsabilities: 500,
-//     salary: 0,
-//   };
-//   searchKeywords.forEach((keyword) => {
-//     const regex = new RegExp(keyword);
-//     rawDataBase.forEach((el) => {
-//       const pointsTotal = 0;
-//       for (let prop in el) {
-//         if (prop === "relevancePoints") continue;
-//         if (!Array.isArray(el[prop])) {
-//           console.log(el[prop]);
-//           if (el[prop].match(regex)) {
-//             pointsTotal += points[prop];
-//           }
-//         } else {
-//           if (el[prop].length === 0) continue;
-//           el[prop].forEach((plm) => {
-//             if (plm.match(regex)) {
-//               pointsTotal += points[prop];
-//             }
-//           });
-//         }
-//       }
-//       el.relevancePoints = pointsTotal;
-//     });
-//   });
-// };
+addEventListeners();

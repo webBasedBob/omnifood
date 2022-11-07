@@ -553,7 +553,11 @@ const addEventListeners = function () {
   const closeBtn = document.querySelector(".full-screen-close-btn");
   const mainSearchBtn = document.querySelector(".btn-search-main");
   const firstPageSearchBtn = document.querySelector(".btn-search");
+  const filtersContainer = document.querySelector(".filters");
 
+  filtersContainer.addEventListener("click", (e) => {
+    if (e.target.localName == "input") jobSearch();
+  });
   mainSearchBtn.addEventListener("click", jobSearch);
   searchResultsContainer.addEventListener("click", expandResult);
   closeBtn.addEventListener("click", closeExpandedResultWindow);

@@ -556,7 +556,10 @@ const addEventListeners = function () {
   const filtersContainer = document.querySelector(".filters");
 
   filtersContainer.addEventListener("click", (e) => {
-    if (e.target.localName == "input") jobSearch();
+    if (e.target.localName == "input") {
+      jobSearch();
+      toggleAppliedFiltersVisibility(e);
+    }
   });
   mainSearchBtn.addEventListener("click", jobSearch);
   searchResultsContainer.addEventListener("click", expandResult);
@@ -567,3 +570,36 @@ const addEventListeners = function () {
   firstPageSearchBtn.addEventListener("click", jobSearch);
 };
 addEventListeners();
+
+const createAppliedFiltersHTML = function () {
+  const appliedFiltersContainer = document.querySelector(".applied-filters");
+  const allFilterLabesl = document.querySelectorAll("label");
+  allFilterLabesl.forEach((el) => {
+    let filterText = el.innerText.includes("(")
+      ? el.innerText.slice(0, el.innerText.indexOf("(") - 1)
+      : el.innerText;
+    let html = `<div class="applied-filter hidden">
+                <p>${filterText}</p>
+                <ion-icon
+                  class="remove-filter"
+                  name="close-outline"
+                ></ion-icon>
+              </div>`;
+    appliedFiltersContainer.insertAdjacentHTML("afterbegin", html);
+  });
+};
+createAppliedFiltersHTML();
+
+const toggleAppliedFiltersVisibility = function (e) {
+  let filterText = e.target.nextElementSibling.innerText.includes("(")
+    ? e.target.nextElementSibling.innerText.slice(
+        0,
+        e.target.nextElementSibling.innerText.indexOf("(") - 1
+      )
+    : e.target.nextElementSibling.innerText;
+  const allFilters = Array.from(document.querySelectorAll(".applied-filter"));
+  const filtrulCareneTrebuie = allFilters.find(
+    (el) => el.children[0].innerText == filterText
+  );
+  filtrulCareneTrebuie.classList.toggle("hidden");
+};

@@ -158,6 +158,9 @@ ul {
 .remove-filters:hover {
   background-color: #fef7f2;
 }
+.applied-filters {
+  min-height: 13.2rem;
+}
 .applied-filter {
   display: inline-flex;
   background-color: #fdf2e9;
@@ -179,6 +182,10 @@ ul {
   gap: 3rem;
 }
 
+.remove-filter {
+  font-size: 2rem;
+  padding-left: 1rem;
+}
 .filter-name {
   display: flex;
   justify-content: space-between;

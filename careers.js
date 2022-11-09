@@ -548,29 +548,6 @@ const closeExpandedResultWindow = function () {
   resetFullDetailsWindow();
 };
 
-const addEventListeners = function () {
-  const searchResultsContainer = document.querySelector(".search-results");
-  const closeBtn = document.querySelector(".full-screen-close-btn");
-  const mainSearchBtn = document.querySelector(".btn-search-main");
-  const firstPageSearchBtn = document.querySelector(".btn-search");
-  const filtersContainer = document.querySelector(".filters");
-
-  filtersContainer.addEventListener("click", (e) => {
-    if (e.target.localName == "input") {
-      jobSearch();
-      toggleAppliedFiltersVisibility(e);
-    }
-  });
-  mainSearchBtn.addEventListener("click", jobSearch);
-  searchResultsContainer.addEventListener("click", expandResult);
-  closeBtn.addEventListener("click", closeExpandedResultWindow);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") jobSearch();
-  });
-  firstPageSearchBtn.addEventListener("click", jobSearch);
-};
-addEventListeners();
-
 const createAppliedFiltersHTML = function () {
   const appliedFiltersContainer = document.querySelector(".applied-filters");
   const allFilterLabesl = document.querySelectorAll("label");
@@ -603,3 +580,48 @@ const toggleAppliedFiltersVisibility = function (e) {
   );
   filtrulCareneTrebuie.classList.toggle("hidden");
 };
+
+const unapplyFilter = function (e) {
+  if (e.target.localName !== "ion-icon") return;
+  const allFiltersArr = Array.from(
+    document.querySelectorAll(".individual-filter")
+  );
+  const correspopndingFilter = allFiltersArr.find((el) => {
+    // for some reason the innerText in individual filter has a space in the beginning - mist check, but im so fking tired
+    let filterText = el.innerText.includes("(")
+      ? el.innerText.slice(1, el.innerText.indexOf("(") - 1)
+      : el.innerText.slice(1);
+    return filterText == e.target.previousElementSibling.innerText;
+  });
+  correspopndingFilter.children[0].checked = false;
+  e.target.closest(".applied-filter").classList.toggle("hidden");
+};
+
+const addEventListeners = function () {
+  const searchResultsContainer = document.querySelector(".search-results");
+  const closeBtn = document.querySelector(".full-screen-close-btn");
+  const mainSearchBtn = document.querySelector(".btn-search-main");
+  const firstPageSearchBtn = document.querySelector(".btn-search");
+  const filtersContainer = document.querySelector(".filters");
+  const appliedFiltersContainer = document.querySelector(".applied-filters");
+
+  appliedFiltersContainer.addEventListener("click", function (e) {
+    unapplyFilter(e);
+    jobSearch(e);
+  });
+
+  filtersContainer.addEventListener("click", (e) => {
+    if (e.target.localName == "input") {
+      jobSearch();
+      toggleAppliedFiltersVisibility(e);
+    }
+  });
+  mainSearchBtn.addEventListener("click", jobSearch);
+  searchResultsContainer.addEventListener("click", expandResult);
+  closeBtn.addEventListener("click", closeExpandedResultWindow);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") jobSearch();
+  });
+  firstPageSearchBtn.addEventListener("click", jobSearch);
+};
+addEventListeners();

@@ -404,12 +404,26 @@ const syncSearchInputField = function () {
   mainSearchField.value = firstPageSearchField.value;
 };
 
+const showResultsNumber = function (noOfResults) {
+  const resultsNumberContainer = document.querySelector(".results-number");
+  resultsNumberContainer.innerHTML = "";
+  resultsNumberContainer.insertAdjacentHTML(
+    "afterbegin",
+    `<strong>${noOfResults}</strong> ${
+      noOfResults === 1 ? "result" : "results"
+    }`
+  );
+};
+
 const jobSearch = function () {
   const searchCriteria = createSearchCriteria();
   const resultRawData = filterDatabase(searchCriteria);
+  const sortingCriterion =
+    searchCriteria.keywords.length === 0 ? "date" : "relevance";
   createRelevanceScores(searchCriteria.keywords, resultRawData);
   displayJobResults(resultRawData);
-  sortResults();
+  showResultsNumber(resultRawData.length);
+  sortResults(sortingCriterion);
   const firstPage = document.querySelector(".section-first-interaction");
   if (firstPage.classList.contains("hidden")) return;
   showMainPage();
@@ -423,31 +437,33 @@ const showMainPage = function () {
   mainPage.classList.remove("hidden");
 };
 
-const sortResults = function () {
+const sortResults = function (sortingCriterion) {
   const resultsContainer = document.querySelector(".search-results");
   const resultsArray = Array.from(document.querySelectorAll(".search-result"));
-  const sortByDate = function (a, b) {
-    const aDate = new Date(a.childNodes[3].childNodes[1].innerText);
-    const bDate = new Date(b.childNodes[3].childNodes[1].innerText);
-    return bDate - aDate;
+  const sortByObj = {
+    relevance(a, b) {
+      const aRelevance = a.dataset.relevancescore;
+      const bRelevance = b.dataset.relevancescore;
+      return bRelevance - aRelevance;
+    },
+    salary(a, b) {
+      const aFullSalary = a.childNodes[3].childNodes[5].innerText;
+      const bFullSalary = b.childNodes[3].childNodes[5].innerText;
+      const aExtractedSalary = Number(
+        aFullSalary.slice(2, aFullSalary.indexOf("-"))
+      );
+      const bExtractedSalary = Number(
+        bFullSalary.slice(2, bFullSalary.indexOf("-"))
+      );
+      return bExtractedSalary - aExtractedSalary;
+    },
+    date(a, b) {
+      const aDate = new Date(a.childNodes[3].childNodes[1].innerText);
+      const bDate = new Date(b.childNodes[3].childNodes[1].innerText);
+      return bDate - aDate;
+    },
   };
-  const sortBySalary = function (a, b) {
-    const aFullSalary = a.childNodes[3].childNodes[5].innerText;
-    const bFullSalary = b.childNodes[3].childNodes[5].innerText;
-    const aExtractedSalary = Number(
-      aFullSalary.slice(2, aFullSalary.indexOf("-"))
-    );
-    const bExtractedSalary = Number(
-      bFullSalary.slice(2, bFullSalary.indexOf("-"))
-    );
-    return bExtractedSalary - aExtractedSalary;
-  };
-  const sortByRelevance = function (a, b) {
-    const aRelevance = a.dataset.relevancescore;
-    const bRelevance = b.dataset.relevancescore;
-    return bRelevance - aRelevance;
-  };
-  resultsArray.sort(sortByRelevance);
+  resultsArray.sort(sortByObj[sortingCriterion]);
   resultsArray.forEach((el) => resultsContainer.append(el));
 };
 
@@ -597,6 +613,22 @@ const unapplyFilter = function (e) {
   e.target.closest(".applied-filter").classList.toggle("hidden");
 };
 
+//remove applied filters
+
+const removeAppliedFilters = function () {
+  const allAppliedFilters = document.querySelectorAll(".applied-filter");
+  const allFilters = document.querySelectorAll("input[type ='checkbox']");
+  allAppliedFilters.forEach((appliedFilter) =>
+    appliedFilter.classList.add("hidden")
+  );
+  allFilters.forEach((filter) => (filter.checked = false));
+};
+
+const cleanAppliefFilters = function () {
+  removeAppliedFilters();
+  jobSearch();
+};
+
 const addEventListeners = function () {
   const searchResultsContainer = document.querySelector(".search-results");
   const closeBtn = document.querySelector(".full-screen-close-btn");
@@ -604,7 +636,9 @@ const addEventListeners = function () {
   const firstPageSearchBtn = document.querySelector(".btn-search");
   const filtersContainer = document.querySelector(".filters");
   const appliedFiltersContainer = document.querySelector(".applied-filters");
+  const removeAllAppliedFiltersBtn = document.querySelector(".remove-filters");
 
+  removeAllAppliedFiltersBtn.addEventListener("click", cleanAppliefFilters);
   appliedFiltersContainer.addEventListener("click", function (e) {
     unapplyFilter(e);
     jobSearch(e);

@@ -564,11 +564,11 @@ const closeExpandedResultWindow = function () {
   resetFullDetailsWindow();
 };
 
-const extractFilterLabel = function (sourceStr) {
-  let labelMustBeCut = sourceStr.innerText.includes("(");
+const extractFilterLabel = function (source) {
+  let labelMustBeCut = source.innerText.includes("(");
   let filterLabel = labelMustBeCut
-    ? sourceStr.innerText.slice(0, sourceStr.innerText.indexOf("(") - 1)
-    : sourceStr.innerText;
+    ? source.innerText.slice(0, source.innerText.indexOf("(") - 1)
+    : source.innerText;
   return filterLabel;
 };
 

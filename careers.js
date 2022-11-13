@@ -404,10 +404,10 @@ const syncSearchInputField = function () {
   mainSearchField.value = firstPageSearchField.value;
 };
 
-const showResultsNumber = function (noOfResults) {
-  const resultsNumberContainer = document.querySelector(".results-number");
-  resultsNumberContainer.innerHTML = "";
-  resultsNumberContainer.insertAdjacentHTML(
+const showNumberOfResults = function (noOfResults) {
+  const numberOfResultsContainer = document.querySelector(".results-number");
+  numberOfResultsContainer.innerHTML = "";
+  numberOfResultsContainer.insertAdjacentHTML(
     "afterbegin",
     `<strong>${noOfResults}</strong> ${
       noOfResults === 1 ? "result" : "results"
@@ -422,7 +422,7 @@ const jobSearch = function () {
     searchCriteria.keywords.length === 0 ? "date" : "relevance";
   createRelevanceScores(searchCriteria.keywords, resultRawData);
   displayJobResults(resultRawData);
-  showResultsNumber(resultRawData.length);
+  showNumberOfResults(resultRawData.length);
   sortResults(sortingCriterion);
   const firstPage = document.querySelector(".section-first-interaction");
   if (firstPage.classList.contains("hidden")) return;
@@ -440,7 +440,7 @@ const showMainPage = function () {
 const sortResults = function (sortingCriterion) {
   const resultsContainer = document.querySelector(".search-results");
   const resultsArray = Array.from(document.querySelectorAll(".search-result"));
-  const sortByObj = {
+  const collectionOfSortingMethods = {
     relevance(a, b) {
       const aRelevance = a.dataset.relevancescore;
       const bRelevance = b.dataset.relevancescore;
@@ -463,8 +463,8 @@ const sortResults = function (sortingCriterion) {
       return bDate - aDate;
     },
   };
-  resultsArray.sort(sortByObj[sortingCriterion]);
-  resultsArray.forEach((el) => resultsContainer.append(el));
+  resultsArray.sort(collectionOfSortingMethods[sortingCriterion]);
+  resultsArray.forEach((result) => resultsContainer.append(result));
 };
 
 const buildExpandedResult = function (source, id) {
@@ -564,15 +564,21 @@ const closeExpandedResultWindow = function () {
   resetFullDetailsWindow();
 };
 
-const createAppliedFiltersHTML = function () {
+const extractFilterLabel = function (sourceStr) {
+  let labelMustBeCut = sourceStr.innerText.includes("(");
+  let filterLabel = labelMustBeCut
+    ? sourceStr.innerText.slice(0, sourceStr.innerText.indexOf("(") - 1)
+    : sourceStr.innerText;
+  return filterLabel;
+};
+
+const insertAppliedFiltersInHTML = function () {
   const appliedFiltersContainer = document.querySelector(".applied-filters");
-  const allFilterLabesl = document.querySelectorAll("label");
-  allFilterLabesl.forEach((el) => {
-    let filterText = el.innerText.includes("(")
-      ? el.innerText.slice(0, el.innerText.indexOf("(") - 1)
-      : el.innerText;
+  const filterLabels = document.querySelectorAll("label");
+  filterLabels.forEach((label) => {
+    const labelText = extractFilterLabel(label);
     let html = `<div class="applied-filter hidden">
-                <p>${filterText}</p>
+                <p>${labelText}</p>
                 <ion-icon
                   class="remove-filter"
                   name="close-outline"
@@ -581,52 +587,45 @@ const createAppliedFiltersHTML = function () {
     appliedFiltersContainer.insertAdjacentHTML("afterbegin", html);
   });
 };
-createAppliedFiltersHTML();
+insertAppliedFiltersInHTML();
 
-const toggleAppliedFiltersVisibility = function (e) {
-  let filterText = e.target.nextElementSibling.innerText.includes("(")
-    ? e.target.nextElementSibling.innerText.slice(
-        0,
-        e.target.nextElementSibling.innerText.indexOf("(") - 1
-      )
-    : e.target.nextElementSibling.innerText;
-  const allFilters = Array.from(document.querySelectorAll(".applied-filter"));
-  const filtrulCareneTrebuie = allFilters.find(
-    (el) => el.children[0].innerText == filterText
+const toggleAppliedFilterVisibility = function (e) {
+  const targetText = e.target.nextElementSibling;
+  const targetFilterLabel = extractFilterLabel(targetText);
+  const allAppliedFiltersArray = Array.from(
+    document.querySelectorAll(".applied-filter")
   );
-  filtrulCareneTrebuie.classList.toggle("hidden");
+  const targetFilter = allAppliedFiltersArray.find(
+    (filter) => filter.children[0].innerText == targetFilterLabel
+  );
+  targetFilter.classList.toggle("hidden");
 };
 
-const unapplyFilter = function (e) {
-  if (e.target.localName !== "ion-icon") return;
-  const allFiltersArr = Array.from(
+const uncheckFilter = function (e) {
+  const removeFilterBtnIsNotClicked = e.target.localName !== "ion-icon";
+  if (removeFilterBtnIsNotClicked) return;
+  const allFiltersArray = Array.from(
     document.querySelectorAll(".individual-filter")
   );
-  const correspopndingFilter = allFiltersArr.find((el) => {
-    // for some reason the innerText in individual filter has a space in the beginning - mist check, but im so fking tired
-    let filterText = el.innerText.includes("(")
-      ? el.innerText.slice(1, el.innerText.indexOf("(") - 1)
-      : el.innerText.slice(1);
-    return filterText == e.target.previousElementSibling.innerText;
+  const filterToUncheck = allFiltersArray.find((filter) => {
+    let filterLabel = extractFilterLabel(filter.children[1]);
+    return filterLabel == e.target.previousElementSibling.innerText;
   });
-  correspopndingFilter.children[0].checked = false;
+  filterToUncheck.children[0].checked = false;
   e.target.closest(".applied-filter").classList.toggle("hidden");
 };
 
 //remove applied filters
 
-const removeAppliedFilters = function () {
+const removeAllAppliedFilters = function () {
   const allAppliedFilters = document.querySelectorAll(".applied-filter");
-  const allFilters = document.querySelectorAll("input[type ='checkbox']");
+  const allFilterCheckboxes = document.querySelectorAll(
+    "input[type ='checkbox']"
+  );
   allAppliedFilters.forEach((appliedFilter) =>
     appliedFilter.classList.add("hidden")
   );
-  allFilters.forEach((filter) => (filter.checked = false));
-};
-
-const cleanAppliefFilters = function () {
-  removeAppliedFilters();
-  jobSearch();
+  allFilterCheckboxes.forEach((filter) => (filter.checked = false));
 };
 
 const addEventListeners = function () {
@@ -638,16 +637,19 @@ const addEventListeners = function () {
   const appliedFiltersContainer = document.querySelector(".applied-filters");
   const removeAllAppliedFiltersBtn = document.querySelector(".remove-filters");
 
-  removeAllAppliedFiltersBtn.addEventListener("click", cleanAppliefFilters);
+  removeAllAppliedFiltersBtn.addEventListener("click", function () {
+    removeAllAppliedFilters();
+    jobSearch();
+  });
   appliedFiltersContainer.addEventListener("click", function (e) {
-    unapplyFilter(e);
+    uncheckFilter(e);
     jobSearch(e);
   });
 
   filtersContainer.addEventListener("click", (e) => {
     if (e.target.localName == "input") {
       jobSearch();
-      toggleAppliedFiltersVisibility(e);
+      toggleAppliedFilterVisibility(e);
     }
   });
   mainSearchBtn.addEventListener("click", jobSearch);

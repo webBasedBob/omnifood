@@ -373,7 +373,7 @@ const displayJobResults = function (jobsArr) {
     src="img/favicon.png"
     class="result-omnifood-logo"
     alt="omnifood logo"
-    />
+    />  
     <div class="result-overview">
     <p class="overview-date-posted">${job.publishingDateStr}</p>
     <p class="overview-job-title">${toTitleCase(job.title)}</p>

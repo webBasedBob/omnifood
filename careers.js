@@ -1,215 +1,33 @@
-let database = [
-  {
-    title: "team lead",
-    location: "remote",
-    category: "management",
-    experience: "senior",
-    salary: "$ 100-120k / year",
-    responsabilities: [
-      "Recruiting, managing, and maintaining an excellent engineering team.",
-      "Planning and executing complex technical projects related to cloud web-based applications.",
-      "Collaboration with other technical colleagues.",
-      "Contribute to the overall architecture, design, and development.",
-      "Managing software project schedules.",
-      "Maintaining and improving team performance and quality of life.",
-      "Developing processes to improve product performance and quality.",
-      "Ensuring successful product and feature rollouts, as well as reliable operations.",
-      "Creating a healthy team culture and transparent communication.",
-      "Providing coaching and counseling via mentoring and one-to-one meetings.",
-      "Planning and executing training for the engineering team.",
-    ],
-    requirements: [
-      "Agile mindset and extensive experience with modern development practices.",
-      "Experience managing, coaching, and mentoring software engineers.",
-      "Experience with cloud technologies and distributed systems.",
-      "Experience in shipping products and coordinating releases with relevant players.",
-      "Experience developing cross-disciplinary collaboration between engineering, operations, support, and product teams.",
-      "Experience with end-to-end quality best practices and their implementation.",
-      "Experience with staffing, interviewing, building, and retaining teams.",
-      "Experience converting complex ideas in written, verbal, and presentational formats.",
-      "Real product experience with JavaScript/TypeScript frameworks such as Angular / ReactJS / Vue.js or other Frontend frameworks also with dedicated backend frameworks such as Node.js / .NET.",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "IT recruiter",
-    location: "remote",
-    category: "human-resources",
-    experience: "mid",
-    salary: "$ 60-70k / year",
-    responsabilities: [
-      "Manage and deliver end to end external recruitment processes",
-      "Conduct job interviews and propose shortlists of candidates to internal clients;",
-      "Manage applications and response, providing feedback to management",
-      "Serve as the primary point of contact for candidates throughout the recruitment process;",
-      "Partner with operations management, so that recruitment and selection of employees meet business needs;",
-      "Provide quality recruitment and selection process information to hiring managers;",
-      "Update the recruitment tools",
-    ],
-    requirements: [
-      "+3 years of experience in the recruitment of technical roles",
-      "Professional appearance, ability to work in a team and a high degree of initiative",
-      "Ability to work under pressure, service mentality and persistence",
-      "University degree",
-      "Open and communicative personality",
-      "Proficient in working with data and reporting",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "marketing design specialist",
-    location: "remote",
-    category: "marketing",
-    experience: "mid",
-    salary: "$ 60-70k / year",
-    responsabilities: [
-      "Develop and maintain the SEO strategy to ensure optimal web positioning for our web properties in the different marketing channels.",
-      "Owner & Guardian of the Brand internally/Externally",
-      "Manage & Create new digital design work",
-      "Ensure consistency of Brand and creativity across digital channels",
-      "Provide design Support to other business lines, graphics, logos, identity design, merch, etc..",
-    ],
-    requirements: [
-      "Proven experience as marketing Design or Brand specialist",
-      "Thorough understanding of marketing elements (including traditional and digital marketing such as SEO/Social media etc.) and market research methods",
-      "Solid computer skills, including MS Office, marketing software, Adobe Creative Suite and applications (Web analytics, Google Adwords, etc.)",
-      "Well-organized and detail-oriented",
-      "Exceptional communication and writing skills",
-      "Commercial awareness partnered with a creative mind",
-      "BSc/BA in marketing, communications, or equivalent",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "full stack developer",
-    location: "remote",
-    category: "information-technology",
-    experience: "senior",
-    salary: "$ 90-110k / year",
-    responsabilities: [
-      "Take a leadership role in helping the team with feature development and maintenance across Flink’s arsenal of backend services/microservices",
-      "Taking part in the discussion and planning of new features.",
-      "Mentorship of our junior engineers.",
-      "Closely collaborate with other teams to deliver value to the end user.",
-      "Drive the backend chapter towards adapting and experimenting with new technologies.",
-      "Contribute to scaling up the backend team and bringing great talents onboard by conducting interviews and code pairing sessions.",
-      "We have you build it, you own it and you monitor it mentality here at Flink. As a Senior Software engineer, you will ship your code using Kubernetes and monitor using DataDog.",
-      "Our warehouse management system will be built using TypeScript, NestJS, React.JS and Node.js, in a microservice architecture",
-    ],
-    requirements: [
-      "Experience building scalable and reliable large-scale applications.",
-      "5 years of commercial experience as a Fullstack Software Engineer with expertise in Typescript and Node.js and Frontend Frameworks such as React.js or Vue.js.",
-      "As a Senior Software Engineer, we will expect you to have previous experience of ownership over projects/part of an application/system you have worked on.",
-      "You will have previous experience of architectural input into the design and build of a backend application/product/feature.",
-      "Previous experience in mentoring junior engineers.",
-      "Comfortable with event-based communication between microservices.",
-      "Familiar with common monitoring / alerting/logging tools such as - Stackdriver, Datadog, NewRelic, Prometheus, ELK).",
-      "Experienced with SQL databases (NoSQL is nice to have).",
-      "Experience using cloud provider platforms like GCP or AWS, and deploying distributed services to Kubernetes. (Terraform knowledge is nice to have).",
-      "Rigor in high code quality, unit testing and integration testing.",
-      "Proficient in applying best practice Design patterns and Design principles when building your software.",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "node.js developer",
-    location: "remote",
-    category: "information-technology",
-    experience: "mid",
-    salary: "$ 80-100k / year",
-    responsabilities: [
-      "Architect, design, code, test, deploy and monitor complex features in Node.js based services in our Realtime Communication Cloud using TypeScript as the programming language",
-      "Utilize pair programming and test-driven design/development techniques to implement new features end-to-end",
-      "Perform high-quality code reviews across teams",
-      "Participate in tech lead forums to ensure better alignment and collaboration among the teams",
-      "Collaborate with the team of team leads to provide technical governance and solutions",
-    ],
-    requirements: [
-      "3-4 years of experience building RESTful APIs using NodeJS/TypeScript/JavaScript/ExpressJS/Gitlab/GitHub",
-      "Must be fluent in TypeScript, JavaScript, NodeJS, NoSQL Database (Couch, Mongo), Writing Unit Tests/ TDD",
-      "Experience with Docker, Kubernetes, elastic is a plus.",
-      "Build, maintain, document, and evolve REST APIs, modules and packages.",
-      "Participate in Agile ceremonies as part of Scaled Agile Delivery environment.",
-      "Collaborate with team members, architecture, QE Teams to develop systems to adhere to specs and frameworks.",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "devops engineer",
-    location: "remote",
-    category: "information-technology",
-    experience: "mid",
-    salary: "$ 90-110k / year",
-    responsabilities: [
-      "Requirements definition",
-      "Implementation of automation/monitoring mechanisms",
-      "Systems monitoring and supervision",
-      "CI/CD management and automation",
-      "Work with automation services and platforms",
-      "Ensure systems availability, performance, and first & second levels of support",
-      "Troubleshooting and analysis for finding the root cause of issues",
-      "Scripting and coding",
-      "Infrastructure management",
-    ],
-    requirements: [
-      "Experience with containerization tools (EKS, Kubernetes).",
-      "Experience with Jenkins (managing clusters, creating pipelines and groovy scripts).",
-      "Knowledge about monitoring tools (ELK, Prometheus, Grafana, CloudWatch).",
-      "Excellent planning and communication skills, capable of documenting and detailing implementation designs.",
-      "Proficient with Amazon Web Services.",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "front-end developer",
-    location: "remote",
-    category: "information-technology",
-    experience: "mid",
-    salary: "$ 70-90k / year",
-    responsabilities: [
-      "Develop new user-facing features ensuring code quality and high performance",
-      "Write reusable code",
-      "Ensure the technical feasibility of UI/UX designs",
-      "Cooperating with back-end developers in the process of building RESTful models",
-      "Able to estimate effort required and deliver to your commitment",
-    ],
-    requirements: [
-      "At least two years experience in working with modern JavaScript and JavaScript frameworks.",
-      "Good understanding of micro front ends and web components.",
-      "Proven interest in testing, code review, and code quality.",
-      "Experience working with REST web services and/or web APIs.",
-      "Ability to work in a Kanban system with fast switching priorities.",
-    ],
-    niceToHave: [],
-  },
-  {
-    title: "test engineer",
-    location: "remote",
-    category: "information-technology",
-    experience: "entry",
-    salary: "$ 50-60k / year",
-    responsabilities: [
-      "Design, create, execute, monitor, and update test scenarios based on defined acceptance criteria",
-      "Document, investigate, troubleshoot, and report the uncovered software defects",
-      "Find issues early in the development cycle to prevent late changes in the code",
-      "Contribute to the design, development, and execution of automated test cases as per project needs",
-      "Attend the scrum events within the team",
-    ],
-    requirements: [
-      "1 year of testing-related experience (automation testing skills are a big plus)",
-      "Troubleshooting, problem-solving mindset; ability to systematically and effectively break down problems to identify root failures",
-      "A quality mindset where mistakes and failure are viewed as opportunities to learn and improve and close gaps",
-      "Able and comfortable with working in a fast-paced, collaborative environment",
-      "Good understanding of the lifecycle of a software development project",
-    ],
-    niceToHave: [
-      "Prior experience in Automation testing (ie. Cypress, Katalon, Selenium Web Driver,)",
-      "Familiar with Bugzilla and/or JIRA",
-      "Work experience in multi-cultural environments",
-      "Experience with Agile/Scrum methodology",
-    ],
-  },
-];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+let database = [];
+
+const retreiveJobsFromFireBase = function () {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+    authDomain: "omnifood-custom-version.firebaseapp.com",
+    databaseURL:
+      "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "omnifood-custom-version",
+    storageBucket: "omnifood-custom-version.appspot.com",
+    messagingSenderId: "1094073505469",
+    appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+    measurementId: "G-1DT1EYNVPW",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const dbFirebase = getDatabase(app);
+  const reference = ref(dbFirebase, "jobOpenings");
+  onValue(reference, (snapshot) => {
+    database = snapshot.val();
+    addJobMissingInfo(database);
+  });
+};
 
 const toTitleCase = function (str) {
   const charArray = Array.from(str.trim().toLowerCase());
@@ -242,15 +60,15 @@ const addJobMissingInfo = function (jobsArray) {
       .format(newDateObj)
       .replace(",", "");
   };
-  const addIdsAndpublishingDates = function (jobsArray) {
+  const addIdDatePostedAndNiceToHaveReq = function (jobsArray) {
     jobsArray.forEach((job) => {
       job.publishingDateStr = generateDate();
       job.ID = randomInt(10_000, 99_999);
+      job.niceToHave = job.niceToHave ? job.niceToHave : [];
     });
   };
-  addIdsAndpublishingDates(jobsArray);
+  addIdDatePostedAndNiceToHaveReq(jobsArray);
 };
-addJobMissingInfo(database);
 
 const createSearchCriteria = function () {
   const firstPage = document.querySelector(".section-first-interaction");
@@ -587,7 +405,6 @@ const insertAppliedFiltersInHTML = function () {
     appliedFiltersContainer.insertAdjacentHTML("afterbegin", html);
   });
 };
-insertAppliedFiltersInHTML();
 
 const toggleAppliedFilterVisibility = function (e) {
   const targetText = e.target.nextElementSibling;
@@ -660,4 +477,7 @@ const addEventListeners = function () {
   });
   firstPageSearchBtn.addEventListener("click", jobSearch);
 };
+
+retreiveJobsFromFireBase();
+insertAppliedFiltersInHTML();
 addEventListeners();

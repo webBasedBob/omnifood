@@ -7,7 +7,7 @@ import {
 
 let database = [];
 
-const retreiveJobsFromFireBase = function () {
+const retrieveJobsFromFirebase = function () {
   const firebaseConfig = {
     apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
     authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -478,6 +478,6 @@ const addEventListeners = function () {
   firstPageSearchBtn.addEventListener("click", jobSearch);
 };
 
-retreiveJobsFromFireBase();
+retrieveJobsFromFirebase();
 insertAppliedFiltersInHTML();
 addEventListeners();

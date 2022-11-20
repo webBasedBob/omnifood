@@ -25,7 +25,8 @@ const retrieveJobsFromFirebase = function () {
   const reference = ref(dbFirebase, "jobOpenings");
   onValue(reference, (snapshot) => {
     database = snapshot.val();
-    addJobMissingInfo(database);
+    addMissingData(database);
+    // addJobMissingInfo(database);
   });
 };
 
@@ -42,33 +43,39 @@ const toTitleCase = function (str) {
   return charArray.join("");
 };
 
-const addJobMissingInfo = function (jobsArray) {
-  const randomInt = function (min, max) {
-    const correctedMin = min - 1;
-    return Math.floor(Math.random() * (max - correctedMin) + min);
-  };
-  const generateDate = function () {
-    let newDateObj = new Date();
-    newDateObj.setDate(randomInt(1, 29));
-    newDateObj.setMonth(newDateObj.getMonth() - 1);
-    let options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return Intl.DateTimeFormat("default", options)
-      .format(newDateObj)
-      .replace(",", "");
-  };
-  const addIdDatePostedAndNiceToHaveReq = function (jobsArray) {
-    jobsArray.forEach((job) => {
-      job.publishingDateStr = generateDate();
-      job.ID = randomInt(10_000, 99_999);
-      job.niceToHave = job.niceToHave ? job.niceToHave : [];
-    });
-  };
-  addIdDatePostedAndNiceToHaveReq(jobsArray);
+const addMissingData = function (incompleteJobsArr) {
+  incompleteJobsArr.forEach(
+    (job) => (job.niceToHave = job.niceToHave ? job.niceToHave : [])
+  );
 };
+
+// const addJobMissingInfo = function (jobsArray) {
+//   const randomInt = function (min, max) {
+//     const correctedMin = min - 1;
+//     return Math.floor(Math.random() * (max - correctedMin) + min);
+//   };
+//   const generateDate = function () {
+//     let newDateObj = new Date();
+//     newDateObj.setDate(randomInt(1, 29));
+//     newDateObj.setMonth(newDateObj.getMonth() - 1);
+//     let options = {
+//       year: "numeric",
+//       month: "long",
+//       day: "numeric",
+//     };
+//     return Intl.DateTimeFormat("default", options)
+//       .format(newDateObj)
+//       .replace(",", "");
+//   };
+//   const addIdDatePostedAndNiceToHaveReq = function (jobsArray) {
+//     jobsArray.forEach((job) => {
+//       job.publishingDateStr = generateDate();
+//       job.ID = randomInt(10_000, 99_999);
+//       job.niceToHave = job.niceToHave ? job.niceToHave : [];
+//     });
+//   };
+//   addIdDatePostedAndNiceToHaveReq(jobsArray);
+// };
 
 const createSearchCriteria = function () {
   const firstPage = document.querySelector(".section-first-interaction");
@@ -138,9 +145,9 @@ const filterDatabase = function (searchCriteriaObj) {
 };
 
 const createRelevanceScores = function (searchKeywords, rawDataBase) {
-  rawDataBase.forEach((job) => {
-    job.relevancePoints = 0;
-  });
+  // rawDataBase.forEach((job) => {
+  //   job.relevancePoints = 0;
+  // });
   const noKeywords = searchKeywords.length === 0;
   const databaseIsEmpty = rawDataBase.length === 0;
   if (noKeywords || databaseIsEmpty) return;
@@ -445,6 +452,25 @@ const removeAllAppliedFilters = function () {
   allFilterCheckboxes.forEach((filter) => (filter.checked = false));
 };
 
+// const pulamea = function () {
+//   const firebaseConfig = {
+//     apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+//     authDomain: "omnifood-custom-version.firebaseapp.com",
+//     databaseURL:
+//       "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+//     projectId: "omnifood-custom-version",
+//     storageBucket: "omnifood-custom-version.appspot.com",
+//     messagingSenderId: "1094073505469",
+//     appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+//     measurementId: "G-1DT1EYNVPW",
+//   };
+
+//   const app = initializeApp(firebaseConfig);
+//   const dbFirebase = getDatabase(app);
+//   const reference = ref(dbFirebase, "jobOpenings");
+//   set(reference, database);
+//   console.log("pula mea");
+// };
 const addEventListeners = function () {
   const searchResultsContainer = document.querySelector(".search-results");
   const closeBtn = document.querySelector(".full-screen-close-btn");
@@ -457,6 +483,7 @@ const addEventListeners = function () {
   removeAllAppliedFiltersBtn.addEventListener("click", function () {
     removeAllAppliedFilters();
     jobSearch();
+    // pulamea();
   });
   appliedFiltersContainer.addEventListener("click", function (e) {
     uncheckFilter(e);

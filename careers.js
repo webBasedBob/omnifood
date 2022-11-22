@@ -116,9 +116,6 @@ const filterDatabase = function (searchCriteriaObj) {
 };
 
 const createRelevanceScores = function (searchKeywords, rawDataBase) {
-  // rawDataBase.forEach((job) => {
-  //   job.relevancePoints = 0;
-  // });
   const noKeywords = searchKeywords.length === 0;
   const databaseIsEmpty = rawDataBase.length === 0;
   if (noKeywords || databaseIsEmpty) return;
@@ -263,85 +260,12 @@ const sortResults = function (sortingCriterion) {
   resultsArray.forEach((result) => resultsContainer.append(result));
 };
 
-const buildExpandedResult = function (source, id) {
-  const expandedResultContainer = document.querySelector(
-    ".result-fully-displayed"
-  );
-  const resultToExpand = source.find((el) => el.ID == id);
-  const experienceGlossary = {
-    none: "No Experience",
-    entry: "Entry-Level ( &lt; 2 years )",
-    mid: "Mid-Level ( 2-5 years )",
-    senior: "Senior ( &gt; 5 years )",
-  };
-  let resultSummaryHTML = `
-        <div class="result-summary">
-          <div class="date-posted-wrapper">
-            <p>Job full details</p>
-            <p>Posted on ${resultToExpand.publishingDateStr}</p>
-          </div>
-          <h1 class="full-screen-job-title">${toTitleCase(
-            resultToExpand.title
-          )}</h1>
-          <div class="full-screen-salary">
-            <ion-icon name="cash-outline"></ion-icon>
-            <p><strong>${resultToExpand.salary.slice(
-              0,
-              resultToExpand.salary.indexOf("k") + 1
-            )}</strong> / year</p>
-          </div>
-          <div class="full-screen-experience">
-            <ion-icon name="briefcase-outline"></ion-icon>
-            <p>${experienceGlossary[resultToExpand.experience]}</p>
-          </div>
-          <div class="full-screen-location">
-            <ion-icon name="location-outline"></ion-icon>
-            <p>${toTitleCase(resultToExpand.location)}</p>
-          </div>
-        </div>`;
-  expandedResultContainer.insertAdjacentHTML("afterbegin", resultSummaryHTML);
-
-  const addListItems = function (source, containerClass) {
-    const listContainer = document.querySelector(containerClass);
-    listContainer.innerHTML = "";
-    source.forEach((listItem) => {
-      let listItemHTML = `<li>${listItem}</li>`;
-      listContainer.insertAdjacentHTML("afterbegin", listItemHTML);
-    });
-  };
-  addListItems(
-    resultToExpand.responsabilities,
-    ".full-screen-result-responsabilities"
-  );
-  addListItems(
-    resultToExpand.requirements,
-    ".full-screen-result-requirements-must-have"
-  );
-  addListItems(
-    resultToExpand.niceToHave,
-    ".full-screen-result-requirements-nice-to-have"
-  );
-};
-
-const toggleVisibility = function () {
-  const navigation = document.querySelector(".header");
-  const expandedResult = document.querySelector(".result-fully-displayed");
-  const searchPanel = document.querySelector(".search-panel");
-  const filtersAndResults = document.querySelector(".filters-and-results");
-  navigation.classList.toggle("hidden");
-  searchPanel.classList.toggle("hidden");
-  filtersAndResults.classList.toggle("hidden");
-  expandedResult.classList.toggle("hidden");
-};
-
-// buildExpandedResult(database, database[4].ID);
-const expandResult = function (e) {
+const openFullJobDetails = function (e) {
   const logoWasClicked = e.target.classList.contains("result-omnifood-logo");
   const jobTitleWasClicked = e.target.classList.contains("overview-job-title");
   if (logoWasClicked || jobTitleWasClicked) {
     const id = e.target.closest(".search-result").dataset.jobid;
-    buildExpandedResult(database, id);
-    toggleVisibility();
+    window.open(`/omnifood/jobResult.html#${id}`);
   }
 };
 
@@ -425,7 +349,6 @@ const removeAllAppliedFilters = function () {
 
 const addEventListeners = function () {
   const searchResultsContainer = document.querySelector(".search-results");
-  const closeBtn = document.querySelector(".full-screen-close-btn");
   const mainSearchBtn = document.querySelector(".btn-search-main");
   const firstPageSearchBtn = document.querySelector(".btn-search");
   const filtersContainer = document.querySelector(".filters");
@@ -448,8 +371,7 @@ const addEventListeners = function () {
     }
   });
   mainSearchBtn.addEventListener("click", jobSearch);
-  searchResultsContainer.addEventListener("click", expandResult);
-  closeBtn.addEventListener("click", closeExpandedResultWindow);
+  searchResultsContainer.addEventListener("click", openFullJobDetails);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") jobSearch();
   });

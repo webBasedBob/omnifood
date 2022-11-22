@@ -55,3 +55,55 @@ heroSectionTextBox.addEventListener("click", function (e) {
 
 // const [firstItem] = carouselItems;
 // firstItem.style.transform = "translate(114.6%, 0px)";
+// foodish api - images only - not the pretiest, but ok
+// fetch(`https://foodish-api.herokuapp.com/api`)
+//   .then((caca) => caca.json())
+//   .then((response) => {
+//     const img = document.querySelector(".hero-img");
+//     img.src = response.image;
+//   });
+// const appId = "a5cea2be";
+// const key = "95cea576a8a53c23997c5ec6c40084b7";
+// fetch(
+//   `https://api.edamam.com/api/recipes/v2?type=any&q=chicken&app_id=a5cea2be&app_key=95cea576a8a53c23997c5ec6c40084b7&imageSize=SMALL&random=true&
+//   `
+// )
+//   .then((caca) => caca.json())
+//   .then((response) => {
+//     const img = document.querySelector(".hero-img");
+//     img.src = response.hits[1].recipe.image;
+//     console.log(response);
+//   });
+
+// const url = `https://api.edamam.com/api/recipes/v2?type=any&q=chicken&app_id=a5cea2be&app_key=95cea576a8a53c23997c5ec6c40084b7&imageSize=SMALL&random=true&
+//   `;
+//
+//
+//https://api.edamam.com/api/recipes/v2
+// ("http://www.edamam.com/ontologies/edamam.owl#recipe_");
+
+// to do
+//function to create url for fetch request - this is to make after all teh search fields are created
+//fn to make the request and rerturn the result
+// const recipeSearch = async function (url) {
+//   const rawResult = await fetch(url);
+//   const jsonResult = await rawResult.json();
+//   let recipesArr = jsonResult.hits.map((result) => result.recipe);
+//   return Promise.resolve(recipesArr);
+// };
+//fn to take the result and render it on the page
+// const renderResults = function (recipesArr) {
+//   const recipeResultsContainer = document.querySelector(".recipe-results");
+//   recipesArr.forEach((recipe) => {
+//     const htmmlToInsert = `<div class="recipe-result">
+//     <img src="${recipe.images.REGULAR.url}"/>
+//     <p class="recipe-result-title">${recipe.label}</p>
+//   </div>`;
+//     recipeResultsContainer.insertAdjacentHTML("afterbegin", htmmlToInsert);
+//   });
+// };
+//fn to expand the recipe
+//fn to save the recipe to favorites - maybe
+// console.log(recipeSearch(url));
+
+// recipeSearch(url).then((data) => renderResults(data));

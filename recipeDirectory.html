@@ -186,18 +186,60 @@
       </div>
       </section>
       <section class="recipes-directory" id="recipes-directory">
-        <div class="choose-diet">
-          <p> Choose diet</p>
-          <p class="diet">Vegan</p>
-          <p class="diet">Pescetarian</p>
-          <p class="diet">Gluten-free</p>
-          <p class="diet">plm</p>
-        </div>
-        <div class="meal-types">
-          <p class="meal-type">Breakfast</p>
-          <p class="meal-type">Main dish</p>
-          <p class="meal-type">Dessert</p>
-          <p class="meal-type">Dinner</p>
+        <div class="search-container">
+          <div class="search-panel">
+            <input
+              type="text"
+              class="main-search-field"
+              placeholder="Keywords..."
+            />
+            <ion-icon class="clean-search-field" name="close-outline"></ion-icon>
+            <button class="btn-search">Search</button>
+          </div>
+          <div class="filter-carousel-container">
+            <p class="filter-category">Diet :</p>
+            <ion-icon
+              class="filter-carousel-arr filter-carousel-arr-left"
+              name="chevron-back-outline"
+            ></ion-icon>
+            <div class="filter-carousel">
+              <p>Vegan</p>
+              <p>Pescetarian</p>
+              <p>Keto</p>
+              <p>Numai Pule</p>
+              <p>i ❤ pussy</p>
+            </div>
+            <ion-icon
+              class="filter-carousel-arr filter-carousel-arr-left"
+              name="chevron-forward-outline"
+            ></ion-icon>
+          </div>
+          <div class="filter-carousel-container">
+            <p class="filter-category">Cuisine :</p>
+            <ion-icon
+              class="filter-carousel-arr filter-carousel-arr-left"
+              name="chevron-back-outline"
+            ></ion-icon>
+            <div class="filter-carousel">
+              <p>Italian</p>
+              <p>Romanian</p>
+              <p>Chinese</p>
+              <p>Mediterranean</p>
+              <p>Nordic</p>
+            </div>
+            <ion-icon
+              class="filter-carousel-arr filter-carousel-arr-left"
+              name="chevron-forward-outline"
+            ></ion-icon>
+          </div>
+          <div class="meal-types">
+            <p class="filter-category">Meal type : </p>
+            <p class="meal-type">Breakfast</p>
+            <p class="meal-type">Main dish</p>
+            <p class="meal-type">Dessert</p>
+            <p class="meal-type">Dinner</p>
+          </div>
+          
         </div>
         <div class="recipe-results">
             <div class="recipe-result">

@@ -15,9 +15,15 @@
     <link rel="stylesheet" href="css/general.css" />
     <!-- <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/queries.css" /> -->
-    <link rel="stylesheet" href="recipeDirectory.css"/>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="recipeDirectory.css" />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
 
     <script
       defer
@@ -49,7 +55,7 @@
       </button>
     </header>
     <main>
-      <section class="section-hero">
+      <!-- <section class="section-hero">
         <div class="hero">
           <div class="hero-text-box">
             <h1 class="heading-primary">
@@ -68,122 +74,347 @@
           </div>
         
         <div class="hero-img-box">
-          <picture>
-            <!-- <source srcset="img/hero.webp" type="image/webp" />
+          <picture> -->
+      <!-- <source srcset="img/hero.webp" type="image/webp" />
             <source srcset="img/hero-min.png" type="image/png" /> -->
 
-            <img
+      <!-- <img
               src="omnifood_page2.png"
               class="hero-img"
               alt="Woman enjoying food, meals in storage container, and food bowls on a table"
             />
           </picture>
         </div>
-      </section>
+      </section> -->
       <section id="trending-foods" class="trending-foods">
-        
-        <h2 class="carousel-heading heading-tertiary">Best rated recipes of the month</h2>
+        <h2 class="carousel-heading heading-tertiary">
+          Best rated recipes of the month
+        </h2>
         <div class="carousel-wrapper">
-          <ion-icon class= "carousel-arrow arrow-left" name="chevron-back-outline"></ion-icon>
-          <ion-icon class= "carousel-arrow arrow-right" name="chevron-forward-outline"></ion-icon>
-          
-          <div class="carousel ">
-            
+          <ion-icon
+            class="carousel-arrow arrow-left"
+            name="chevron-back-outline"
+          ></ion-icon>
+          <ion-icon
+            class="carousel-arrow arrow-right"
+            name="chevron-forward-outline"
+          ></ion-icon>
 
+          <div class="carousel">
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/638741-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
 
-          <div class="carousel-item">
-            <img class="carousel-item-img" src="https://spoonacular.com/recipeImages/638741-556x370.jpg"/>
-            <div class ="carousel-item-info-wrapper">
-            <div class="meal-tags">
-              <span class="tag tag--vegan">Vegan</span>
-              <span class="tag tag--paleo">Paleo</span>
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.67</strong></p>
+                  <p class="number-of-reviews">412 reviews</p>
+                </div>
+              </div>
             </div>
-            <p class="carousel-item-title">Ciulama de prepelita</p>
-            
-            <div class="nutriscore carousel-item-info">
-              <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
-              <p >NutriScore &reg; <strong>92</strong></p>
+
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/63872-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.84</strong></p>
+                  <p class="number-of-reviews">528 reviews</p>
+                </div>
+              </div>
             </div>
-            <div class="calories carousel-item-info">
-              <ion-icon class="carousel-icon" name="flame"></ion-icon>
-              <p ><strong>400</strong> calories</p>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/631741-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
             </div>
-            <div class="rating carousel-item-info">
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star-half-outline"></ion-icon>
-              <p class="rating-number"><strong>4.67</strong></p>
-              <p class="number-of-reviews">412 reviews</p>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/63041-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/631721-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/631741-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/631141-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/63141-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img
+                class="carousel-item-img"
+                src="https://spoonacular.com/recipeImages/63741-556x370.jpg"
+              />
+              <div class="carousel-item-info-wrapper">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">Vegan</span>
+                  <span class="tag tag--paleo">Paleo</span>
+                </div>
+                <p class="carousel-item-title">Ciulama de prepelita</p>
+
+                <div class="nutriscore carousel-item-info">
+                  <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
+                  <p>NutriScore &reg; <strong>92</strong></p>
+                </div>
+                <div class="calories carousel-item-info">
+                  <ion-icon class="carousel-icon" name="flame"></ion-icon>
+                  <p><strong>400</strong> calories</p>
+                </div>
+                <div class="rating carousel-item-info">
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon class="carousel-icon" name="star"></ion-icon>
+                  <ion-icon
+                    class="carousel-icon"
+                    name="star-half-outline"
+                  ></ion-icon>
+                  <p class="rating-number"><strong>4.81</strong></p>
+                  <p class="number-of-reviews">241 reviews</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-          <div class="carousel-item">
-            <img class="carousel-item-img" src="https://spoonacular.com/recipeImages/63872-556x370.jpg"/>
-            <div class ="carousel-item-info-wrapper">
-            <div class="meal-tags">
-              <span class="tag tag--vegan">Vegan</span>
-              <span class="tag tag--paleo">Paleo</span>
-            </div>
-            <p class="carousel-item-title">Ciulama de prepelita</p>
-            
-            <div class="nutriscore carousel-item-info">
-              <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
-              <p >NutriScore &reg; <strong>92</strong></p>
-            </div>
-            <div class="calories carousel-item-info">
-              <ion-icon class="carousel-icon" name="flame"></ion-icon>
-              <p ><strong>400</strong> calories</p>
-            </div>
-            <div class="rating carousel-item-info">
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star"></ion-icon>
-              <ion-icon class="carousel-icon" name="star-half-outline"></ion-icon>
-              <p class="rating-number"><strong>4.84</strong></p>
-              <p class="number-of-reviews">528 reviews</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img class="carousel-item-img" src="https://spoonacular.com/recipeImages/631741-556x370.jpg"/>
-          <div class ="carousel-item-info-wrapper">
-          <div class="meal-tags">
-            <span class="tag tag--vegan">Vegan</span>
-            <span class="tag tag--paleo">Paleo</span>
-          </div>
-          <p class="carousel-item-title">Ciulama de prepelita</p>
-          
-          <div class="nutriscore carousel-item-info">
-            <ion-icon class="carousel-icon" name="restaurant"></ion-icon>
-            <p >NutriScore &reg; <strong>92</strong></p>
-          </div>
-          <div class="calories carousel-item-info">
-            <ion-icon class="carousel-icon" name="flame"></ion-icon>
-            <p ><strong>400</strong> calories</p>
-          </div>
-          <div class="rating carousel-item-info">
-            <ion-icon class="carousel-icon" name="star"></ion-icon>
-            <ion-icon class="carousel-icon" name="star"></ion-icon>
-            <ion-icon class="carousel-icon" name="star"></ion-icon>
-            <ion-icon class="carousel-icon" name="star"></ion-icon>
-            <ion-icon class="carousel-icon" name="star-half-outline"></ion-icon>
-            <p class="rating-number"><strong>4.81</strong></p>
-            <p class="number-of-reviews">241 reviews</p>
-          </div>
-        </div>
-      </div>
-      
           <div class="carousel-breadcrumbs">
             <div class="carousel-breadcrumb"></div>
             <div class="carousel-breadcrumb"></div>
             <div class="carousel-breadcrumb"></div>
           </div>
         </div>
-      </div>
       </section>
       <section class="recipes-directory" id="recipes-directory">
         <div class="search-container">
@@ -193,100 +424,198 @@
               class="main-search-field"
               placeholder="Keywords..."
             />
-            <ion-icon class="clean-search-field" name="close-outline"></ion-icon>
+            <ion-icon
+              class="clean-search-field"
+              name="close-outline"
+            ></ion-icon>
             <button class="btn-search">Search</button>
           </div>
-          <div class="filter-carousel-container">
+          <div class="filter-categories-container">
             <p class="filter-category">Diet :</p>
-            <ion-icon
-              class="filter-carousel-arr filter-carousel-arr-left"
-              name="chevron-back-outline"
-            ></ion-icon>
-            <div class="filter-carousel">
-              <p>Vegan</p>
-              <p>Pescetarian</p>
-              <p>Keto</p>
-              <p>Numai Pule</p>
-              <p>i ❤ pussy</p>
-            </div>
-            <ion-icon
-              class="filter-carousel-arr filter-carousel-arr-left"
-              name="chevron-forward-outline"
-            ></ion-icon>
-          </div>
-          <div class="filter-carousel-container">
             <p class="filter-category">Cuisine :</p>
-            <ion-icon
-              class="filter-carousel-arr filter-carousel-arr-left"
-              name="chevron-back-outline"
-            ></ion-icon>
-            <div class="filter-carousel">
-              <p>Italian</p>
-              <p>Romanian</p>
-              <p>Chinese</p>
-              <p>Mediterranean</p>
-              <p>Nordic</p>
-            </div>
-            <ion-icon
-              class="filter-carousel-arr filter-carousel-arr-left"
-              name="chevron-forward-outline"
-            ></ion-icon>
+            <p class="filter-category">Meal type :</p>
           </div>
-          <div class="meal-types">
-            <p class="filter-category">Meal type : </p>
+          <div class="carousels-container">
+            <div class="filter-carousel-container">
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-left"
+                name="chevron-back-outline"
+              ></ion-icon>
+              <div class="filter-carousel">
+                <p data-diet="vegan" class="diet-carousel-item">Vegan</p>
+                <p data-diet="vegetarian" class="diet-carousel-item">
+                  Vegetarian
+                </p>
+                <p data-diet="pescetarian" class="diet-carousel-item">
+                  Pescetarian
+                </p>
+                <p data-diet="keto-friendly" class="diet-carousel-item">Keto</p>
+                <p data-diet="red-meat-free" class="diet-carousel-item">
+                  Red meat-free
+                </p>
+                <p data-diet="pork-free" class="diet-carousel-item">
+                  Pork-free
+                </p>
+                <p data-diet="dairy-free" class="diet-carousel-item">
+                  Dairy-free
+                </p>
+                <p data-diet="gluten-free" class="diet-carousel-item">
+                  Gluten-free
+                </p>
+              </div>
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-left"
+                name="chevron-forward-outline"
+              ></ion-icon>
+            </div>
+            <div class="filter-carousel-container">
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-left cuisine-carousel-left-arr"
+                name="chevron-back-outline"
+              ></ion-icon>
+              <div class="filter-carousel">
+                <p data-cuisinetype="American" class="cuisine-carousel-item">
+                  American
+                </p>
+                <p data-cuisinetype="Asian" class="cuisine-carousel-item">
+                  Asian
+                </p>
+                <p data-cuisinetype="British" class="cuisine-carousel-item">
+                  British
+                </p>
+                <p data-cuisinetype="Caribbean" class="cuisine-carousel-item">
+                  Caribbean
+                </p>
+                <p
+                  data-cuisinetype="Central%20Europe"
+                  class="cuisine-carousel-item"
+                >
+                  Central Europe
+                </p>
+                <p data-cuisinetype="Chinese" class="cuisine-carousel-item">
+                  Chinese
+                </p>
+                <p
+                  data-cuisinetype="Eastern%20Europe"
+                  class="cuisine-carousel-item"
+                >
+                  Eastern Europe
+                </p>
+                <p data-cuisinetype="French" class="cuisine-carousel-item">
+                  French
+                </p>
+                <p data-cuisinetype="Indian" class="cuisine-carousel-item">
+                  Indian
+                </p>
+                <p data-cuisinetype="Italian" class="cuisine-carousel-item">
+                  Italian
+                </p>
+                <p data-cuisinetype="Japanese" class="cuisine-carousel-item">
+                  Japanese
+                </p>
+                <p data-cuisinetype="Kosher" class="cuisine-carousel-item">
+                  Kosher
+                </p>
+                <p
+                  data-cuisinetype="Mediterranean"
+                  class="cuisine-carousel-item"
+                >
+                  Mediterranean
+                </p>
+                <p data-cuisinetype="Mexican" class="cuisine-carousel-item">
+                  Mexican
+                </p>
+                <p
+                  data-cuisinetype="Middle%20Eastern"
+                  class="cuisine-carousel-item"
+                >
+                  Middle Eastern
+                </p>
+                <p data-cuisinetype="Nordic" class="cuisine-carousel-item">
+                  Nordic
+                </p>
+                <p
+                  data-cuisinetype="South%20American"
+                  class="cuisine-carousel-item"
+                >
+                  South American
+                </p>
+                <p
+                  data-cuisinetype="South%20East%20Asian"
+                  class="cuisine-carousel-item"
+                >
+                  South East Asian
+                </p>
+              </div>
+              <ion-icon
+                class="filter-carousel-arr filter-carousel-arr-right cuisine-carousel-right-arr"
+                name="chevron-forward-outline"
+              ></ion-icon>
+            </div>
+            <div class="filter-carousel-container">
+              <div class="meal-types">
+                <p data-mealtype="Breakfast" class="meal-type selected">
+                  Breakfast
+                </p>
+                <p data-mealtype="Lunch" class="meal-type">Lunch</p>
+                <p data-mealtype="Dinner" class="meal-type">Dinner</p>
+              </div>
+            </div>
+            <!-- <div class="meal-types">
+            
             <p class="meal-type">Breakfast</p>
             <p class="meal-type">Main dish</p>
             <p class="meal-type">Dessert</p>
             <p class="meal-type">Dinner</p>
+          </div> -->
           </div>
-          
         </div>
         <div class="recipe-results">
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2741-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/241-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/27641-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2041-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2700-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/741-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/9741-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2701-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2749-556x370.jpg"/>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2741-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/241-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/27641-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2041-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2700-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/741-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/9741-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2701-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2749-556x370.jpg" />
 
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/2721-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
-            <div class="recipe-result">
-              <img src="https://spoonacular.com/recipeImages/1041-556x370.jpg"/>
-              <p class="recipe-result-title">Ciulama de prepelita africana</p>
-            </div>
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/2721-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
+          <div class="recipe-result">
+            <img src="https://spoonacular.com/recipeImages/1041-556x370.jpg" />
+            <p class="recipe-result-title">Ciulama de prepelita africana</p>
+          </div>
         </div>
       </section>
     </main>

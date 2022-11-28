@@ -255,6 +255,7 @@ Medium: 11px
   grid-template-rows: auto auto;
   width: 80vw;
   margin: 0 auto;
+  justify-items: center;
 }
 .search-panel {
   grid-column: 1/-1;
@@ -317,7 +318,7 @@ Medium: 11px
 .filter-carousel {
   overflow: hidden;
   position: relative;
-  width: 45vw;
+  width: 50vw;
   height: 5rem;
 }
 .filter-carousel p {
@@ -350,6 +351,10 @@ Medium: 11px
   width: 60vw;
   padding-left: 5rem;
 }
+.filter.selected {
+  background-color: #e67e22;
+  color: #fff;
+}
 
 .recipe-results {
   display: grid;
@@ -357,6 +362,7 @@ Medium: 11px
   justify-items: center;
   row-gap: 3rem;
   column-gap: 3rem;
+  min-height: 45vh;
 }
 .recipe-result {
   width: 22vw;
@@ -417,9 +423,8 @@ Medium: 11px
     font-size: 43.75%;
   }
   .filter-carousel {
-    width: 53vw;
+    width: 48vw;
   }
-
   .recipe-result-title {
     font-size: 2.4rem;
   }

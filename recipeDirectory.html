@@ -55,37 +55,6 @@
       </button>
     </header>
     <main>
-      <!-- <section class="section-hero">
-        <div class="hero">
-          <div class="hero-text-box">
-            <h1 class="heading-primary">
-              A healthy meal delivered to your door, every single day
-            </h1>
-            <p class="hero-description">
-              The smart 365-days-per-year food subscription that will make you
-              eat healthy again. Tailored to your personal tastes and
-              nutritional needs.
-            </p>
-            <a href="#recipes-directory" class="see-more-recipes btn btn--full margin-right-sm"
-              >See our recipes selection</a
-            >
-
-            <a href="#trending-foods" class="see-trending-foods-btn btn btn--outline">Learn more &darr;</a>
-          </div>
-        
-        <div class="hero-img-box">
-          <picture> -->
-      <!-- <source srcset="img/hero.webp" type="image/webp" />
-            <source srcset="img/hero-min.png" type="image/png" /> -->
-
-      <!-- <img
-              src="omnifood_page2.png"
-              class="hero-img"
-              alt="Woman enjoying food, meals in storage container, and food bowls on a table"
-            />
-          </picture>
-        </div>
-      </section> -->
       <section id="trending-foods" class="trending-foods">
         <h2 class="carousel-heading heading-tertiary">
           Best rated recipes of the month
@@ -438,33 +407,35 @@
           <div class="carousels-container">
             <div class="filter-carousel-container">
               <ion-icon
-                class="filter-carousel-arr filter-carousel-arr-left"
+                class="filter-carousel-arr filter-carousel-arr-left diet-carousel-left-arr"
                 name="chevron-back-outline"
               ></ion-icon>
               <div class="filter-carousel">
-                <p data-diet="vegan" class="diet-carousel-item">Vegan</p>
-                <p data-diet="vegetarian" class="diet-carousel-item">
+                <p data-diet="vegan" class="diet-carousel-item filter">Vegan</p>
+                <p data-diet="vegetarian" class="diet-carousel-item filter">
                   Vegetarian
                 </p>
-                <p data-diet="pescetarian" class="diet-carousel-item">
-                  Pescetarian
+                <p data-diet="pescatarian" class="diet-carousel-item filter">
+                  Pescatarian
                 </p>
-                <p data-diet="keto-friendly" class="diet-carousel-item">Keto</p>
-                <p data-diet="red-meat-free" class="diet-carousel-item">
+                <p data-diet="keto-friendly" class="diet-carousel-item filter">
+                  Keto
+                </p>
+                <p data-diet="red-meat-free" class="diet-carousel-item filter">
                   Red meat-free
                 </p>
-                <p data-diet="pork-free" class="diet-carousel-item">
+                <p data-diet="pork-free" class="diet-carousel-item filter">
                   Pork-free
                 </p>
-                <p data-diet="dairy-free" class="diet-carousel-item">
+                <p data-diet="dairy-free" class="diet-carousel-item filter">
                   Dairy-free
                 </p>
-                <p data-diet="gluten-free" class="diet-carousel-item">
+                <p data-diet="gluten-free" class="diet-carousel-item filter">
                   Gluten-free
                 </p>
               </div>
               <ion-icon
-                class="filter-carousel-arr filter-carousel-arr-left"
+                class="filter-carousel-arr filter-carousel-arr-right diet-carousel-right-arr"
                 name="chevron-forward-outline"
               ></ion-icon>
             </div>
@@ -474,46 +445,76 @@
                 name="chevron-back-outline"
               ></ion-icon>
               <div class="filter-carousel">
-                <p data-cuisinetype="American" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="American"
+                  class="cuisine-carousel-item filter"
+                >
                   American
                 </p>
-                <p data-cuisinetype="Asian" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Asian"
+                  class="cuisine-carousel-item filter"
+                >
                   Asian
                 </p>
-                <p data-cuisinetype="British" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="British"
+                  class="cuisine-carousel-item filter"
+                >
                   British
                 </p>
-                <p data-cuisinetype="Caribbean" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Caribbean"
+                  class="cuisine-carousel-item filter"
+                >
                   Caribbean
                 </p>
                 <p
                   data-cuisinetype="Central%20Europe"
-                  class="cuisine-carousel-item"
+                  class="cuisine-carousel-item filter"
                 >
                   Central Europe
                 </p>
-                <p data-cuisinetype="Chinese" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Chinese"
+                  class="cuisine-carousel-item filter"
+                >
                   Chinese
                 </p>
                 <p
                   data-cuisinetype="Eastern%20Europe"
-                  class="cuisine-carousel-item"
+                  class="cuisine-carousel-item filter"
                 >
                   Eastern Europe
                 </p>
-                <p data-cuisinetype="French" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="French"
+                  class="cuisine-carousel-item filter"
+                >
                   French
                 </p>
-                <p data-cuisinetype="Indian" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Indian"
+                  class="cuisine-carousel-item filter"
+                >
                   Indian
                 </p>
-                <p data-cuisinetype="Italian" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Italian"
+                  class="cuisine-carousel-item filter"
+                >
                   Italian
                 </p>
-                <p data-cuisinetype="Japanese" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Japanese"
+                  class="cuisine-carousel-item filter"
+                >
                   Japanese
                 </p>
-                <p data-cuisinetype="Kosher" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Kosher"
+                  class="cuisine-carousel-item filter"
+                >
                   Kosher
                 </p>
                 <p
@@ -522,7 +523,10 @@
                 >
                   Mediterranean
                 </p>
-                <p data-cuisinetype="Mexican" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Mexican"
+                  class="cuisine-carousel-item filter"
+                >
                   Mexican
                 </p>
                 <p
@@ -531,18 +535,21 @@
                 >
                   Middle Eastern
                 </p>
-                <p data-cuisinetype="Nordic" class="cuisine-carousel-item">
+                <p
+                  data-cuisinetype="Nordic"
+                  class="cuisine-carousel-item filter"
+                >
                   Nordic
                 </p>
                 <p
                   data-cuisinetype="South%20American"
-                  class="cuisine-carousel-item"
+                  class="cuisine-carousel-item filter"
                 >
                   South American
                 </p>
                 <p
                   data-cuisinetype="South%20East%20Asian"
-                  class="cuisine-carousel-item"
+                  class="cuisine-carousel-item filter"
                 >
                   South East Asian
                 </p>
@@ -554,69 +561,16 @@
             </div>
             <div class="filter-carousel-container">
               <div class="meal-types">
-                <p data-mealtype="Breakfast" class="meal-type selected">
+                <p data-mealtype="Breakfast" class="meal-type filter">
                   Breakfast
                 </p>
-                <p data-mealtype="Lunch" class="meal-type">Lunch</p>
-                <p data-mealtype="Dinner" class="meal-type">Dinner</p>
+                <p data-mealtype="Lunch" class="meal-type filter">Lunch</p>
+                <p data-mealtype="Dinner" class="meal-type filter">Dinner</p>
               </div>
             </div>
-            <!-- <div class="meal-types">
-            
-            <p class="meal-type">Breakfast</p>
-            <p class="meal-type">Main dish</p>
-            <p class="meal-type">Dessert</p>
-            <p class="meal-type">Dinner</p>
-          </div> -->
           </div>
         </div>
-        <div class="recipe-results">
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2741-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/241-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/27641-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2041-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2700-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/741-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/9741-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2701-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2749-556x370.jpg" />
-
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/2721-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-          <div class="recipe-result">
-            <img src="https://spoonacular.com/recipeImages/1041-556x370.jpg" />
-            <p class="recipe-result-title">Ciulama de prepelita africana</p>
-          </div>
-        </div>
+        <div class="recipe-results"></div>
       </section>
     </main>
   </body>

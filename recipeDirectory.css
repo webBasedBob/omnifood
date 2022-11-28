@@ -227,6 +227,7 @@ Medium: 11px
   gap: 4rem;
   flex-direction: column;
   padding: 6rem;
+  position: relative;
 }
 .choose-diet {
   grid-column: 2/2;
@@ -391,7 +392,15 @@ Medium: 11px
 .recipe-result:hover {
   transform: scale(1.1);
 }
-
+.loader {
+  background: transparent url(img/loader.gif) no-repeat center center;
+  background-size: 75px;
+  height: 75px;
+  width: 75px;
+  position: absolute;
+  bottom: 25%;
+  right: 50%;
+}
 /* queryes */
 /* 1376px */
 @media (max-width: 86em) {

@@ -227,7 +227,6 @@ const sortResults = function () {
 
 const renderResults = function (recipesArr) {
   const recipeResultsContainer = document.querySelector(".recipe-results");
-  recipeResultsContainer.innerHTML = "";
   recipesArr.forEach((recipe) => {
     const htmmlToInsert = `<div data-relevancescore = ${
       recipe.relevanceScore
@@ -238,8 +237,21 @@ const renderResults = function (recipesArr) {
     recipeResultsContainer.insertAdjacentHTML("afterbegin", htmmlToInsert);
   });
 };
-
+const emptyOutResultsContainer = function () {
+  const recipeResultsContainer = document.querySelector(".recipe-results");
+  recipeResultsContainer.innerHTML = "";
+};
+const showLoader = function () {
+  const loader = document.querySelector(".loader");
+  loader.classList.remove("hidden");
+};
+const hideLoader = function () {
+  const loader2 = document.querySelector(".loader");
+  loader2.classList.add("hidden");
+};
 const recipeSearch = async function () {
+  emptyOutResultsContainer();
+  showLoader();
   const url = createUrl();
   const recipesArray = await retreiveRecipesFromApi(url);
   storeRecipesGlobally(recipesArray);
@@ -248,6 +260,7 @@ const recipeSearch = async function () {
   console.log(recipesArray);
   renderResults(recipesArray);
   sortResults();
+  hideLoader();
 };
 
 //fn to expand the recipe

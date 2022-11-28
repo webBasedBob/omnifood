@@ -188,13 +188,50 @@ const storeRecipesGlobally = function (recipesArr) {
     return { ...recipe, id: extractRecipeId(recipe) };
   });
 };
+const createRelevanceScores = function (recipesArr) {
+  recipesArr.forEach((recipe) => {
+    recipe.relevanceScore = 0;
+  });
+  const searchInputField = document.querySelector(".main-search-field");
+  const searchKeywords = correctUserInputText(searchInputField.value).split(
+    " "
+  );
+  const noKeywords = searchKeywords[0] === "";
+  const databaseIsEmpty = recipesArr.length === 0;
+  if (noKeywords || databaseIsEmpty) return;
+  searchKeywords.forEach((keyword) => {
+    const keywordVariations = [
+      keyword,
+      keyword[0].toUpperCase() + keyword.slice(1),
+      keyword.toUpperCase(),
+    ];
+    const regex = new RegExp(keywordVariations.join("|"));
+    recipesArr.forEach((recipe) => {
+      if (recipe.label.match(regex)) recipe.relevanceScore += 10;
+    });
+  });
+};
+
+const sortByRelevance = function (a, b) {
+  const aRelevance = a.dataset.relevancescore;
+  const bRelevance = b.dataset.relevancescore;
+  return bRelevance - aRelevance;
+};
+
+const sortResults = function () {
+  const resultsContainer = document.querySelector(".recipe-results");
+  const resultsArray = Array.from(document.querySelectorAll(".recipe-result"));
+  resultsArray.sort(sortByRelevance);
+  resultsArray.forEach((result) => resultsContainer.append(result));
+};
 
 const renderResults = function (recipesArr) {
   const recipeResultsContainer = document.querySelector(".recipe-results");
+  recipeResultsContainer.innerHTML = "";
   recipesArr.forEach((recipe) => {
-    const htmmlToInsert = `<div data-recipeid = "${extractRecipeId(
-      recipe
-    )}" class="recipe-result">
+    const htmmlToInsert = `<div data-relevancescore = ${
+      recipe.relevanceScore
+    } data-recipeid = "${extractRecipeId(recipe)}" class="recipe-result">
     <img src="${recipe.images.REGULAR.url}"/>
     <p class="recipe-result-title">${recipe.label}</p>
   </div>`;
@@ -206,11 +243,12 @@ const recipeSearch = async function () {
   const url = createUrl();
   const recipesArray = await retreiveRecipesFromApi(url);
   storeRecipesGlobally(recipesArray);
+  createRelevanceScores(recipesArray);
+
   console.log(recipesArray);
   renderResults(recipesArray);
+  sortResults();
 };
-
-document.querySelector(".btn-search").addEventListener("click", recipeSearch);
 
 //fn to expand the recipe
 //fn to save the recipe to favorites - maybe
@@ -226,11 +264,21 @@ const selectFilter = function (e) {
     e.target.classList.add("selected");
   }
 };
-
+const clearSearchInputField = function () {
+  const searchInputField = document.querySelector(".main-search-field");
+  searchInputField.value = "";
+};
+const SearchByPressingEnter = function (e) {
+  if (e.key === "Enter") recipeSearch();
+};
 const addEventListeners = function () {
   const filtersContainer = document.querySelector(".carousels-container");
-  filtersContainer.addEventListener("click", selectFilter);
   const searchBtn = document.querySelector(".btn-search");
+  const clearSearchBarBtn = document.querySelector(".clean-search-field");
+
+  filtersContainer.addEventListener("click", selectFilter);
   searchBtn.addEventListener("click", recipeSearch);
+  clearSearchBarBtn.addEventListener("click", clearSearchInputField);
+  document.addEventListener("keydown", SearchByPressingEnter);
 };
 addEventListeners();

@@ -162,7 +162,8 @@ const createUrl = function () {
         .reduce((acc, curVal) => acc + "%20" + curVal)}`
     );
   dietFilter && resultUrl.push(`health=${dietFilter.dataset.diet}`);
-  cuisineFilter && result.push(`cuisine=${cuisineFilter.dataset.cuisinetype}`);
+  cuisineFilter &&
+    resultUrl.push(`cuisineType=${cuisineFilter.dataset.cuisinetype}`);
   mealTypeFilter &&
     resultUrl.push(`mealType=${mealTypeFilter.dataset.mealtype}`);
   resultUrl.push(`app_id=${appId}&app_key=${appKey}`);
@@ -213,3 +214,23 @@ document.querySelector(".btn-search").addEventListener("click", recipeSearch);
 
 //fn to expand the recipe
 //fn to save the recipe to favorites - maybe
+
+const selectFilter = function (e) {
+  if (e.target.classList.contains("selected")) {
+    e.target.classList.remove("selected");
+    return;
+  }
+  if (e.target.classList.contains("filter")) {
+    const siblingFilters = [...e.target.parentElement.children];
+    siblingFilters.forEach((filter) => filter.classList.remove("selected"));
+    e.target.classList.add("selected");
+  }
+};
+
+const addEventListeners = function () {
+  const filtersContainer = document.querySelector(".carousels-container");
+  filtersContainer.addEventListener("click", selectFilter);
+  const searchBtn = document.querySelector(".btn-search");
+  searchBtn.addEventListener("click", recipeSearch);
+};
+addEventListeners();

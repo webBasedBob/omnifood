@@ -4,7 +4,7 @@ import {
   ref,
   onValue,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-
+import { toTitleCase } from "./js/reusableFunctions.js";
 let database = [];
 
 const retrieveJobsFromFirebase = function () {
@@ -27,19 +27,6 @@ const retrieveJobsFromFirebase = function () {
     database = snapshot.val();
     addMissingData(database);
   });
-};
-
-const toTitleCase = function (str) {
-  const charArray = Array.from(str.trim().toLowerCase());
-  const capitalizeNextCharacter = function (currentCharIndex) {
-    const nextCharIndex = currentCharIndex + 1;
-    charArray[nextCharIndex] = charArray[nextCharIndex].toUpperCase();
-  };
-  charArray[0] = charArray[0].toUpperCase();
-  charArray.forEach((char, i) => {
-    if (char === " ") capitalizeNextCharacter(i);
-  });
-  return charArray.join("");
 };
 
 const addMissingData = function (incompleteJobsArr) {
@@ -278,10 +265,6 @@ const resetFullDetailsWindow = function () {
     document.querySelector(".full-screen-result-requirements-nice-to-have"),
   ];
   elmToEmptyOut.forEach((elm) => (elm.innerHTML = ""));
-};
-const closeExpandedResultWindow = function () {
-  toggleVisibility();
-  resetFullDetailsWindow();
 };
 
 const extractFilterLabel = function (source) {

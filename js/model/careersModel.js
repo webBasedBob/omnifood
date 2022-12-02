@@ -11,6 +11,7 @@ export const state = {
   searchCriteria: {},
   ExpandedJobResultId: 0,
   sectionVisibleNow: "firstPage",
+  sortingCriterion: "",
 };
 
 const getJobsFromServer = function () {
@@ -34,7 +35,9 @@ const getJobsFromServer = function () {
     addMissingData(state.jobsDatabase);
   });
 };
-
+export const setSortingCriterion = function (criterion) {
+  state.sortingCriterion = criterion;
+};
 const addMissingData = function (incompleteJobsArr) {
   incompleteJobsArr.forEach(
     (job) => (job.niceToHave = job.niceToHave ? job.niceToHave : [])

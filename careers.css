@@ -266,9 +266,13 @@ label {
   font-size: 2.4rem;
   color: #333;
 }
+.sort-results button.sort-active {
+  color: #222;
+  font-weight: 700;
+}
 .sort-results {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0.5rem 1.5rem;
   font-size: 2rem;
   padding: 2rem 4rem;

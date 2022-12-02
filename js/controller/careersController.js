@@ -4,6 +4,7 @@ import searchResultsView from "../view/viewCareers/careersSearchResultsView.js";
 import filtersView from "../view/viewCareers/careersFiltersView.js";
 import filtersCarouselView from "../view/viewCareers/careersFiltersCarouselView.js";
 import firstPageSearchView from "../view/viewCareers/careersFirstPageSearchView.js";
+import sortView from "../view/viewCareers/careersSortView.js";
 const controlFirstPageSearch = function () {
   filtersView.init();
   controlSearchResults();
@@ -18,9 +19,12 @@ const controlSearchResults = function () {
   model.getSearchResults();
   searchResultsView.renderResults(model.state.jobResults);
   searchResultsView.renderResultsNo(model.state.jobResults.length);
-  const sortingCriterion =
-    model.state.searchCriteria.keywords.length === 0 ? "date" : "relevance";
-  searchResultsView.sortResults(sortingCriterion);
+  model.setSortingCriterion(
+    model.state.searchCriteria.keywords.length === 0 ? "date" : "relevance"
+  );
+
+  searchResultsView.sortResults(model.state.sortingCriterion);
+  sortView.highlightSortingCriterion(model.state.sortingCriterion);
   searchView.switchPages();
 };
 
@@ -54,6 +58,14 @@ const controlExpandResult = function (e) {
   model.storeExpandedRecipeId(e);
   window.open(`/omnifood/jobResult.html#${model.state.ExpandedJobResultId}`);
 };
+
+const controlSorting = function (e) {
+  const sortingCriterion = e.target.innerText.toLowerCase();
+  model.setSortingCriterion(sortingCriterion);
+  sortView.highlightSortingCriterion(model.state.sortingCriterion);
+  searchResultsView.sortResults(model.state.sortingCriterion);
+};
+
 const init = function () {
   firstPageSearchView.addHandlerFirstPageSearch(controlFirstPageSearch);
   searchView.addHandlerJobSearch(controlSearchResults);
@@ -63,5 +75,6 @@ const init = function () {
   searchResultsView.addHandlerExpandJobResult(controlExpandResult);
 
   filtersCarouselView.addHandlerSelectFilter(controlFiltersCarousel);
+  sortView.addHandlerSort(controlSorting);
 };
 init();

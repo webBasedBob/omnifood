@@ -7,7 +7,7 @@ import {
   query,
   orderByChild,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-import { toTitleCase } from "./js/reusableFunctions";
+import { toTitleCase } from "./js/reusableFunctions.js";
 const getJobId = function () {
   const url = window.location.href;
   const id = Number(url.slice(url.indexOf("#") + 1));

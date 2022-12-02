@@ -40,15 +40,13 @@ class searchView {
     this.syncSearchInputField();
   }
   addHandlerJobSearch(handler) {
-    const searchBtns = [
-      document.querySelector(".btn-search-main"),
-      document.querySelector(".btn-search"),
-    ];
-    searchBtns.forEach((btn) => {
-      btn.addEventListener("click", handler);
-    });
+    const searchBtn = document.querySelector(".btn-search-main");
+    searchBtn.addEventListener("click", handler);
+    const FirstPageIsHidden = document.querySelector(
+      ".section-first-interaction.hidden"
+    );
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handler();
+      if (FirstPageIsHidden && e.key === "Enter") handler();
     });
   }
 }

@@ -48,18 +48,17 @@ class filtersView {
     const filterToUncheck = allFiltersArray.find((filter) => {
       let filterLabel = this.extractFilterLabel(filter.children[1]);
       return filterLabel == e.target.previousElementSibling.innerText;
-    });
-    filterToUncheck.children[0].checked = false;
-    e.target.closest(".applied-filter").classList.toggle("hidden");
+    }).children[0];
+    filterToUncheck.click();
   }
 
+  selectFilter(id) {
+    const filter = document.querySelector(`#${id}`);
+    filter.click();
+  }
   addHandlerMainFilters(handler) {
     const filtersContainer = document.querySelector(".filters");
-    filtersContainer.addEventListener("click", (e) => {
-      if (e.target.localName == "input") {
-        handler(e);
-      }
-    });
+    filtersContainer.addEventListener("input", handler);
   }
 
   addHandlerApplyedFilters(handler) {

@@ -80,7 +80,6 @@ export const enableCarouselFunctionality = function (
       currentItem = carouselItems.length - noOfVisibleCarouselElms();
     navigateCarousel();
   };
-
   navigateCarousel();
   nextBtn.addEventListener("click", carouselNextItem);
   prevBtn.addEventListener("click", carouselPrevItem);

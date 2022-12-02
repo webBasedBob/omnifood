@@ -10,6 +10,7 @@ export const state = {
   jobResults: [],
   searchCriteria: {},
   ExpandedJobResultId: 0,
+  sectionVisibleNow: "firstPage",
 };
 
 const getJobsFromServer = function () {

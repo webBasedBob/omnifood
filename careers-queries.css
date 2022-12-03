@@ -65,8 +65,41 @@
     transform: translate(20%, -80%);
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0.5rem 1.5rem;
   }
+  /* body {
+    position: relative;
+  } */
   .filters {
     display: none;
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: white;
+    min-height: 100vh;
+    padding: 10vw;
+  }
+
+  .filter-name {
+    align-self: center;
+    position: relative;
+    width: 8vw;
+  }
+  .filter-name ion-icon {
+    position: absolute;
+    right: -5vw;
+  }
+  .search-panel input {
+    width: 55vw;
+  }
+  .search-panel .show-mobile-filters-btn {
+    display: inline-block;
+  }
+  .mobile-filters-search-btn-wrapper {
+    display: block;
+  }
+  .mobile-filters-close-btn {
+    display: inline-block;
   }
   .filters-and-results {
     grid-template-columns: 1fr;

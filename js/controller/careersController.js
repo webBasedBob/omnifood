@@ -65,7 +65,10 @@ const controlSorting = function (e) {
   sortView.highlightSortingCriterion(model.state.sortingCriterion);
   searchResultsView.sortResults(model.state.sortingCriterion);
 };
-
+const controlMobileFilters = function () {
+  filtersView.toggleMobileFilters();
+  searchResultsView.hideResults();
+};
 const init = function () {
   firstPageSearchView.addHandlerFirstPageSearch(controlFirstPageSearch);
   searchView.addHandlerJobSearch(controlSearchResults);
@@ -76,5 +79,6 @@ const init = function () {
 
   filtersCarouselView.addHandlerSelectFilter(controlFiltersCarousel);
   sortView.addHandlerSort(controlSorting);
+  filtersView.addHandlerControlMobileFilters(controlMobileFilters);
 };
 init();

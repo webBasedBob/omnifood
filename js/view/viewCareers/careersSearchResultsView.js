@@ -69,7 +69,11 @@ class searchResultsView {
 
   renderResultsNo(noOfResults) {
     const numberOfResultsContainer = document.querySelector(".results-number");
+    const resultsNoPreviewMobileFilterSearchBtn = document.querySelector(
+      ".mobile-filters-search-btn strong"
+    );
     numberOfResultsContainer.innerHTML = "";
+    resultsNoPreviewMobileFilterSearchBtn.innerText = `${noOfResults}`;
     numberOfResultsContainer.insertAdjacentHTML(
       "afterbegin",
       `<strong>${noOfResults}</strong> ${
@@ -79,6 +83,9 @@ class searchResultsView {
   }
   addHandlerExpandJobResult(handler) {
     this.#parentEl.addEventListener("click", handler);
+  }
+  hideResults() {
+    this.#parentEl.classList.toggle("hidden");
   }
 }
 

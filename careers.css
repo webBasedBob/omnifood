@@ -68,6 +68,10 @@
 ***    main section - search panel
 ********************* */
 
+.search-panel .show-mobile-filters-btn {
+  display: none;
+}
+
 .search-panel {
   padding: 2rem !important;
   display: flex;
@@ -209,7 +213,55 @@ label {
   padding-left: 1rem;
   cursor: pointer;
 }
-
+.mobile-filters-search-btn-wrapper {
+  display: none;
+  padding: 0.8rem;
+  border-radius: 500px;
+  width: 60%;
+  position: fixed;
+  bottom: 2rem;
+  left: 20vw;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0.5rem 1.5rem;
+}
+.mobile-filters-search-btn {
+  border: none;
+  border-radius: 500px;
+  width: 100%;
+  padding: 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  background-color: #e67e22;
+  color: #fdf2e9;
+  cursor: pointer;
+}
+.mobile-filters-search-btn strong {
+  font-weight: 900;
+}
+.mobile-filters-close-btn {
+  display: none;
+  position: fixed;
+  top: 5rem;
+  right: 5vw;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0.5rem 1.5rem;
+  z-index: 101;
+  border: none;
+  border-radius: 100%;
+  width: 3.8rem;
+  height: 3.8rem;
+  font-size: 3.6rem;
+  color: #777;
+}
+.search-panel .show-mobile-filters-btn {
+  margin-left: 2rem;
+  width: 3rem;
+  transform: scaleY(0.9);
+  /* height: 2rem; */
+}
+.show-mobile-filters-btn ion-icon {
+  transform: translate(-1.1rem, 0.2rem) scale(1.5);
+}
 /* ******************
 ***    main section - other filters
 ********************* */
@@ -302,7 +354,7 @@ label {
 ********************* */
 
 .search-results {
-  margin-top: 4rem;
+  margin: 4rem 0;
   /* display: none; */
   grid-column: 2/-1;
   display: flex;

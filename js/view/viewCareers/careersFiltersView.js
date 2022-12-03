@@ -98,6 +98,18 @@ class filtersView {
       appliedFiltersContainer.insertAdjacentHTML("afterbegin", html);
     });
   }
+  addHandlerControlMobileFilters(handler) {
+    const btns = [
+      document.querySelector(".show-mobile-filters-btn"),
+      document.querySelector(".mobile-filters-close-btn"),
+      document.querySelector(".mobile-filters-search-btn"),
+    ];
+    btns.forEach((btn) => btn.addEventListener("click", handler));
+  }
+  toggleMobileFilters() {
+    const mobileFiltersContainer = document.querySelector(".filters");
+    mobileFiltersContainer.classList.toggle("flex");
+  }
 }
 
 export default new filtersView();

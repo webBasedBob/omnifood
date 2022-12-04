@@ -13,8 +13,25 @@
     />
     <script type="module" src="accConsole.js"></script>
     <link rel="stylesheet" href="accConsole.css" />
+    <link rel="stylesheet" href="css/general.css" />
   </head>
   <body>
+    <nav class="main-nav">
+      <ul class="main-nav-list">
+        <li><a class="main-nav-link" href="#how">How it works</a></li>
+        <li><a class="main-nav-link" href="#meals">Meals</a></li>
+        <li>
+          <a class="main-nav-link" href="#testimonials">Testimonials</a>
+        </li>
+        <li><a class="main-nav-link" href="#pricing">Pricing</a></li>
+        <li><a class="main-nav-link nav-cta" href="#cta">Try for free</a></li>
+      </ul>
+    </nav>
+    <div class="not-logged-in-screen">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
     <div class="auth-modal hidden">
       <div class="choose-action-container">
         <button class="choose-action-btn choose-action-sign-up">SIGN UP</button>
@@ -41,5 +58,84 @@
       </div>
     </div>
     <div class="overlay hidden"></div>
+    <main class="console-wrapper hidden">
+      <section class="console-categories-panel">
+        <div class="console-category plan">Plan</div>
+        <div class="console-category subscription">Subscription</div>
+        <div class="console-category careers">Careers</div>
+        <div class="console-category feedback">Feedback/Complaints</div>
+        <div class="console-category settings">Settings</div>
+      </section>
+      <section class="content">
+        <div class="acc-settings-panel">
+          <h2 class="section-title">Account Information</h2>
+          <ul class="acc-info-list">
+            <li>
+              <h4 class="acc-info-name">Name</h4>
+              <p class="acc-info-cur-data">Pop catalin</p>
+              <button class="edit-acc-info">Edit</button>
+            </li>
+            <li>
+              <h4 class="acc-info-name">Email</h4>
+              <p class="acc-info-cur-data">CACTT@DSD.COM</p>
+              <button class="edit-acc-info">Edit</button>
+            </li>
+            <li>
+              <h4 class="acc-info-name">Phone</h4>
+              <p class="acc-info-cur-data">074415428</p>
+              <button class="edit-acc-info">Edit</button>
+            </li>
+          </ul>
+          <h2 class="section-title manage-acc">Manage Account</h2>
+          <div class="acc-actions-container">
+            <button class="acc-action-btn access-change-psw-btn">
+              Change Password
+            </button>
+            <button class="acc-action-btn access-forgot-psw-btn">
+              Forgot Password?
+            </button>
+            <button class="acc-action-btn access-delete-acc-btn">
+              Delete Account
+            </button>
+          </div>
+          <div class="acc-setting-expanded-wrapper">
+            <div class="acc-setting-expanded hidden">
+              <label for="pld-psw">Old Password</label>
+              <input class="auth-text-input" type="password" id="old-psw" />
+              <label for="new-psw">New Password</label>
+              <input class="auth-text-input" type="password" id="new-psw" />
+              <label for="confirm-new-psw">Confirm New Password</label>
+              <input
+                class="auth-text-input"
+                type="password"
+                id="confirn-new-psw"
+              />
+              <button class="acc-related-action-btn btn-overlay change-psw-btn">
+                Change Password
+              </button>
+            </div>
+            <div class="expanded-forgot-psw hidden">
+              <button class="acc-related-action-btn send-psw-reset-btn">
+                Reset Your Password
+              </button>
+              <p class="forgot-psw-info-txt">
+                You will receive a password reset link on email
+              </p>
+            </div>
+            <div class="acc-setting-expanded hidden">
+              <label for="delete-acc-psw">Password</label>
+              <input
+                class="auth-text-input"
+                type="password"
+                id="delete-acc-psw"
+              />
+              <button class="acc-related-action-btn btn-overlay change-psw-btn">
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auth test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="accConsole.js"></script>
+    <link rel="stylesheet" href="accConsole.css" />
+  </head>
+  <body>
+    <div class="auth-modal hidden">
+      <div class="choose-action-container">
+        <button class="choose-action-btn choose-action-sign-up">SIGN UP</button>
+        <button class="choose-action-btn choose-action-login">LOGIN</button>
+      </div>
+      <div class="action-elements-container sign-up-container">
+        <label for="sign-up-email" class="auth-input-label">Email</label>
+        <input type="text" id="sign-up-email" class="auth-text-input" />
+        <label for="sign-up-psw" class="auth-input-label">Password</label>
+        <input type="password" id="sign-up-psw" class="auth-text-input" />
+        <button class="take-action-btn sign-up-btn">SIGN UP</button>
+      </div>
+      <div class="action-elements-container login-container hidden">
+        <label for="login-email" class="auth-input-label">Email</label>
+        <input type="text" id="login-email" class="auth-text-input" />
+        <label for="login-psw" class="auth-input-label">Password</label>
+        <input type="password" id="login-psw" class="auth-text-input" />
+        <div class="remember-me-container">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <button class="take-action-btn login-btn">LOGIN</button>
+        <a href="#" class="forgot-psw">Forgot Password?</a>
+      </div>
+    </div>
+    <div class="overlay hidden"></div>
+  </body>
+</html>

@@ -130,7 +130,9 @@ html {
   background-color: #fff;
   border-radius: 9px;
 }
-.auth-modal button {
+.choose-action-login,
+.choose-action-sign-up,
+.action-elements-container button {
   border: none;
   font-size: 2.4rem;
 }
@@ -144,6 +146,10 @@ html {
   color: #555;
   font-weight: 600;
   font-size: 2rem;
+}
+.btn-active {
+  /* background-color: #f0f0f0; */
+  border-top: #999 solid 1px;
 }
 .action-elements-container {
   padding-top: 0rem;
@@ -235,6 +241,9 @@ input:checked {
   color: #333;
   cursor: pointer;
 }
+.console-category.selected {
+  border-left: #555 1px solid;
+}
 .content {
   background-color: #fff;
   border-radius: 11px;
@@ -266,7 +275,7 @@ input:checked {
   padding: 1.6rem 0;
   /* justify-content: space-between; */
 }
-.acc-info-name {
+.acc-info-title {
   font-weight: 600;
   width: 20rem;
 }
@@ -305,7 +314,7 @@ input:checked {
   text-decoration: underline;
 }
 
-.acc-setting-expanded {
+.acc-expanded-setting {
   padding-top: 7rem;
   display: grid;
   grid-template-columns: auto auto;
@@ -313,10 +322,10 @@ input:checked {
   align-items: center;
   row-gap: 1.6rem;
 }
-.acc-setting-expanded input {
+.acc-expanded-setting input {
   width: 40rem;
 }
-.acc-setting-expanded label {
+.acc-expanded-setting label {
   width: 25rem;
 }
 .acc-related-action-btn {
@@ -338,4 +347,7 @@ input:checked {
 }
 .forgot-psw-info-txt {
   padding-top: 2rem;
+}
+.acc-expanded-setting.expanded-forgot-psw {
+  display: block;
 }

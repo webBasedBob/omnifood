@@ -27,24 +27,26 @@
         <li><a class="main-nav-link nav-cta" href="#cta">Try for free</a></li>
       </ul>
     </nav>
-    <div class="not-logged-in-screen">
+    <div class="not-logged-in-screen hidden">
       <h3>You are not logged in</h3>
       <p>Please log in to access this page</p>
       <button class="auth-me">Log In / Sign Up</button>
     </div>
     <div class="auth-modal hidden">
       <div class="choose-action-container">
+        <button class="choose-action-btn choose-action-login btn-active">
+          LOGIN
+        </button>
         <button class="choose-action-btn choose-action-sign-up">SIGN UP</button>
-        <button class="choose-action-btn choose-action-login">LOGIN</button>
       </div>
-      <div class="action-elements-container sign-up-container">
+      <div class="action-elements-container sign-up-container hidden">
         <label for="sign-up-email" class="auth-input-label">Email</label>
         <input type="text" id="sign-up-email" class="auth-text-input" />
         <label for="sign-up-psw" class="auth-input-label">Password</label>
         <input type="password" id="sign-up-psw" class="auth-text-input" />
         <button class="take-action-btn sign-up-btn">SIGN UP</button>
       </div>
-      <div class="action-elements-container login-container hidden">
+      <div class="action-elements-container login-container">
         <label for="login-email" class="auth-input-label">Email</label>
         <input type="text" id="login-email" class="auth-text-input" />
         <label for="login-psw" class="auth-input-label">Password</label>
@@ -64,43 +66,52 @@
         <div class="console-category subscription">Subscription</div>
         <div class="console-category careers">Careers</div>
         <div class="console-category feedback">Feedback/Complaints</div>
-        <div class="console-category settings">Settings</div>
+        <div class="console-category settings selected">Settings</div>
       </section>
       <section class="content">
         <div class="acc-settings-panel">
           <h2 class="section-title">Account Information</h2>
           <ul class="acc-info-list">
             <li>
-              <h4 class="acc-info-name">Name</h4>
-              <p class="acc-info-cur-data">Pop catalin</p>
+              <h4 class="acc-info-title">Name</h4>
+              <p class="acc-info-cur-data name">Pop catalin</p>
               <button class="edit-acc-info">Edit</button>
             </li>
             <li>
-              <h4 class="acc-info-name">Email</h4>
-              <p class="acc-info-cur-data">CACTT@DSD.COM</p>
+              <h4 class="acc-info-title">Email</h4>
+              <p class="acc-info-cur-data email">CACTT@DSD.COM</p>
               <button class="edit-acc-info">Edit</button>
             </li>
             <li>
-              <h4 class="acc-info-name">Phone</h4>
-              <p class="acc-info-cur-data">074415428</p>
+              <h4 class="acc-info-title">Phone</h4>
+              <p class="acc-info-cur-data phone">074415428</p>
               <button class="edit-acc-info">Edit</button>
             </li>
           </ul>
           <h2 class="section-title manage-acc">Manage Account</h2>
           <div class="acc-actions-container">
-            <button class="acc-action-btn access-change-psw-btn">
+            <button
+              data-elm-to-show-class="expanded-change-psw"
+              class="acc-action-btn access-change-psw-btn"
+            >
               Change Password
             </button>
-            <button class="acc-action-btn access-forgot-psw-btn">
+            <button
+              data-elm-to-show-class="expanded-forgot-psw"
+              class="acc-action-btn access-forgot-psw-btn"
+            >
               Forgot Password?
             </button>
-            <button class="acc-action-btn access-delete-acc-btn">
+            <button
+              data-elm-to-show-class="expanded-delete-acc"
+              class="acc-action-btn access-delete-acc-btn"
+            >
               Delete Account
             </button>
           </div>
-          <div class="acc-setting-expanded-wrapper">
-            <div class="acc-setting-expanded hidden">
-              <label for="pld-psw">Old Password</label>
+          <div class="acc-expanded-setting-wrapper">
+            <div class="acc-expanded-setting expanded-change-psw hidden">
+              <label for="old-psw">Old Password</label>
               <input class="auth-text-input" type="password" id="old-psw" />
               <label for="new-psw">New Password</label>
               <input class="auth-text-input" type="password" id="new-psw" />
@@ -108,13 +119,13 @@
               <input
                 class="auth-text-input"
                 type="password"
-                id="confirn-new-psw"
+                id="confirm-new-psw"
               />
               <button class="acc-related-action-btn btn-overlay change-psw-btn">
                 Change Password
               </button>
             </div>
-            <div class="expanded-forgot-psw hidden">
+            <div class="acc-expanded-setting expanded-forgot-psw hidden">
               <button class="acc-related-action-btn send-psw-reset-btn">
                 Reset Your Password
               </button>
@@ -122,7 +133,7 @@
                 You will receive a password reset link on email
               </p>
             </div>
-            <div class="acc-setting-expanded hidden">
+            <div class="acc-expanded-setting expanded-delete-acc hidden">
               <label for="delete-acc-psw">Password</label>
               <input
                 class="auth-text-input"

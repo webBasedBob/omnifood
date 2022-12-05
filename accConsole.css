@@ -267,7 +267,7 @@ input:checked {
   font-size: 1.8rem;
   padding-top: 3.6rem;
 }
-.acc-info-list li {
+.acc-info-elm {
   display: flex;
   border-top: #999 solid 1px;
   border-left: none;
@@ -309,6 +309,7 @@ input:checked {
   font-size: 2rem;
   color: #216fdb;
   cursor: pointer;
+  padding: 1rem 3rem;
 }
 .acc-action-btn:hover {
   text-decoration: underline;
@@ -350,4 +351,49 @@ input:checked {
 }
 .acc-expanded-setting.expanded-forgot-psw {
   display: block;
+}
+
+/*  */
+/*  */
+/* */
+.edit-acc-info-section {
+  display: grid;
+  grid-template-columns: 20rem 20rem auto auto;
+  justify-items: start;
+  align-items: center;
+  row-gap: 2rem;
+  padding: 2rem 0 4rem 0;
+}
+.edit-acc-info-section .auth-input-label {
+  /* padding-left: 2rem; */
+  width: 20rem;
+  grid-column: 1/2;
+  grid-row: 1/1;
+}
+.edit-acc-info-section .auth-text-input {
+  transform: translateX(-1rem);
+  grid-column: 2/-1;
+  grid-row: 1/1;
+}
+.edit-acc-info-cancel-btn,
+.edit-acc-info-modify {
+  background-color: #fff;
+  border: none;
+  padding: 1rem 3rem;
+  border-radius: 4px;
+  font-size: 2rem;
+  transform: translateX(-1rem);
+}
+.edit-acc-info-modify {
+  grid-column: 2/3;
+  grid-row: 2/2;
+  background-color: #216fdb;
+  color: #fff;
+}
+.edit-acc-info-cancel-btn {
+  grid-column: 3/4;
+  grid-row: 2/2;
+  background-color: #f0f0f0;
+  margin-left: 2rem;
+  border: #e0e0e0 1px solid;
 }

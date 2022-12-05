@@ -8,42 +8,7 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
-  authDomain: "omnifood-custom-version.firebaseapp.com",
-  databaseURL:
-    "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "omnifood-custom-version",
-  storageBucket: "omnifood-custom-version.appspot.com",
-  messagingSenderId: "1094073505469",
-  appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
-  measurementId: "G-1DT1EYNVPW",
-};
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-let user;
-
-onAuthStateChanged(auth, (curUser) => {
-  if (curUser) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = curUser.uid;
-    console.log("pula mea, cica merge", uid);
-    // user.displayName = "bob";
-    console.log(curUser);
-    // ...
-    showAccountConsole();
-    hideAuthModal();
-    user = auth.currentUser;
-    renderUserInfo();
-  } else {
-    renderNotLoggedInScreen();
-    // User is signed out
-    // ...
-  }
-});
-
+// DOM manipulation functions
 const renderUserInfo = function () {
   const userName = document.querySelector(".acc-info-cur-data.name");
   const userEmail = document.querySelector(".acc-info-cur-data.email");
@@ -66,13 +31,6 @@ const showAuthModal = function () {
   overlay.classList.remove("hidden");
   authModal.classList.remove("hidden");
 };
-// signOut(auth)
-//   .then(() => {
-//     // Sign-out successful.
-//   })
-//   .catch((error) => {
-//     // An error happened.
-//   });
 
 const showAccountConsole = function () {
   const accountConsole = document.querySelector(".console-wrapper");
@@ -128,6 +86,90 @@ const switchAuthWindow = function () {
 };
 switchAuthWindow();
 
+const openAccInfoEditWindow = function (e) {
+  const editWindow = e.target.parentElement.nextElementSibling;
+  editWindow.classList.remove("hidden");
+  e.target.classList.add("hidden");
+};
+
+const closeAccInfoEditWindow = function (e) {
+  const editWindow = e.target.closest(".edit-acc-info-section");
+  editWindow.classList.add("hidden");
+  const editBtn = e.target.closest("li").querySelector(".edit-acc-info");
+  editBtn.classList.remove("hidden");
+};
+
+const addEventListeners = function () {
+  const authMeBtn = document.querySelector(".auth-me");
+  const expandedSettingsContainer = document.querySelector(
+    ".acc-actions-container"
+  );
+  const editAccInfoBtns = document.querySelectorAll(".edit-acc-info");
+  const editAccInfoCancelBtns = document.querySelectorAll(
+    ".edit-acc-info-cancel-btn"
+  );
+
+  authMeBtn.addEventListener("click", showAuthModal);
+  expandedSettingsContainer.addEventListener("click", showExpandedAccSetting);
+  editAccInfoBtns.forEach((btn) => {
+    btn.addEventListener("click", openAccInfoEditWindow);
+  });
+  editAccInfoCancelBtns.forEach((btn) => {
+    btn.addEventListener("click", closeAccInfoEditWindow);
+  });
+};
+addEventListeners();
+
+//
+//
+// application logic code
+//
+//
+//
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+  authDomain: "omnifood-custom-version.firebaseapp.com",
+  databaseURL:
+    "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "omnifood-custom-version",
+  storageBucket: "omnifood-custom-version.appspot.com",
+  messagingSenderId: "1094073505469",
+  appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+  measurementId: "G-1DT1EYNVPW",
+};
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+let user;
+
+onAuthStateChanged(auth, (curUser) => {
+  if (curUser) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = curUser.uid;
+    console.log("pula mea, cica merge", uid);
+    // user.displayName = "bob";
+    console.log(curUser);
+    // ...
+    showAccountConsole();
+    hideAuthModal();
+    user = auth.currentUser;
+    renderUserInfo();
+  } else {
+    renderNotLoggedInScreen();
+    // User is signed out
+    // ...
+  }
+});
+
+// signOut(auth)
+//   .then(() => {
+//     // Sign-out successful.
+//   })
+//   .catch((error) => {
+//     // An error happened.
+//   });
 const signUp = function () {
   const signUpBtn = document.querySelector(".sign-up-btn");
   signUpBtn.addEventListener("click", function () {
@@ -169,13 +211,3 @@ const logIn = function () {
   });
 };
 logIn();
-
-const addEventListeners = function () {
-  const authMeBtn = document.querySelector(".auth-me");
-  authMeBtn.addEventListener("click", showAuthModal);
-  const expandedSettingsContainer = document.querySelector(
-    ".acc-actions-container"
-  );
-  expandedSettingsContainer.addEventListener("click", showExpandedAccSetting);
-};
-addEventListeners();

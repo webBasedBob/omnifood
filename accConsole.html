@@ -72,20 +72,62 @@
         <div class="acc-settings-panel">
           <h2 class="section-title">Account Information</h2>
           <ul class="acc-info-list">
-            <li>
-              <h4 class="acc-info-title">Name</h4>
-              <p class="acc-info-cur-data name">Pop catalin</p>
-              <button class="edit-acc-info">Edit</button>
+            <li class="edit-section-is-open">
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Name</h4>
+                <p class="acc-info-cur-data name"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <div class="edit-acc-info-section hidden">
+                <label for="change-acc-name" class="auth-input-label"
+                  >New name</label
+                >
+                <input
+                  type="text"
+                  id="change-acc-name"
+                  class="auth-text-input"
+                />
+                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-cancel-btn">Cancel</button>
+              </div>
             </li>
             <li>
-              <h4 class="acc-info-title">Email</h4>
-              <p class="acc-info-cur-data email">CACTT@DSD.COM</p>
-              <button class="edit-acc-info">Edit</button>
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Email</h4>
+                <p class="acc-info-cur-data email"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <div class="edit-acc-info-section hidden">
+                <label for="change-acc-email" class="auth-input-label"
+                  >New email</label
+                >
+                <input
+                  type="text"
+                  id="change-acc-email"
+                  class="auth-text-input"
+                />
+                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-cancel-btn">Cancel</button>
+              </div>
             </li>
             <li>
-              <h4 class="acc-info-title">Phone</h4>
-              <p class="acc-info-cur-data phone">074415428</p>
-              <button class="edit-acc-info">Edit</button>
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Phone</h4>
+                <p class="acc-info-cur-data phone"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <div class="edit-acc-info-section hidden">
+                <label for="change-acc-phone" class="auth-input-label"
+                  >New phone no.</label
+                >
+                <input
+                  type="text"
+                  id="change-acc-phone"
+                  class="auth-text-input"
+                />
+                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-cancel-btn">Cancel</button>
+              </div>
             </li>
           </ul>
           <h2 class="section-title manage-acc">Manage Account</h2>

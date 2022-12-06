@@ -59,7 +59,9 @@
         <a href="#" class="forgot-psw">Forgot Password?</a>
       </div>
     </div>
-    <div class="overlay hidden"></div>
+    <div class="overlay-container hidden">
+      <div class="overlay"></div>
+    </div>
     <main class="console-wrapper hidden">
       <section class="console-categories-panel">
         <div class="console-category plan">Plan</div>
@@ -87,7 +89,9 @@
                   id="change-acc-name"
                   class="auth-text-input"
                 />
-                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-save-changes change-name-btn">
+                  Save changes
+                </button>
                 <button class="edit-acc-info-cancel-btn">Cancel</button>
               </div>
             </li>
@@ -106,7 +110,9 @@
                   id="change-acc-email"
                   class="auth-text-input"
                 />
-                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-save-changes change-email-btn">
+                  Save changes
+                </button>
                 <button class="edit-acc-info-cancel-btn">Cancel</button>
               </div>
             </li>
@@ -125,7 +131,9 @@
                   id="change-acc-phone"
                   class="auth-text-input"
                 />
-                <button class="edit-acc-info-modify">Save changes</button>
+                <button class="edit-acc-info-save-changes change-phone-btn">
+                  Save changes
+                </button>
                 <button class="edit-acc-info-cancel-btn">Cancel</button>
               </div>
             </li>
@@ -182,7 +190,7 @@
                 type="password"
                 id="delete-acc-psw"
               />
-              <button class="acc-related-action-btn btn-overlay change-psw-btn">
+              <button class="acc-related-action-btn btn-overlay delete-acc-btn">
                 Delete Account
               </button>
             </div>

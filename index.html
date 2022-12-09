@@ -67,8 +67,8 @@
     <title>Omnifood &mdash; Never cook again!</title>
   </head>
   <body>
-    <header class="header">
-      <a href="#">
+    <!-- <header class="header">
+      <a href="./index.html">
         <img class="logo" alt="Omnifood logo" src="img/omnifood-logo.png" />
       </a>
 
@@ -88,8 +88,34 @@
         <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
         <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
       </button>
-    </header>
+    </header> -->
 
+    <header class="header">
+      <a href="./index.html">
+        <img class="logo" alt="Omnifood logo" src="img/omnifood-logo.png" />
+      </a>
+
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="./html/careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./html/recipeDirectory.html"
+              >Recipes</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="./html/accConsole.html">Account</a>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="btn-mobile-nav">
+        <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
+        <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
+      </button>
+    </header>
     <main>
       <section class="section-hero">
         <div class="hero">
@@ -123,11 +149,8 @@
           </div>
           <div class="hero-img-box">
             <picture>
-              <source srcset="img/hero.webp" type="image/webp" />
-              <source srcset="img/hero-min.png" type="image/png" />
-
               <img
-                src="img/hero-min.png"
+                src="img/hero.png"
                 class="hero-img"
                 alt="Woman enjoying food, meals in storage container, and food bowls on a table"
               />

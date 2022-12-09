@@ -19,9 +19,9 @@
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script type="module" src="accConsole.js"></script>
-    <link rel="stylesheet" href="accConsole.css" />
-    <link rel="stylesheet" href="css/general.css" />
+    <script type="module" src="../js/accConsole.js"></script>
+    <link rel="stylesheet" href="../css/general.css" />
+    <link rel="stylesheet" href="../css/accConsole.css" />
   </head>
   <body>
     <div class="action-result-notification-pop-up hidden">
@@ -49,17 +49,33 @@
       </div>
     </div>
 
-    <nav class="main-nav">
-      <ul class="main-nav-list">
-        <li><a class="main-nav-link" href="#how">How it works</a></li>
-        <li><a class="main-nav-link" href="#meals">Meals</a></li>
-        <li>
-          <a class="main-nav-link" href="#testimonials">Testimonials</a>
-        </li>
-        <li><a class="main-nav-link" href="#pricing">Pricing</a></li>
-        <li><a class="main-nav-link nav-cta" href="#cta">Try for free</a></li>
-      </ul>
-    </nav>
+    <header class="header">
+      <a href="../index.html">
+        <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
+      </a>
+
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="./careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./recipeDirectory.html">Recipes</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./accConsole.html">Account</a>
+          </li>
+          <li>
+            <a href="#" class="main-nav-link log-out-btn">Log Out</a>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="btn-mobile-nav">
+        <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
+        <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
+      </button>
+    </header>
     <div class="not-logged-in-screen hidden">
       <h3>You are not logged in</h3>
       <p>Please log in to access this page</p>
@@ -129,7 +145,12 @@
       </form>
     </div>
     <div class="overlay-container hidden">
-      <div class="overlay"></div>
+      <div class="overlay">
+        <ion-icon
+          name="close-circle-outline"
+          class="auth-modal-close-btn"
+        ></ion-icon>
+      </div>
     </div>
     <main class="console-wrapper hidden">
       <section class="console-categories-panel">

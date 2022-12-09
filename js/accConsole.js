@@ -16,6 +16,16 @@ import {
   EmailAuthProvider,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 
+const mobileNavFunctionality = function () {
+  const btnNavEl = document.querySelector(".btn-mobile-nav");
+  const headerEl = document.querySelector(".header");
+
+  btnNavEl.addEventListener("click", function () {
+    headerEl.classList.toggle("nav-open");
+  });
+};
+mobileNavFunctionality();
+
 // DOM manipulation code
 const renderUserInfo = function () {
   const userName = document.querySelector(".acc-info-cur-data.name");
@@ -44,6 +54,12 @@ const displayAccountConsole = function () {
   const accountConsole = document.querySelector(".console-wrapper");
 
   accountConsole.classList.remove("hidden");
+};
+
+const hideAccountConsole = function () {
+  const accountConsole = document.querySelector(".console-wrapper");
+
+  accountConsole.classList.add("hidden");
 };
 
 const hideAuthModal = function () {
@@ -163,7 +179,13 @@ const displayForgorPswForm = function () {
   hideAllAuthForms();
   authFormToDisplay.classList.remove("hidden");
 };
+const hideLogOutBtn = function () {
+  document.querySelector(".log-out-btn").classList.add("hidden");
+};
 
+const displayLogOutBtn = function () {
+  document.querySelector(".log-out-btn").classList.remove("hidden");
+};
 ////////
 /////////
 // //////  application logic code
@@ -192,8 +214,10 @@ onAuthStateChanged(auth, (curUser) => {
     hideAuthModal();
     user = auth.currentUser;
     renderUserInfo();
+    displayLogOutBtn();
   } else {
     displayNotLoggedInScreen();
+    hideLogOutBtn();
   }
 });
 
@@ -209,14 +233,16 @@ const promptUserForPsw = function () {
     });
   });
 };
-
-// signOut(auth)
-//   .then(() => {
-//     // Sign-out successful.
-//   })
-//   .catch((error) => {
-//     // An error happened.
-//   });
+const logOutUser = function () {
+  signOut(auth)
+    .then(() => {
+      hideAccountConsole();
+      hideLogOutBtn();
+    })
+    .catch((error) => {
+      // An error happened.
+    });
+};
 
 const signUp = function (e) {
   e.preventDefault();
@@ -454,7 +480,8 @@ const addEventListeners = function () {
   const displayForgotPswFormBtn = document.querySelector(".forgot-psw");
   const signUpBtn = document.querySelector(".sign-up-btn");
   const loginBtn = document.querySelector(".login-btn");
-
+  const logOutBtn = document.querySelector(".log-out-btn");
+  const authModalCloseBtn = document.querySelector(".auth-modal-close-btn");
   authMeBtn.addEventListener("click", displayAuthModal);
   expandedSettingsContainer.addEventListener("click", openAccountSetting);
   editAccInfoBtns.forEach((btn) => {
@@ -479,5 +506,10 @@ const addEventListeners = function () {
   displayForgotPswFormBtn.addEventListener("click", displayForgorPswForm);
   signUpBtn.addEventListener("click", signUp);
   loginBtn.addEventListener("click", logIn);
+  logOutBtn.addEventListener("click", logOutUser);
+  authModalCloseBtn.addEventListener("click", () => {
+    hideAuthModal();
+    displayNotLoggedInScreen();
+  });
 };
 addEventListeners();

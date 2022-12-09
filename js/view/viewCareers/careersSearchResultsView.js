@@ -9,7 +9,7 @@ class searchResultsView {
         job.relevancePoints
       } class="search-result">
     <img
-    src="img/favicon.png"
+    src="../img/favicon.png"
     class="result-omnifood-logo"
     alt="omnifood logo"
     />  

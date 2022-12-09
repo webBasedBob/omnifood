@@ -56,7 +56,9 @@ const controlFiltersCarousel = function (e) {
 
 const controlExpandResult = function (e) {
   model.storeExpandedRecipeId(e);
-  window.open(`/omnifood/jobResult.html#${model.state.ExpandedJobResultId}`);
+  window.open(
+    `/omnifood/html/jobResult.html#${model.state.ExpandedJobResultId}`
+  );
 };
 
 const controlSorting = function (e) {

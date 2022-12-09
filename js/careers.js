@@ -4,8 +4,18 @@ import {
   ref,
   onValue,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-import { toTitleCase } from "./js/reusableFunctions.js";
+import { toTitleCase } from "./reusableFunctions.js";
 let database = [];
+
+const mobileNavFunctionality = function () {
+  const btnNavEl = document.querySelector(".btn-mobile-nav");
+  const headerEl = document.querySelector(".header");
+
+  btnNavEl.addEventListener("click", function () {
+    headerEl.classList.toggle("nav-open");
+  });
+};
+mobileNavFunctionality();
 
 const retrieveJobsFromFirebase = function () {
   const firebaseConfig = {
@@ -150,7 +160,7 @@ const displayJobResults = function (jobsArr) {
       job.relevancePoints
     } class="search-result">
     <img
-    src="img/favicon.png"
+    src="../img/favicon.png"
     class="result-omnifood-logo"
     alt="omnifood logo"
     />  
@@ -252,7 +262,7 @@ const openFullJobDetails = function (e) {
   const jobTitleWasClicked = e.target.classList.contains("overview-job-title");
   if (logoWasClicked || jobTitleWasClicked) {
     const id = e.target.closest(".search-result").dataset.jobid;
-    window.open(`/omnifood/jobResult.html#${id}`);
+    window.open(`/omnifood/html/jobResult.html#${id}`);
   }
 };
 

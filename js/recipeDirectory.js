@@ -1,7 +1,7 @@
 import {
   enableCarouselFunctionality,
   cleanStrFromSymbolsAndUselessSpaces,
-} from "./js/reusableFunctions.js";
+} from "./reusableFunctions.js";
 // // making the nav sticky
 // const stickyNav = function (entries) {
 //   const [entry] = entries;
@@ -28,6 +28,15 @@ import {
 //     scrollTo.scrollIntoView({ behavior: "smooth" });
 //   }
 // });
+const mobileNavFunctionality = function () {
+  const btnNavEl = document.querySelector(".btn-mobile-nav");
+  const headerEl = document.querySelector(".header");
+
+  btnNavEl.addEventListener("click", function () {
+    headerEl.classList.toggle("nav-open");
+  });
+};
+mobileNavFunctionality();
 
 enableCarouselFunctionality(
   "filter-carousel",
@@ -78,6 +87,7 @@ const createUrl = function () {
   mealTypeFilter &&
     resultUrl.push(`mealType=${mealTypeFilter.dataset.mealtype}`);
   resultUrl.push(`app_id=${appId}&app_key=${appKey}`);
+  resultUrl.push("random=true");
 
   return resultUrl.join("&");
 };
@@ -90,6 +100,7 @@ const extractRecipeId = function (recipe) {
 const retreiveRecipesFromApi = async function (url) {
   const rawResult = await fetch(url);
   const jsonResult = await rawResult.json();
+  console.log(rawResult, jsonResult);
   let recipesArr = jsonResult.hits.map((result) => result.recipe);
   return recipesArr;
 };

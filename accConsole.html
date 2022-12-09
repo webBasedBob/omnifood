@@ -7,6 +7,14 @@
     <title>auth test</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -16,6 +24,31 @@
     <link rel="stylesheet" href="css/general.css" />
   </head>
   <body>
+    <div class="action-result-notification-pop-up hidden">
+      <ion-icon name="checkmark-circle" class="checkmark-icon"></ion-icon>
+      <p class="notification-text">Succour profile naSuccessfSSuc</p>
+      <ion-icon name="close" class="close-icon"></ion-icon>
+    </div>
+    <div class="error-overlay hidden">
+      <div class="error-modal">
+        <ion-icon name="alert-circle" class="error-icon"></ion-icon>
+        <h4>Oops...</h4>
+        <p class="error-message">generic error message</p>
+        <button class="close-error-modal-btn">Dismiss</button>
+      </div>
+    </div>
+
+    <div class="prompt-for-psw-overlay hidden">
+      <div class="prompt-psw-modal">
+        <ion-icon name="alert-circle" class="attention-icon"></ion-icon>
+        <p class="prompt-message">
+          Please provide your password to complete this action
+        </p>
+        <input id="user-psw-reauth" class="auth-text-input" type="password" />
+        <button class="close-psw-prompt-btn">Done</button>
+      </div>
+    </div>
+
     <nav class="main-nav">
       <ul class="main-nav-list">
         <li><a class="main-nav-link" href="#how">How it works</a></li>
@@ -39,25 +72,61 @@
         </button>
         <button class="choose-action-btn choose-action-sign-up">SIGN UP</button>
       </div>
-      <div class="action-elements-container sign-up-container hidden">
-        <label for="sign-up-email" class="auth-input-label">Email</label>
-        <input type="text" id="sign-up-email" class="auth-text-input" />
-        <label for="sign-up-psw" class="auth-input-label">Password</label>
-        <input type="password" id="sign-up-psw" class="auth-text-input" />
-        <button class="take-action-btn sign-up-btn">SIGN UP</button>
-      </div>
-      <div class="action-elements-container login-container">
+
+      <form action="" class="action-elements-container login-container">
         <label for="login-email" class="auth-input-label">Email</label>
-        <input type="text" id="login-email" class="auth-text-input" />
+        <input type="email" id="login-email" class="auth-text-input" required />
         <label for="login-psw" class="auth-input-label">Password</label>
-        <input type="password" id="login-psw" class="auth-text-input" />
+        <input
+          type="password"
+          id="login-psw"
+          class="auth-text-input"
+          required
+        />
         <div class="remember-me-container">
-          <input type="checkbox" id="remember-me" />
+          <input type="checkbox" id="remember-me" checked />
           <label for="remember-me">Remember me</label>
         </div>
-        <button class="take-action-btn login-btn">LOGIN</button>
+        <input type="submit" value="LOGIN" class="take-action-btn login-btn" />
         <a href="#" class="forgot-psw">Forgot Password?</a>
-      </div>
+      </form>
+      <form class="action-elements-container sign-up-container hidden">
+        <label for="sign-up-email" class="auth-input-label">Email</label>
+        <input
+          type="email"
+          id="sign-up-email"
+          class="auth-text-input"
+          required
+        />
+        <label for="sign-up-psw" class="auth-input-label">Password</label>
+        <input
+          type="password"
+          id="sign-up-psw"
+          class="auth-text-input"
+          required
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
+        />
+        <input
+          type="submit"
+          value="SIGN UP"
+          class="take-action-btn sign-up-btn"
+        />
+      </form>
+      <form class="action-elements-container forgot-psw-container hidden">
+        <label for="forgot-psw-email" class="auth-input-label">Email</label>
+        <input
+          type="email"
+          id="forgot-psw-email"
+          class="auth-text-input"
+          required
+        />
+        <input
+          type="submit"
+          value="Send password reset email"
+          class="take-action-btn reset-psw-btn"
+        />
+      </form>
     </div>
     <div class="overlay-container hidden">
       <div class="overlay"></div>
@@ -80,7 +149,7 @@
                 <p class="acc-info-cur-data name"></p>
                 <button class="edit-acc-info">Edit</button>
               </div>
-              <div class="edit-acc-info-section hidden">
+              <form class="edit-acc-info-section hidden">
                 <label for="change-acc-name" class="auth-input-label"
                   >New name</label
                 >
@@ -88,12 +157,18 @@
                   type="text"
                   id="change-acc-name"
                   class="auth-text-input"
+                  autocomplete="off"
                 />
-                <button class="edit-acc-info-save-changes change-name-btn">
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-name-btn"
+                >
                   Save changes
                 </button>
-                <button class="edit-acc-info-cancel-btn">Cancel</button>
-              </div>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
             </li>
             <li>
               <div class="acc-info-elm">
@@ -101,20 +176,26 @@
                 <p class="acc-info-cur-data email"></p>
                 <button class="edit-acc-info">Edit</button>
               </div>
-              <div class="edit-acc-info-section hidden">
+              <form class="edit-acc-info-section hidden">
                 <label for="change-acc-email" class="auth-input-label"
                   >New email</label
                 >
                 <input
-                  type="text"
+                  type="email"
                   id="change-acc-email"
                   class="auth-text-input"
+                  required
                 />
-                <button class="edit-acc-info-save-changes change-email-btn">
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-email-btn"
+                >
                   Save changes
                 </button>
-                <button class="edit-acc-info-cancel-btn">Cancel</button>
-              </div>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
             </li>
             <li>
               <div class="acc-info-elm">
@@ -122,7 +203,7 @@
                 <p class="acc-info-cur-data phone"></p>
                 <button class="edit-acc-info">Edit</button>
               </div>
-              <div class="edit-acc-info-section hidden">
+              <form class="edit-acc-info-section hidden">
                 <label for="change-acc-phone" class="auth-input-label"
                   >New phone no.</label
                 >
@@ -131,50 +212,71 @@
                   id="change-acc-phone"
                   class="auth-text-input"
                 />
-                <button class="edit-acc-info-save-changes change-phone-btn">
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-phone-btn"
+                >
                   Save changes
                 </button>
-                <button class="edit-acc-info-cancel-btn">Cancel</button>
-              </div>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
             </li>
           </ul>
           <h2 class="section-title manage-acc">Manage Account</h2>
           <div class="acc-actions-container">
             <button
-              data-elm-to-show-class="expanded-change-psw"
+              data-elm-to-display-class="expanded-change-psw"
               class="acc-action-btn access-change-psw-btn"
             >
               Change Password
             </button>
             <button
-              data-elm-to-show-class="expanded-forgot-psw"
+              data-elm-to-display-class="expanded-forgot-psw"
               class="acc-action-btn access-forgot-psw-btn"
             >
               Forgot Password?
             </button>
             <button
-              data-elm-to-show-class="expanded-delete-acc"
+              data-elm-to-display-class="expanded-delete-acc"
               class="acc-action-btn access-delete-acc-btn"
             >
               Delete Account
             </button>
           </div>
           <div class="acc-expanded-setting-wrapper">
-            <div class="acc-expanded-setting expanded-change-psw hidden">
+            <form class="acc-expanded-setting expanded-change-psw hidden">
               <label for="old-psw">Old Password</label>
-              <input class="auth-text-input" type="password" id="old-psw" />
+              <input
+                class="auth-text-input"
+                type="password"
+                id="old-psw"
+                required
+              />
               <label for="new-psw">New Password</label>
-              <input class="auth-text-input" type="password" id="new-psw" />
+              <input
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                class="auth-text-input"
+                type="password"
+                id="new-psw"
+                required
+                title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
+              />
               <label for="confirm-new-psw">Confirm New Password</label>
               <input
                 class="auth-text-input"
                 type="password"
                 id="confirm-new-psw"
+                required
               />
-              <button class="acc-related-action-btn btn-overlay change-psw-btn">
+              <button
+                type="submit"
+                class="acc-related-action-btn btn-overlay change-psw-btn"
+              >
                 Change Password
               </button>
-            </div>
+            </form>
             <div class="acc-expanded-setting expanded-forgot-psw hidden">
               <button class="acc-related-action-btn send-psw-reset-btn">
                 Reset Your Password
@@ -183,17 +285,21 @@
                 You will receive a password reset link on email
               </p>
             </div>
-            <div class="acc-expanded-setting expanded-delete-acc hidden">
+            <form class="acc-expanded-setting expanded-delete-acc hidden">
               <label for="delete-acc-psw">Password</label>
               <input
                 class="auth-text-input"
                 type="password"
                 id="delete-acc-psw"
+                required
               />
-              <button class="acc-related-action-btn btn-overlay delete-acc-btn">
+              <button
+                type="submit"
+                class="acc-related-action-btn btn-overlay delete-acc-btn"
+              >
                 Delete Account
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </section>

@@ -104,6 +104,30 @@ const hideAccInfoEditForm = function (e) {
   editBtn.classList.remove("hidden");
 };
 
+class ErrorHandler {
+  #errorsDictionary = {
+    "auth/network-request-failed":
+      "Operation failed due to network issues, please check your internet connection",
+    "auth/email-already-in-use":
+      "The email you entered is already associated with an account, please log in instead",
+    "auth/wrong-password": "Wrong password, please try again!",
+    "auth/too-many-requests":
+      "Access to this account has been temporarily disabled due to many failed login attempts. Reset your password or log in later!",
+    "auth/user-not-found":
+      "Email adress does not match any account, please make sure it is spelled correctly or create an new account!",
+    "auth/quota-exceeded":
+      "The maximim number of name changes was exceeded, please try again later!",
+  };
+  #errorModal = document.querySelector(".error-overlay");
+  #errorMessageContainer = this.#errorModal.querySelector(".error-message");
+  renderError(error) {
+    this.#errorMessageContainer.innerText =
+      this.#errorsDictionary[error.code] || error.message;
+    this.#errorModal.classList.remove("hidden");
+  }
+}
+const errorHandler = new ErrorHandler();
+
 const renderError = function (errMessage) {
   const errorModalContainer = document.querySelector(".error-overlay");
   const errorMessageContainer =
@@ -204,6 +228,7 @@ const firebaseConfig = {
   appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
   measurementId: "G-1DT1EYNVPW",
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let user;
@@ -221,132 +246,119 @@ onAuthStateChanged(auth, (curUser) => {
   }
 });
 
-const promptUserForPsw = function () {
-  const promptContainer = document.querySelector(".prompt-for-psw-overlay");
-  promptContainer.classList.remove("hidden");
-  const psw = document.querySelector("#user-psw-reauth");
-  const submitBtn = document.querySelector(".close-psw-prompt-btn");
-  return new Promise(function (resolve, reject) {
-    submitBtn.addEventListener("click", () => {
-      promptContainer.classList.add("hidden");
-      resolve(psw.value);
-    });
-  });
-};
-const logOutUser = function () {
-  signOut(auth)
-    .then(() => {
-      hideAccountConsole();
-      hideLogOutBtn();
-    })
-    .catch((error) => {
-      // An error happened.
-    });
+const logOutUser = async function () {
+  try {
+    await signOut(auth);
+    hideAccountConsole();
+    hideLogOutBtn();
+  } catch (err) {
+    errorHandler.renderError(error);
+  }
 };
 
-const signUp = function (e) {
+const signUp = async function (e) {
   e.preventDefault();
   const signUpForm = document.querySelector(".sign-up-container");
   if (!signUpForm.reportValidity()) return;
 
   const email = document.querySelector("#sign-up-email").value;
   const password = document.querySelector("#sign-up-psw").value;
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      renderNotification("Account created, you are now logged in!");
-    })
-    .catch((error) => {
-      if (error.code === "auth/network-request-failed") renderNetworkError();
-      if (error.code === "auth/email-already-in-use")
-        renderError(
-          "The email you entered is already associated with an account, please log in instead"
-        );
-    });
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    renderNotification("Account created, you are now logged in!");
+  } catch (error) {
+    errorHandler.renderError(error);
+  }
 };
 
-const logIn = function (e) {
+const logIn = async function (e) {
   e.preventDefault();
   const loginForm = document.querySelector(".login-container");
   if (!loginForm.reportValidity()) return;
 
   const email = document.querySelector("#login-email").value;
   const password = document.querySelector("#login-psw").value;
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-    })
-    .catch((error) => {
-      if (error.code === "auth/network-request-failed") renderNetworkError();
-      if (error.code === "auth/wrong-password") renderWrongPswError();
-      if (error.code === "auth/too-many-requests")
-        renderError(
-          `${error.message.slice(10, 97)} Reset your password or log in later!`
-        );
-      if (error.code === "auth/user-not-found")
-        renderError(
-          "Email adress does not match any account, please make sure it is spelled correctly or create an new account!"
-        );
-    });
+  try {
+    const logIn = await signInWithEmailAndPassword(auth, email, password);
+    user = logIn.user;
+    console.log(user);
+  } catch (error) {
+    errorHandler.renderError(error);
+  }
 };
 
-const updateAccName = function (e) {
+const updateAccName = async function (e) {
   e.preventDefault();
   const formContainer = document.querySelectorAll(".edit-acc-info-section")[0];
   if (!formContainer.reportValidity()) return;
 
   const newName = document.querySelector("#change-acc-name").value;
   const currentNameElm = document.querySelector(".acc-info-cur-data.name");
-
-  updateProfile(auth.currentUser, {
-    displayName: newName,
-  })
-    .then(() => {
-      renderNotification("Name updated");
-      currentNameElm.innerText = newName || "-";
-    })
-    .catch((error) => {
-      if (error.code === "auth/network-request-failed") {
-        renderNetworkError();
-        return;
-      }
-      if (error.code === "auth/quota-exceeded") {
-        renderError(
-          "The maximim number of name changes was exceeded, please try again later!"
-        );
-        return;
-      }
-      renderError(error.message);
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: newName,
     });
+    renderNotification("Name updated");
+    currentNameElm.innerText = newName || "-";
+  } catch (err) {
+    errorHandler.renderError(error);
+  }
+};
+
+const promptUserForPsw = function () {
+  const promptContainer = document.querySelector(".prompt-for-psw-overlay");
+  promptContainer.classList.remove("hidden");
+  const psw = document.querySelector("#user-psw-reauth");
+  const submitBtn = document.querySelector(".close-psw-prompt-btn");
+  return new Promise(function (resolve) {
+    submitBtn.addEventListener("click", () => {
+      promptContainer.classList.add("hidden");
+      resolve(psw.value);
+    });
+  });
 };
 
 const updateEmailOnFirebase = async function (newEmail) {
-  updateEmail(auth.currentUser, newEmail)
-    .then(() => {
-      const currentEmailElm = document.querySelector(
-        ".acc-info-cur-data.email"
-      );
-      currentEmailElm.innerText = newEmail;
-      renderNotification("Email changed successfully");
-    })
-    .catch(async function (error) {
-      if (error.code === "auth/email-already-in-use")
-        renderError(
-          "Action denied! This email is already associated with another account"
-        );
-      if (error.code === "auth/requires-recent-login") {
-        const psw = await promptUserForPsw();
-        let credentials = EmailAuthProvider.credential(user.email, psw);
-        reauthenticateWithCredential(user, credentials)
-          .then(() => updateEmailOnFirebase(newEmail))
-          .catch((error) => {
-            if (error.code === "auth/wrong-password") {
-              renderWrongPswError();
-              return;
-            }
-            renderError(error.message);
-          });
+  try {
+    await updateEmail(auth.currentUser, newEmail);
+    const currentEmailElm = document.querySelector(".acc-info-cur-data.email");
+    currentEmailElm.innerText = newEmail;
+    renderNotification("Email changed successfully");
+  } catch (error) {
+    if (error.code === "auth/requires-recent-login") {
+      const psw = await promptUserForPsw();
+      let credentials = EmailAuthProvider.credential(user.email, psw);
+      try {
+        await reauthenticateWithCredential(user, credentials);
+        updateEmailOnFirebase(newEmail);
+      } catch (error) {
+        errorHandler.renderError(error);
       }
-    });
+    } else errorHandler.renderError(error);
+  }
+  // updateEmail(auth.currentUser, newEmail)
+  //   .then(() => {
+  //     const currentEmailElm = document.querySelector(
+  //       ".acc-info-cur-data.email"
+  //     );
+  //     currentEmailElm.innerText = newEmail;
+  //     renderNotification("Email changed successfully");
+  //   })
+  //   .catch(async function (error) {
+  //     if (error.code === "auth/requires-recent-login") {
+  //       const psw = await promptUserForPsw();
+  //       let credentials = EmailAuthProvider.credential(user.email, psw);
+  //       reauthenticateWithCredential(user, credentials)
+  //         .then(() => updateEmailOnFirebase(newEmail))
+  //         .catch((error) => {
+  //           if (error.code === "auth/wrong-password") {
+  //             renderWrongPswError();
+  //             return;
+  //           }
+  //           renderError(error.message);
+  //         });
+  //     } else errorHandler.renderError(error);
+  //   });
 };
 
 const updatAccEmail = function (e) {
@@ -358,27 +370,38 @@ const updatAccEmail = function (e) {
   updateEmailOnFirebase(newEmail);
 };
 
-const changePswOnFirebase = function (newPassword, oldPsw) {
-  updatePassword(user, newPassword)
-    .then(() => {
-      renderNotification("Password changed successfully!");
-    })
-    .catch((error) => {
-      if (error.code === "auth/requires-recent-login") {
+const changePswOnFirebase = async function (newPassword, oldPsw) {
+  try {
+    await updatePassword(user, newPassword);
+    renderNotification("Password changed successfully!");
+  } catch (error) {
+    if (error.code === "auth/requires-recent-login") {
+      try {
         let credentials = EmailAuthProvider.credential(user.email, oldPsw);
-        reauthenticateWithCredential(user, credentials)
-          .then(() => {
-            changePswOnFirebase(newPassword);
-          })
-          .catch((error) => {
-            if (error.code === "auth/wrong-password") {
-              renderWrongPswError();
-              return;
-            }
-            renderError(error.message);
-          });
+        await reauthenticateWithCredential(user, credentials);
+        changePswOnFirebase(newPassword);
+      } catch (error) {
+        errorHandler.renderError(error);
       }
-    });
+    } else errorHandler.renderError(error);
+  }
+
+  // updatePassword(user, newPassword)
+  //   .then(() => {
+  //     renderNotification("Password changed successfully!");
+  //   })
+  //   .catch((error) => {
+  //     if (error.code === "auth/requires-recent-login") {
+  //       let credentials = EmailAuthProvider.credential(user.email, oldPsw);
+  //       reauthenticateWithCredential(user, credentials)
+  //         .then(() => {
+  //           changePswOnFirebase(newPassword);
+  //         })
+  //         .catch((error) => {
+  //           errorHandler.renderError(error);
+  //         });
+  //     }
+  //   });
 };
 
 const changeAccPsw = function (e) {
@@ -397,20 +420,14 @@ const changeAccPsw = function (e) {
   changePswOnFirebase(newPassword, oldPsw);
 };
 
-const sendPswResetEmail = function (email) {
-  const targetEmail = user?.email || email;
-
-  sendPasswordResetEmail(auth, targetEmail)
-    .then(() => {
-      renderNotification("Password reset email sent, check your inbox!");
-    })
-    .catch((error) => {
-      if (error.code === "auth/network-request-failed") {
-        renderNetworkError();
-        return;
-      }
-      renderError(error.message);
-    });
+const sendPswResetEmail = async function (email) {
+  try {
+    const targetEmail = user?.email || email;
+    await sendPasswordResetEmail(auth, targetEmail);
+    renderNotification("Password reset email sent, check your inbox!");
+  } catch (error) {
+    errorHandler.renderError(error);
+  }
 };
 
 const forgotPswSendEmail = function (e) {
@@ -422,27 +439,41 @@ const forgotPswSendEmail = function (e) {
   sendPswResetEmail(email);
 };
 
-const deleteUserAccount = function (currentPsw) {
-  deleteUser(user)
-    .then(() => {
-      renderNotification("Account deleted successfully");
-    })
-    .catch((error) => {
-      if (error.code === "auth/requires-recent-login") {
+const deleteUserAccount = async function (currentPsw) {
+  try {
+    await deleteUser(user);
+    renderNotification("Account deleted successfully");
+  } catch (error) {
+    if (error.code === "auth/requires-recent-login") {
+      try {
         let credentials = EmailAuthProvider.credential(user.email, currentPsw);
-        reauthenticateWithCredential(user, credentials)
-          .then(() => {
-            deleteUserAccount();
-          })
-          .catch((error) => {
-            if (error.code === "auth/wrong-password") {
-              renderWrongPswError();
-              return;
-            }
-            renderError(error.message);
-          });
+        await reauthenticateWithCredential(user, credentials);
+        deleteUserAccount();
+      } catch (error) {
+        errorHandler.renderError(error);
       }
-    });
+    } else errorHandler.renderError(error);
+  }
+  // deleteUser(user)
+  //   .then(() => {
+  //     renderNotification("Account deleted successfully");
+  //   })
+  //   .catch((error) => {
+  //     if (error.code === "auth/requires-recent-login") {
+  //       let credentials = EmailAuthProvider.credential(user.email, currentPsw);
+  //       reauthenticateWithCredential(user, credentials)
+  //         .then(() => {
+  //           deleteUserAccount();
+  //         })
+  //         .catch((error) => {
+  //           if (error.code === "auth/wrong-password") {
+  //             renderWrongPswError();
+  //             return;
+  //           }
+  //           renderError(error.message);
+  //         });
+  //     }
+  //   });
 };
 
 const deleteAccount = function () {

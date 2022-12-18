@@ -128,25 +128,6 @@ class ErrorHandler {
 }
 const errorHandler = new ErrorHandler();
 
-const renderError = function (errMessage) {
-  const errorModalContainer = document.querySelector(".error-overlay");
-  const errorMessageContainer =
-    errorModalContainer.querySelector(".error-message");
-
-  errorMessageContainer.innerText = errMessage;
-  errorModalContainer.classList.remove("hidden");
-};
-
-const renderNetworkError = renderError.bind(
-  null,
-  "Operation failed due to network issues, please check your internet connection"
-);
-
-const renderWrongPswError = renderError.bind(
-  null,
-  "Wrong password, please try again!"
-);
-
 const closeErrorModal = function () {
   const errorModalContainer = document.querySelector(".error-overlay");
   errorModalContainer.classList.add("hidden");
@@ -251,7 +232,7 @@ const logOutUser = async function () {
     await signOut(auth);
     hideAccountConsole();
     hideLogOutBtn();
-  } catch (err) {
+  } catch (error) {
     errorHandler.renderError(error);
   }
 };
@@ -300,7 +281,7 @@ const updateAccName = async function (e) {
     });
     renderNotification("Name updated");
     currentNameElm.innerText = newName || "-";
-  } catch (err) {
+  } catch (error) {
     errorHandler.renderError(error);
   }
 };
@@ -336,29 +317,6 @@ const updateEmailOnFirebase = async function (newEmail) {
       }
     } else errorHandler.renderError(error);
   }
-  // updateEmail(auth.currentUser, newEmail)
-  //   .then(() => {
-  //     const currentEmailElm = document.querySelector(
-  //       ".acc-info-cur-data.email"
-  //     );
-  //     currentEmailElm.innerText = newEmail;
-  //     renderNotification("Email changed successfully");
-  //   })
-  //   .catch(async function (error) {
-  //     if (error.code === "auth/requires-recent-login") {
-  //       const psw = await promptUserForPsw();
-  //       let credentials = EmailAuthProvider.credential(user.email, psw);
-  //       reauthenticateWithCredential(user, credentials)
-  //         .then(() => updateEmailOnFirebase(newEmail))
-  //         .catch((error) => {
-  //           if (error.code === "auth/wrong-password") {
-  //             renderWrongPswError();
-  //             return;
-  //           }
-  //           renderError(error.message);
-  //         });
-  //     } else errorHandler.renderError(error);
-  //   });
 };
 
 const updatAccEmail = function (e) {
@@ -385,23 +343,6 @@ const changePswOnFirebase = async function (newPassword, oldPsw) {
       }
     } else errorHandler.renderError(error);
   }
-
-  // updatePassword(user, newPassword)
-  //   .then(() => {
-  //     renderNotification("Password changed successfully!");
-  //   })
-  //   .catch((error) => {
-  //     if (error.code === "auth/requires-recent-login") {
-  //       let credentials = EmailAuthProvider.credential(user.email, oldPsw);
-  //       reauthenticateWithCredential(user, credentials)
-  //         .then(() => {
-  //           changePswOnFirebase(newPassword);
-  //         })
-  //         .catch((error) => {
-  //           errorHandler.renderError(error);
-  //         });
-  //     }
-  //   });
 };
 
 const changeAccPsw = function (e) {
@@ -454,26 +395,6 @@ const deleteUserAccount = async function (currentPsw) {
       }
     } else errorHandler.renderError(error);
   }
-  // deleteUser(user)
-  //   .then(() => {
-  //     renderNotification("Account deleted successfully");
-  //   })
-  //   .catch((error) => {
-  //     if (error.code === "auth/requires-recent-login") {
-  //       let credentials = EmailAuthProvider.credential(user.email, currentPsw);
-  //       reauthenticateWithCredential(user, credentials)
-  //         .then(() => {
-  //           deleteUserAccount();
-  //         })
-  //         .catch((error) => {
-  //           if (error.code === "auth/wrong-password") {
-  //             renderWrongPswError();
-  //             return;
-  //           }
-  //           renderError(error.message);
-  //         });
-  //     }
-  //   });
 };
 
 const deleteAccount = function () {

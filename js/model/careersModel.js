@@ -1,9 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  onValue,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue } from "firebase/database";
+// "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
 export const state = {
   jobsDatabase: [],

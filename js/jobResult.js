@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import { initializeApp } from "firebase/app";
 import {
   getDatabase,
   ref,
@@ -6,7 +6,7 @@ import {
   equalTo,
   query,
   orderByChild,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+} from "firebase/database";
 import { toTitleCase } from "./reusableFunctions.js";
 const getJobId = function () {
   const url = window.location.href;

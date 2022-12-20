@@ -28,6 +28,41 @@ import {
 //     scrollTo.scrollIntoView({ behavior: "smooth" });
 //   }
 // });
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+// import {
+//   onAuthStateChanged,
+//   getAuth,
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+//   authDomain: "omnifood-custom-version.firebaseapp.com",
+//   databaseURL:
+//     "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+//   projectId: "omnifood-custom-version",
+//   storageBucket: "omnifood-custom-version.appspot.com",
+//   messagingSenderId: "1094073505469",
+//   appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+//   measurementId: "G-1DT1EYNVPW",
+// };
+
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// let user;
+// onAuthStateChanged(auth, (curUser) => {
+//   if (curUser) {
+//     console.log("puls");
+//     console.log(curUser);
+//   } else {
+//   }
+// });
+//
+//
+
+//hiding the carousel for now
+
+document.querySelector("#trending-foods").classList.add("hidden");
+
 const mobileNavFunctionality = function () {
   const btnNavEl = document.querySelector(".btn-mobile-nav");
   const headerEl = document.querySelector(".header");

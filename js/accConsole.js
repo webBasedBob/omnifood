@@ -1,4 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+import { initializeApp } from "firebase/app";
 // // import {} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 import {
   getAuth,
@@ -14,7 +15,9 @@ import {
   deleteUser,
   reauthenticateWithCredential,
   EmailAuthProvider,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+  verifyIdToken,
+} from "firebase/auth";
+//"https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 
 const mobileNavFunctionality = function () {
   const btnNavEl = document.querySelector(".btn-mobile-nav");
@@ -214,13 +217,71 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let user;
 
-onAuthStateChanged(auth, (curUser) => {
+//
+
+// import {
+//   getFunctions,
+//   httpsCallable,
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-functions.js";
+
+//
+///
+// const functions = getFunctions();
+// const addAdminRole = httpsCallable(functions, "addAdminRole");
+// const addRecruiterRole = httpsCallable(functions, "addRecruiterRole");
+// const addSubscriberRole = httpsCallable(functions, "addSubscriberRole");
+// const removeRoles = httpsCallable(functions, "removeRoles");
+// addAdminRole("dsds@dsds.co")
+//   .then((response) => console.log(response))
+//   .catch((error) => console.log(error));
+// addRecruiterRole("duhsuid@ggg.com")
+//   .then((response) => console.log(response))
+//   .catch((error) => console.log(error));
+// addSubscriberRole("sdfdds@sd.ro")
+//   .then((response) => console.log(response))
+//   .catch((error) => console.log(error));
+// removeRoles("dsds@dsds.co")
+//   .then((response) => console.log(response))
+//   .catch((error) => console.log(error));
+// removeRoles("parazitu29@gmail.com")
+//   .then((response) => console.log(response))
+//   .catch((error) => console.log(error));
+
+//
+//'Success! duhsuid@ggg.com has been made an recruiter'
+//"Success! duhsuid@ggg.com has been made an recruiter"
+//'Success! dsds@dsds.co has been made an admin'}
+//'Success! sdfdds@sd.ro has been made an subscriber'}
+//"Success! parazitu29@gmail.com's roles have been deleted"}
+//"Success! dsds@dsds.co's roles have been deleted"}
+
+const isRecruiter = async function () {
+  this.getIdTokenResult()
+    .then((idTokenResult) => {
+      console.log(idTokenResult.claims.recruiter);
+      if (!!idTokenResult.claims.admin) {
+      } else {
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const hasCustomRole = async function (claim) {
+  const token = await user.getIdTokenResult();
+  return token.claims[claim];
+};
+
+onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     displayAccountConsole();
     hideAuthModal();
     user = auth.currentUser;
     renderUserInfo();
     displayLogOutBtn();
+    console.log(user);
+    console.log(await hasCustomRole("recruiter"));
   } else {
     displayNotLoggedInScreen();
     hideLogOutBtn();

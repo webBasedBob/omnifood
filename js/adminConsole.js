@@ -1,7 +1,10 @@
 // import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 // import { initializeApp } from "firebase/app";
-
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -22,14 +25,18 @@ import {
   httpsCallable,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-functions.js";
 
+let usersArr;
 const functions = getFunctions();
-const retrieveAllUsers = httpsCallable(functions, "listAllUsers");
 
-const renderAllUsers = async function () {
-  const usersResponse = await retrieveAllUsers();
-  const usersArray = usersResponse.data.users;
-  console.log(usersArray);
+const getUsersFromFirebase = async function () {
+  const retrieveAllUsers = httpsCallable(functions, "listAllUsers");
+  let usersData = await retrieveAllUsers();
+  usersArr = usersData.data;
+};
+
+const renderUsers = function (usersArray) {
   const usersContainter = document.querySelector(".users-table__body");
+  usersContainter.innerHTML = "";
   usersArray.forEach((user) => {
     const html = `
     <tr class="users-table__body__row">
@@ -53,4 +60,52 @@ const renderAllUsers = async function () {
     usersContainter.insertAdjacentHTML("beforeend", html);
   });
 };
-renderAllUsers();
+
+const sortUsers = function (sortBy, direction) {
+  const usersContainter = document.querySelector(".users-table__body");
+  const userTableRows = Array.from(usersContainter.children);
+  const childNumber = sortBy === "email" ? 1 : 2;
+  userTableRows.sort((userA, userB) => {
+    const userAText =
+      userA.children[childNumber].children[0].innerText.toUpperCase();
+    const userBText =
+      userB.children[childNumber].children[0].innerText.toUpperCase();
+    if (direction === "ascending") {
+      if (userAText < userBText) return -1;
+      if (userAText > userBText) return 1;
+      if (userAText === userBText) return 0;
+    } else {
+      if (userAText < userBText) return 1;
+      if (userAText > userBText) return -1;
+      if (userAText === userBText) return 0;
+    }
+  });
+  userTableRows.forEach((tableRow) => usersContainter.append(tableRow));
+};
+
+// sortUsers("type", "ascending");
+const findUsersByEmail = function (email, usersArr) {
+  const searchingRegEx = new RegExp(email.toLowerCase());
+  const foundUsersArr = usersArr.filter((user) => {
+    return user.email.toLowerCase().match(searchingRegEx);
+  });
+  return foundUsersArr;
+};
+
+const search = function () {
+  const email = document.querySelector(".search-bar__text-input").value;
+  renderUsers(findUsersByEmail(email, usersArr));
+};
+
+const deleteUser = async function (email) {
+  try {
+    const deleteUserFromFirebase = httpsCallable(
+      functions,
+      "deleteUserAccount"
+    );
+    const successMessage = await deleteUserFromFirebase(email);
+    return successMessage;
+  } catch (err) {
+    console.error(err);
+  }
+};

@@ -1,16 +1,20 @@
+body {
+  background-color: #fdf2e9; }
+
 .ingredients-wrapper {
   display: grid;
   background-color: #fdf2e9;
-  height: 100vh;
+  height: 75vh;
   width: 100vw;
-  grid-template-columns: 2fr 4fr 1fr; }
+  grid-template-columns: 2fr 4fr;
+  justify-content: center; }
 
 .ingredients-to-evaluate {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
-  padding: 7rem 3rem 3rem 3rem; }
+  padding: 0rem 3rem 3rem 3rem; }
 
 .evaluation-component {
   display: flex;
@@ -89,7 +93,7 @@
 
 .evaluated-ingredients-wrapper {
   display: flex;
-  margin: 5rem;
+  margin: 0 0 3rem 5rem;
   box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.05);
   gap: 2rem;
   padding: 2rem;
@@ -99,12 +103,57 @@
 .recipe-suggestions-wrapper {
   display: grid;
   background-color: #fdf2e9;
-  height: 100vh;
+  height: 75vh;
   width: 100vw;
-  grid-template-columns: 2fr 4fr; }
+  grid-template-columns: 2fr 3fr; }
 
 .liked-recipes {
-  background-color: #999; }
+  margin-left: 5rem;
+  margin: 0 0 3rem 5rem;
+  box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.05);
+  padding: 3.2rem;
+  border-radius: 9px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  overflow: scroll;
+  row-gap: 3rem;
+  column-gap: 3rem; }
+  .liked-recipes:hover .img-and-title-component:not(:hover) {
+    opacity: 0.5; }
+  .liked-recipes::-webkit-scrollbar {
+    display: none; }
+  .liked-recipes__header {
+    grid-column: 1/-1;
+    justify-self: center; }
+
+.img-and-title-component {
+  background-color: #fff;
+  border-radius: 9px;
+  height: 14rem;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  transition: all 0.5s; }
+  .img-and-title-component__img {
+    border-radius: 9px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    transition: all 0.5s;
+    background-color: #fdf2e9; }
+  .img-and-title-component__title {
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-align: center;
+    padding: 1rem 2rem; }
+  .img-and-title-component:hover .img-and-title-component__img {
+    transform: translateY(-4.4rem);
+    box-shadow: 0 -10px 30px 5px rgba(85, 85, 85, 0.2); }
+  .img-and-title-component:hover {
+    transform: scale(1.2);
+    box-shadow: 0 10px 30px 5px rgba(85, 85, 85, 0.2); }
 
 .swiper-component {
   display: flex;
@@ -143,7 +192,7 @@
   .recipe-card-component__title {
     color: rgba(255, 255, 255, 0.884);
     font-size: 2rem;
-    font-weight: 500;
+    font-weight: 300;
     letter-spacing: 2px;
     padding: 2rem;
     text-align: center; }
@@ -171,7 +220,61 @@
     font-weight: 400;
     box-shadow: 0 0 40px 10px rgba(51, 51, 51, 0.151);
     z-index: 5;
-    color: #555; }
+    color: #555;
+    transition: all 0.3s; }
+    .recipe-card-component__button::after {
+      content: "";
+      border-radius: 1000px;
+      display: inline-block;
+      height: 100%;
+      width: 100%;
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all 0.3s;
+      background-color: #fff; }
+    .recipe-card-component__button:hover::after {
+      transform: scaleX(1.5) scaleY(1.7);
+      opacity: 0; }
+
+.auth-me {
+  margin-top: 5rem;
+  background-color: #e67e22;
+  border: none;
+  font-size: 2rem;
+  padding: 1.6rem 3.2rem;
+  border-radius: 9px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s;
+  position: relative; }
+
+.auth-me:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
+
+.auth-me:active {
+  transform: translateY(7px);
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2); }
+
+.auth-me::after {
+  border-radius: 9px;
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s;
+  background-color: #e67e22; }
+
+.auth-me:hover::after {
+  transform: scaleX(1.5) scaleY(1.7);
+  opacity: 0; }
 
 .action-btns {
   display: flex;
@@ -195,3 +298,21 @@
         transform: scale(1.2); }
     .action-btns__btn__like {
       color: #00b258; }
+
+.breadcrumbs {
+  font-size: 1.6rem;
+  padding: 0 4rem 2rem 6.4rem; }
+
+.breadcrumb {
+  width: fit-content;
+  color: #fdf2e9; }
+  .breadcrumb__first {
+    padding: 1rem 3.6rem 1rem 2.4rem;
+    background-color: #e67e22;
+    clip-path: polygon(0 100%, 90% 100%, 100% 50%, 90% 0, 0 0); }
+  .breadcrumb__second {
+    padding: 1rem 3.6rem 1rem 4rem;
+    background-color: #f3bf91;
+    background-color: #e67e22;
+    clip-path: polygon(0 100%, 90% 100%, 100% 50%, 90% 0, 0 0, 10% 50%);
+    transform: translateX(-2rem); }

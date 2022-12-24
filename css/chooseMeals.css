@@ -1,0 +1,197 @@
+.ingredients-wrapper {
+  display: grid;
+  background-color: #fdf2e9;
+  height: 100vh;
+  width: 100vw;
+  grid-template-columns: 2fr 4fr 1fr; }
+
+.ingredients-to-evaluate {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  padding: 7rem 3rem 3rem 3rem; }
+
+.evaluation-component {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  width: fit-content; }
+  .evaluation-component .ingredient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 30rem;
+    background-color: #fff;
+    border-radius: 1000px;
+    padding: 1rem;
+    box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.068); }
+    .evaluation-component .ingredient__img {
+      height: 6.4rem;
+      width: 6.4rem;
+      border-radius: 1000px;
+      outline: 2px solid #e67e22; }
+    .evaluation-component .ingredient__text {
+      font-size: 2.4rem;
+      width: 16rem; }
+
+.evaluation-btn {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.151); }
+  .evaluation-btn ion-icon {
+    height: 3.2rem;
+    width: 3.2rem; }
+  .evaluation-btn__dislike {
+    background-color: #e35a5c; }
+    .evaluation-btn__dislike ion-icon {
+      transform: translateY(5%); }
+  .evaluation-btn__like {
+    background-color: #00b258; }
+    .evaluation-btn__like ion-icon {
+      transform: translateY(-5%); }
+
+.evaluated-ingredients__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  align-items: center;
+  width: fit-content; }
+  .evaluated-ingredients__list .ingredient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 20rem;
+    color: #fff;
+    border-radius: 1000px;
+    padding: 0.7rem;
+    box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.068); }
+    .evaluated-ingredients__list .ingredient__img {
+      height: 4.5rem;
+      width: 4.5rem;
+      border-radius: 1000px;
+      outline: 2px solid #e67e22;
+      background-color: #fff; }
+    .evaluated-ingredients__list .ingredient__text {
+      font-size: 1.6rem;
+      width: 11rem; }
+
+.evaluated-ingredients.evaluated-ingredients__liked .ingredient {
+  background-color: #00b258; }
+
+.evaluated-ingredients.evaluated-ingredients__disliked .ingredient {
+  background-color: #e35a5c; }
+
+.evaluated-ingredients-wrapper {
+  display: flex;
+  margin: 5rem;
+  box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.05);
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 9px;
+  width: fit-content; }
+
+.recipe-suggestions-wrapper {
+  display: grid;
+  background-color: #fdf2e9;
+  height: 100vh;
+  width: 100vw;
+  grid-template-columns: 2fr 4fr; }
+
+.liked-recipes {
+  background-color: #999; }
+
+.swiper-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4.4rem; }
+
+.recipe-card-component {
+  border-radius: 12px;
+  box-shadow: 0 20px 30px 10px rgba(51, 51, 51, 0.151);
+  width: 32rem;
+  height: 45rem;
+  background: linear-gradient(to left top, #e67e22, #e98b38);
+  display: flex;
+  flex-direction: column;
+  position: relative; }
+  .recipe-card-component__img {
+    width: 25rem;
+    height: 20rem;
+    border-radius: 12px;
+    align-self: center;
+    overflow: hidden;
+    object-fit: cover;
+    transform: translateY(-4rem);
+    position: absolute;
+    box-shadow: 0 5px 15px 5px rgba(51, 51, 51, 0.082);
+    z-index: 1; }
+  .recipe-card-component__text-wrapper {
+    padding: 15rem 4rem 4rem 4rem;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 10; }
+  .recipe-card-component__title {
+    color: rgba(255, 255, 255, 0.884);
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding: 2rem;
+    text-align: center; }
+  .recipe-card-component__subtitle {
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 1px;
+    padding-bottom: 1rem;
+    padding-left: 1rem; }
+  .recipe-card-component__ingredient {
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.781);
+    letter-spacing: 1px;
+    padding-left: 3rem; }
+  .recipe-card-component__button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background-color: #fff;
+    padding: 1rem 1.8rem;
+    border-radius: 1000px;
+    font-size: 1.6rem;
+    width: 18rem;
+    font-weight: 400;
+    box-shadow: 0 0 40px 10px rgba(51, 51, 51, 0.151);
+    z-index: 5;
+    color: #555; }
+
+.action-btns {
+  display: flex;
+  gap: 5rem;
+  z-index: 20; }
+  .action-btns__btn {
+    height: 5.6rem;
+    width: 5.6rem;
+    border-radius: 1000px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px 10px rgba(51, 51, 51, 0.151); }
+    .action-btns__btn ion-icon {
+      height: 3.2rem;
+      width: 3.2rem; }
+    .action-btns__btn__dislike {
+      color: #e35a5c; }
+      .action-btns__btn__dislike ion-icon {
+        transform: scale(1.2); }
+    .action-btns__btn__like {
+      color: #00b258; }

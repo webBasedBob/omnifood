@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../css/resetFile.css" />
     <link rel="stylesheet" href="../css/adminConsole.css" />
     <link rel="stylesheet" href="../css/general.css" />
+    <script type="module" src="../js/adminConsole.js"></script>
   </head>
   <body>
     <header class="header">
@@ -84,18 +85,47 @@
             <input type="text" class="search-bar__text-input" />
             <button type="submit" class="search-bar__search-btn">Search</button>
           </form>
-          <button class="export-users-btn">Export Users</button>
+          <button class="bulk-actions-btn">
+            <span>Actions</span> <ion-icon name="caret-down"></ion-icon>
+          </button>
+          <div class="more-actions hidden">
+            <p class="more-actions__action">Delete Users</p>
+            <p class="more-actions__action">Assign Admin Role</p>
+            <p class="more-actions__action">Assign Recruiter Role</p>
+            <p class="more-actions__action">Assign Subscriber Role</p>
+            <p class="more-actions__action">Remove Role</p>
+            <p class="more-actions__action">Export Users</p>
+          </div>
         </div>
         <table class="users-table">
           <thead class="users-table__head">
             <tr class="users-table__head__row">
               <th></th>
-              <th>Email</th>
-              <th>Account Type</th>
+              <th>
+                <p>Email</p>
+                <div class="sort-arrows">
+                  <ion-icon name="caret-up"></ion-icon>
+                  <ion-icon name="caret-down"></ion-icon>
+                </div>
+              </th>
+              <th>
+                <p>Account Type</p>
+                <div class="sort-arrows">
+                  <ion-icon name="caret-up"></ion-icon>
+                  <ion-icon class="active" name="caret-down"></ion-icon>
+                </div>
+              </th>
               <th></th>
             </tr>
           </thead>
           <tbody class="users-table__body">
+            <div class="more-actions hidden more-actions__single-user">
+              <p class="more-actions__action">Delete User</p>
+              <p class="more-actions__action">Assign Admin Role</p>
+              <p class="more-actions__action">Assign Recruiter Role</p>
+              <p class="more-actions__action">Assign Subscriber Role</p>
+              <p class="more-actions__action">Remove Role</p>
+            </div>
             <tr class="users-table__body__row">
               <td class="users-table__body__row__data">
                 <input type="checkbox" />

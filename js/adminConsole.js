@@ -18,6 +18,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+// let user;
+// onAuthStateChanged(auth, async (curUser) => {
+//   if (curUser) {
+//     // displayAccountConsole();
+//     // hideAuthModal();
+//     user = auth.currentUser;
+//     console.log("logged in");
+//     // renderUserInfo();
+//     // displayLogOutBtn();
+//     // console.log(user);
+//     // console.log(await hasCustomRole("recruiter"));
+//   } else {
+//     // displayNotLoggedInScreen();
+//     // hideLogOutBtn();
+//   }
+// });
 
 import { toTitleCase } from "./reusableFunctions.js";
 import {
@@ -41,10 +58,10 @@ const renderUsers = function (usersArray) {
     const html = `
     <tr class="users-table__body__row">
       <td class="users-table__body__row__data">
-        <input type="checkbox" />
+        <input type="checkbox" id="select-${user.email}"/>
       </td>
       <td class="users-table__body__row__data">
-        <p>${user.email}</p>
+      <label for="select-${user.email}">${user.email}</label>
       </td>
       <td class="users-table__body__row__data">
         <p>${
@@ -109,3 +126,22 @@ const deleteUser = async function (email) {
     console.error(err);
   }
 };
+
+const selectAllUsers = function () {
+  const checklists = document.querySelectorAll(
+    `.users-table__body input[type="checkbox"`
+  );
+  checklists.forEach((checklist) => {
+    checklist.checked = true;
+  });
+};
+// selectAllUsers();
+const deselectAllUsers = function () {
+  const checklists = document.querySelectorAll(
+    `.users-table__body input[type="checkbox"`
+  );
+  checklists.forEach((checklist) => {
+    checklist.checked = false;
+  });
+};
+// deselectAllUsers();

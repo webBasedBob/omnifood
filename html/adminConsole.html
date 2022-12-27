@@ -17,14 +17,14 @@
       nomodule
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
     ></script>
-    <link rel="stylesheet" href="../css/resetFile.css" />
-    <link rel="stylesheet" href="../css/adminConsole.css" />
-    <link rel="stylesheet" href="../css/general.css" />
+    <link rel="stylesheet" href="../sass/resetFile.scss" />
+    <link rel="stylesheet" href="../sass/adminConsole.scss" />
+    <link rel="stylesheet" href="../sass/general.scss" />
     <script type="module" src="../js/adminConsole.js"></script>
   </head>
   <body>
     <header class="header">
-      <a href="../index.html">
+      <a href="./index.html">
         <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
       </a>
 
@@ -32,6 +32,14 @@
         <ul class="main-nav-list">
           <li>
             <a class="main-nav-link" href="./careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./chooseMeals.html">Choose Meals</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./adminConsole.html"
+              >Admin Console</a
+            >
           </li>
           <li>
             <a class="main-nav-link" href="./recipeDirectory.html">Recipes</a>
@@ -47,7 +55,12 @@
         <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
       </button>
     </header>
-    <div class="page-layout">
+    <div class="not-logged-in-screen hidden">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
+    <div class="page-layout hidden">
       <div class="admin-panel">
         <div class="admin-panel__button">
           <div class="admin-panel__icon">

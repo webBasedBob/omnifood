@@ -1,10 +1,8 @@
-// import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-// import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+import { toTitleCase } from "./reusableFunctions.js";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -19,32 +17,34 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-// let user;
-// onAuthStateChanged(auth, async (curUser) => {
-//   if (curUser) {
-//     // displayAccountConsole();
-//     // hideAuthModal();
-//     user = auth.currentUser;
-//     console.log("logged in");
-//     // renderUserInfo();
-//     // displayLogOutBtn();
-//     // console.log(user);
-//     // console.log(await hasCustomRole("recruiter"));
-//   } else {
-//     // displayNotLoggedInScreen();
-//     // hideLogOutBtn();
-//   }
-// });
-
-import { toTitleCase } from "./reusableFunctions.js";
-import {
-  getFunctions,
-  httpsCallable,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-functions.js";
-
 let usersArr;
 const functions = getFunctions();
+// let user;
+const hidePageContent = function () {
+  const pageContent = [document.querySelector(".page-layout")];
+  pageContent.forEach((section) => {
+    section.classList.add("hidden");
+  });
+};
 
+const displayPageContent = function () {
+  const pageContent = [document.querySelector(".page-layout")];
+  pageContent.forEach((section) => {
+    section.classList.remove("hidden");
+  });
+};
+const displayNotLoggedInScreen = function () {
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.remove("hidden");
+};
+onAuthStateChanged(auth, async (curUser) => {
+  if (curUser) {
+    displayPageContent();
+  } else {
+    displayNotLoggedInScreen();
+    hidePageContent();
+  }
+});
 const getUsersFromFirebase = async function () {
   const retrieveAllUsers = httpsCallable(functions, "listAllUsers");
   let usersData = await retrieveAllUsers();

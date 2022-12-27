@@ -17,13 +17,14 @@
       nomodule
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
     ></script>
-    <link rel="stylesheet" href="../css/resetFile.css" />
-    <link rel="stylesheet" href="../css/chooseMeals.css" />
-    <link rel="stylesheet" href="../css/general.css" />
+    <link rel="stylesheet" href="../sass/resetFile.scss" />
+    <link rel="stylesheet" href="../sass/chooseMeals.scss" />
+    <link rel="stylesheet" href="../sass/general.scss" />
+    <script type="module" defer src="../js/chooseMeals.js"></script>
   </head>
   <body>
     <header class="header">
-      <a href="../index.html">
+      <a href="./index.html">
         <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
       </a>
 
@@ -31,6 +32,14 @@
         <ul class="main-nav-list">
           <li>
             <a class="main-nav-link" href="./careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./chooseMeals.html">Choose Meals</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./adminConsole.html"
+              >Admin Console</a
+            >
           </li>
           <li>
             <a class="main-nav-link" href="./recipeDirectory.html">Recipes</a>
@@ -46,16 +55,23 @@
         <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
       </button>
     </header>
-    <div class="breadcrumbs">
-      <button class="breadcrumb breadcrumb__first">Choose Ingredients</button>
+    <div class="not-logged-in-screen hidden">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
+    <div class="breadcrumbs hidden">
+      <button class="breadcrumb breadcrumb__first active">
+        Choose Ingredients
+      </button>
       <button class="breadcrumb breadcrumb__second">Choose Recipes</button>
     </div>
-    <section class="ingredients-wrapper">
+    <section class="ingredients-wrapper hidden">
       <div class="evaluated-ingredients-wrapper">
         <div class="evaluated-ingredients evaluated-ingredients__liked">
           <!-- <h2 class="evaluated-ingredients__title">Love these</h2> -->
           <div class="evaluated-ingredients__list">
-            <figure class="ingredient">
+            <!-- <figure class="ingredient">
               <img
                 src="../img/ingredients/ingr-1.png"
                 alt="tomatoes-image"
@@ -86,13 +102,13 @@
                 class="ingredient__img"
               />
               <p class="ingredient__text">Lettuce</p>
-            </figure>
+            </figure> -->
           </div>
         </div>
         <div class="evaluated-ingredients evaluated-ingredients__disliked">
           <!-- <h2 class="evaluated-ingredients__title">Hate these</h2> -->
           <div class="evaluated-ingredients__list">
-            <figure class="ingredient">
+            <!-- <figure class="ingredient">
               <img
                 src="../img/ingredients/ingr-1.png"
                 alt="tomatoes-image"
@@ -123,80 +139,15 @@
                 class="ingredient__img"
               />
               <p class="ingredient__text">Lettuce</p>
-            </figure>
+            </figure> -->
           </div>
         </div>
       </div>
-      <div class="ingredients-to-evaluate">
-        <div class="evaluation-component">
-          <div class="evaluation-btn evaluation-btn__dislike">
-            <ion-icon name="thumbs-down-outline"></ion-icon>
-          </div>
-          <figure class="ingredient">
-            <img
-              src="../img/ingredients/ingr-1.png"
-              alt="tomatoes-image"
-              class="ingredient__img"
-            />
-            <p class="ingredient__text">Tomato</p>
-          </figure>
-          <div class="evaluation-btn evaluation-btn__like">
-            <ion-icon name="thumbs-up-outline"></ion-icon>
-          </div>
-        </div>
-        <div class="evaluation-component">
-          <div class="evaluation-btn evaluation-btn__dislike">
-            <ion-icon name="thumbs-down-outline"></ion-icon>
-          </div>
-          <figure class="ingredient">
-            <img
-              src="../img/ingredients/ingr-2.jpg"
-              alt="cheese-image"
-              class="ingredient__img"
-            />
-            <p class="ingredient__text">Cheese</p>
-          </figure>
-          <div class="evaluation-btn evaluation-btn__like">
-            <ion-icon name="thumbs-up-outline"></ion-icon>
-          </div>
-        </div>
-        <div class="evaluation-component">
-          <div class="evaluation-btn evaluation-btn__dislike">
-            <ion-icon name="thumbs-down-outline"></ion-icon>
-          </div>
-          <figure class="ingredient">
-            <img
-              src="../img/ingredients/ingr-3.png"
-              alt="egg-image"
-              class="ingredient__img"
-            />
-            <p class="ingredient__text">Egg</p>
-          </figure>
-          <div class="evaluation-btn evaluation-btn__like">
-            <ion-icon name="thumbs-up-outline"></ion-icon>
-          </div>
-        </div>
-        <div class="evaluation-component">
-          <div class="evaluation-btn evaluation-btn__dislike">
-            <ion-icon name="thumbs-down-outline"></ion-icon>
-          </div>
-          <figure class="ingredient">
-            <img
-              src="../img/ingredients/ingr-4.jpeg"
-              alt="lettuce-image"
-              class="ingredient__img"
-            />
-            <p class="ingredient__text">Lettuce</p>
-          </figure>
-          <div class="evaluation-btn evaluation-btn__like">
-            <ion-icon name="thumbs-up-outline"></ion-icon>
-          </div>
-        </div>
-      </div>
+      <div class="ingredients-to-evaluate"></div>
     </section>
     <section class="recipe-suggestions-wrapper hidden">
       <div class="liked-recipes">
-        <h2 class="liked-recipes__header">Food I Like</h2>
+        <!-- <h2 class="liked-recipes__header">Food I Like</h2> -->
 
         <figure class="img-and-title-component">
           <img
@@ -310,8 +261,8 @@
         </figure>
       </div>
       <div class="swiper-component">
-        <figure class="recipe-card-component">
-          <!-- <div class="recipe-card-component__img"></div> -->
+        <div class="swiper-component__card-container"></div>
+        <!-- <figure class="recipe-card-component">
           <img
             src="../img/food.jpg"
             alt="image of juicy burger"
@@ -331,7 +282,7 @@
           <button class="recipe-card-component__button">
             See All Ingredients
           </button>
-        </figure>
+        </figure> -->
         <div class="action-btns">
           <div class="action-btns__btn action-btns__btn__dislike">
             <ion-icon name="close"></ion-icon>

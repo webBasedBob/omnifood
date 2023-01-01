@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let usersArr;
 const functions = getFunctions();
-// let user;
+let user;
 const hidePageContent = function () {
   const pageContent = [document.querySelector(".page-layout")];
   pageContent.forEach((section) => {
@@ -37,18 +37,38 @@ const displayNotLoggedInScreen = function () {
   const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
   notLoggedInScreen.classList.remove("hidden");
 };
+const hasCustomRole = async function (user, role) {
+  const token = await user.getIdTokenResult();
+  return token.claims[role];
+};
+const displayNotAuthorizedScreen = function (role) {
+  const notAutorizedContainer = document.querySelector(".not-logged-in-screen");
+  notAutorizedContainer.innerHTML = `<h3>Access denied</h3>
+  <p>You need to be an ${toTitleCase(role)} to access this page</p>`;
+  displayNotLoggedInScreen();
+};
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
-    displayPageContent();
+    user = curUser;
+    if (await hasCustomRole(curUser, "admin")) {
+      await getUsersFromFirebase();
+      renderUsers(usersArr);
+      displayPageContent();
+    } else {
+      displayNotAuthorizedScreen("admin");
+      hidePageContent();
+    }
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
   }
 });
+
 const getUsersFromFirebase = async function () {
   const retrieveAllUsers = httpsCallable(functions, "listAllUsers");
   let usersData = await retrieveAllUsers();
   usersArr = usersData.data;
+  return usersData.data;
 };
 
 const renderUsers = function (usersArray) {
@@ -65,7 +85,7 @@ const renderUsers = function (usersArray) {
       </td>
       <td class="users-table__body__row__data">
         <p>${
-          Object.keys(user.customClaims).length > 0
+          user.customClaims && Object.keys(user.customClaims).length > 0
             ? toTitleCase(Object.keys(user.customClaims)[0])
             : "Basic"
         }</p>
@@ -112,19 +132,6 @@ const findUsersByEmail = function (email, usersArr) {
 const search = function () {
   const email = document.querySelector(".search-bar__text-input").value;
   renderUsers(findUsersByEmail(email, usersArr));
-};
-
-const deleteUser = async function (email) {
-  try {
-    const deleteUserFromFirebase = httpsCallable(
-      functions,
-      "deleteUserAccount"
-    );
-    const successMessage = await deleteUserFromFirebase(email);
-    return successMessage;
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 const selectAllUsers = function () {
@@ -236,8 +243,74 @@ const userOptionsUIManipulation = function (e) {
   exitViewportObserver.observe(optionsContainer);
 };
 
+const userActionOptions = {
+  async delete() {
+    try {
+      const deleteUserFromFirebase = httpsCallable(
+        functions,
+        "deleteUserAccount"
+      );
+      const successMessage = await deleteUserFromFirebase(
+        moreOptionsTargetEmail
+      );
+      return successMessage;
+    } catch (err) {
+      console.error(err);
+    } finally {
+      renderUsers(await getUsersFromFirebase());
+    }
+  },
+  async assignRole(role, email) {
+    try {
+      const assignRoleFirebase = httpsCallable(
+        functions,
+        `add${toTitleCase(role)}Role`
+      );
+      let responseMessage = await assignRoleFirebase(email);
+      return responseMessage;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      renderUsers(await getUsersFromFirebase());
+    }
+  },
+  admin() {
+    this.assignRole.call(null, "admin", moreOptionsTargetEmail);
+  },
+  recruiter() {
+    this.assignRole.call(null, "recruiter", moreOptionsTargetEmail);
+  },
+  subscriber() {
+    this.assignRole.call(null, "subscriber", moreOptionsTargetEmail);
+  },
+  async remove() {
+    try {
+      const removeUsersRolesFirebase = httpsCallable(functions, "removeRoles");
+      const successMessage = await removeUsersRolesFirebase(
+        moreOptionsTargetEmail
+      );
+      return successMessage;
+    } catch (err) {
+      console.error(err);
+    } finally {
+      renderUsers(await getUsersFromFirebase());
+    }
+  },
+};
+
+const handleUserOptions = async function (e) {
+  if (e.target.tagName !== "P") return;
+
+  const actionToTake = e.target.dataset.action;
+  userActionOptions[actionToTake]();
+};
+
 const addEventListeners = function () {
   const table = document.querySelector(".users-table");
   table.addEventListener("click", userOptionsUIManipulation);
+  const userOptionsWindow = document.querySelector(
+    ".more-actions__single-user"
+  );
+  userOptionsWindow.addEventListener("click", handleUserOptions);
 };
 addEventListeners();

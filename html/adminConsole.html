@@ -23,6 +23,17 @@
     <script type="module" src="../js/adminConsole.js"></script>
   </head>
   <body>
+    <div class="more-actions more-actions__single-user hidden">
+      <p data-action="delete" class="more-actions__action">Delete User</p>
+      <p data-action="admin" class="more-actions__action">Assign Admin Role</p>
+      <p data-action="recruiter" class="more-actions__action">
+        Assign Recruiter Role
+      </p>
+      <p data-action="subscriber" class="more-actions__action">
+        Assign Subscriber Role
+      </p>
+      <p data-action="remove" class="more-actions__action">Remove Role</p>
+    </div>
     <header class="header">
       <a href="./index.html">
         <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
@@ -101,7 +112,7 @@
           <button class="bulk-actions-btn">
             <span>Actions</span> <ion-icon name="caret-down"></ion-icon>
           </button>
-          <div class="more-actions hidden">
+          <div class="hidden more-actions">
             <p class="more-actions__action">Delete Users</p>
             <p class="more-actions__action">Assign Admin Role</p>
             <p class="more-actions__action">Assign Recruiter Role</p>
@@ -110,6 +121,7 @@
             <p class="more-actions__action">Export Users</p>
           </div>
         </div>
+
         <table class="users-table">
           <thead class="users-table__head">
             <tr class="users-table__head__row">
@@ -131,295 +143,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody class="users-table__body">
-            <div class="more-actions hidden more-actions__single-user">
-              <p class="more-actions__action">Delete User</p>
-              <p class="more-actions__action">Assign Admin Role</p>
-              <p class="more-actions__action">Assign Recruiter Role</p>
-              <p class="more-actions__action">Assign Subscriber Role</p>
-              <p class="more-actions__action">Remove Role</p>
-            </div>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Admin</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>abcgs@dskd.io</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Subscriber</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Recruiter</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.popescu19997@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Basic</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Admin</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>abcgs@dskd.io</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Subscriber</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Recruiter</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.popescu19997@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Basic</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Admin</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>abcgs@dskd.io</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Subscriber</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Recruiter</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.popescu19997@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Basic</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Admin</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>abcgs@dskd.io</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Subscriber</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Recruiter</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.popescu19997@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Basic</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Admin</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>abcgs@dskd.io</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Subscriber</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.pop97@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Recruiter</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-            <tr class="users-table__body__row">
-              <td class="users-table__body__row__data">
-                <input type="checkbox" />
-              </td>
-              <td class="users-table__body__row__data">
-                <p>catalin.b.popescu19997@gmail.com</p>
-              </td>
-              <td class="users-table__body__row__data">
-                <p>Basic</p>
-              </td>
-              <td class="users-table__body__row__options">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </td>
-            </tr>
-          </tbody>
+          <tbody class="users-table__body"></tbody>
         </table>
       </main>
     </div>

@@ -145,3 +145,99 @@ const deselectAllUsers = function () {
   });
 };
 // deselectAllUsers();
+
+let moreOptionsTargetEmail;
+
+const placeUserOptions = function (coords) {
+  const optionsContainer = document.querySelector(".more-actions__single-user");
+  const optionsContainerStyle = window.getComputedStyle(optionsContainer);
+  const optionsOverflowViewport =
+    coords.y + parseInt(optionsContainerStyle.height) > window.innerHeight - 40;
+  const left = `${
+    coords.x - parseInt(optionsContainerStyle.width) + coords.width + 10
+  }px`;
+  const top = optionsOverflowViewport
+    ? `${coords.y - parseInt(optionsContainerStyle.height) * 2}px`
+    : `${coords.y - parseInt(optionsContainerStyle.height) + coords.height}px`;
+  optionsContainer.style.left = left;
+  optionsContainer.style.top = top;
+  if (optionsOverflowViewport) {
+    optionsContainer.classList.add("upside-down");
+  } else {
+    optionsContainer.classList.remove("upside-down");
+  }
+};
+
+const userOptionsUIManipulation = function (e) {
+  if (e.target.tagName !== "ION-ICON") return;
+
+  const optionsContainer = document.querySelector(".more-actions__single-user");
+  const contentContainer = document.querySelector(".content-area");
+  moreOptionsTargetEmail =
+    e.target.closest("tr").children[1].children[0].innerText;
+
+  const changePositionBasedOnScroll = function () {
+    placeUserOptions(e.target.getBoundingClientRect());
+  };
+
+  const removeScrollEvent = function () {
+    contentContainer.removeEventListener("scroll", changePositionBasedOnScroll);
+  };
+
+  const closeOptionsWindow = function () {
+    optionsContainer.classList.add("hidden");
+  };
+
+  const observeClassChange = new MutationObserver((mutations) => {
+    if (
+      mutations.some((mutation) => {
+        return mutation.attributeName == "class";
+      })
+    ) {
+      if (!optionsContainer.classList.contains("hidden")) {
+        return;
+      }
+      removeScrollEvent();
+      observeClassChange.disconnect();
+    }
+  });
+
+  const closeOnOutsideClick = function (e) {
+    if (
+      e.target.closest(".more-actions__single-user") ||
+      e.target.closest(".users-table__body__row__options")
+    )
+      return;
+    closeOptionsWindow();
+    document.removeEventListener("click", closeOnOutsideClick);
+  };
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-100px 0px 0px 0px",
+    threshold: 1,
+  };
+
+  const observerCallback = function (entries, observer) {
+    if (entries[0].isIntersecting) return;
+    closeOptionsWindow();
+  };
+
+  const exitViewportObserver = new IntersectionObserver(
+    observerCallback,
+    observerOptions
+  );
+
+  optionsContainer.classList.remove("hidden");
+  placeUserOptions(e.target.getBoundingClientRect());
+  contentContainer.addEventListener("scroll", changePositionBasedOnScroll);
+  observeClassChange.observe(optionsContainer, { attributes: true });
+  document.addEventListener("click", closeOnOutsideClick);
+  exitViewportObserver.observe(optionsContainer);
+};
+
+const addEventListeners = function () {
+  const table = document.querySelector(".users-table");
+  table.addEventListener("click", userOptionsUIManipulation);
+};
+addEventListeners();

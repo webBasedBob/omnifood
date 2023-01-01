@@ -115,7 +115,7 @@ label {
   gap: 2rem;
   max-width: 130rem;
   margin: 0 auto;
-  transform: translateX(-calc($width-panel / 2));
+  transform: translateX(-($width-panel / 2));
   overflow-y: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {
@@ -298,8 +298,10 @@ label {
 }
 .more-actions__single-user {
   font-size: $font-size-table-row;
-  bottom: 31rem;
-  right: 3.5rem;
+  height: fit-content;
+  top: 0;
+  left: 0;
+  position: absolute;
   &::after {
     content: "";
     height: 1rem;
@@ -319,7 +321,10 @@ label {
     }
   }
 }
-
+.upside-down.more-actions__single-user::after {
+  top: 22rem;
+  transform: rotate(180deg);
+}
 .not-logged-in-screen {
   color: #999;
   position: absolute;

@@ -128,26 +128,21 @@ const findUsersByEmail = function (email, usersArr) {
   return foundUsersArr;
 };
 
-const search = function () {
-  const email = document.querySelector(".search-bar__text-input").value;
-  renderUsers(findUsersByEmail(email, usersArr));
-};
-
 const selectAllUsers = function () {
-  const checklists = document.querySelectorAll(
-    `.users-table__body input[type="checkbox"`
+  const checkboxes = document.querySelectorAll(
+    `.users-table__body input[type="checkbox"]`
   );
-  checklists.forEach((checklist) => {
-    checklist.checked = true;
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = true;
   });
 };
-
+// selectAllUsers();
 const deselectAllUsers = function () {
-  const checklists = document.querySelectorAll(
-    `.users-table__body input[type="checkbox"`
+  const checkboxes = document.querySelectorAll(
+    `.users-table__body input[type="checkbox"]`
   );
-  checklists.forEach((checklist) => {
-    checklist.checked = false;
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
   });
 };
 
@@ -339,20 +334,6 @@ const handleBulkActions = function (e) {
   }
 };
 
-const addEventListeners = function () {
-  const table = document.querySelector(".users-table");
-  table.addEventListener("click", userOptionsUIManipulation);
-  const userOptionsWindow = document.querySelector(
-    ".more-actions__single-user"
-  );
-  userOptionsWindow.addEventListener("click", handleUserOptions);
-  const bulkActionBtn = document.querySelector(".bulk-actions-btn");
-  bulkActionBtn.addEventListener("click", toggleBulkOptionsWindow);
-  const bulkOptionsWindow = document.querySelector(".more-actions__bulk");
-  bulkOptionsWindow.addEventListener("click", handleBulkActions);
-};
-addEventListeners();
-
 function exportToCsv(filename, rows) {
   const processRow = function (row) {
     let finalVal = "";
@@ -387,3 +368,64 @@ function exportToCsv(filename, rows) {
     }
   }
 }
+const selectAllHandler = function (e) {
+  if (e.target.checked) selectAllUsers();
+  else deselectAllUsers();
+};
+
+const userSearch = function (e) {
+  e.preventDefault();
+  const email = document.querySelector(".search-bar__text-input").value;
+  renderUsers(findUsersByEmail(email, usersArr));
+};
+
+const handleUserSort = function (e) {
+  const sortingCriterion = e.target
+    .closest(".sort-arrows")
+    .classList.contains("sort-arrows__email")
+    ? "email"
+    : "role";
+
+  const relevantArrowsForCriterion = Array.from(
+    document.querySelectorAll(`.sort-arrows__${sortingCriterion} *`)
+  );
+  const activeArrow = relevantArrowsForCriterion.filter((arrow) => {
+    return arrow.classList.contains("active");
+  });
+  let direction = "ascending";
+  if (
+    activeArrow[0] &&
+    activeArrow[0].classList.contains("sort-arrow__ascending")
+  ) {
+    direction = "descending";
+  }
+  sortUsers(sortingCriterion, direction);
+  const allSortingArrows = document.querySelectorAll(".sort-arrow");
+  allSortingArrows.forEach((arrow) => {
+    arrow.classList.remove("active");
+  });
+  const targetArrow = document.querySelector(
+    `.sort-arrows__${sortingCriterion} .sort-arrow__${direction}`
+  );
+  targetArrow.classList.add("active");
+};
+
+const addEventListeners = function () {
+  const table = document.querySelector(".users-table");
+  table.addEventListener("click", userOptionsUIManipulation);
+  const userOptionsWindow = document.querySelector(
+    ".more-actions__single-user"
+  );
+  userOptionsWindow.addEventListener("click", handleUserOptions);
+  const bulkActionBtn = document.querySelector(".bulk-actions-btn");
+  bulkActionBtn.addEventListener("click", toggleBulkOptionsWindow);
+  const bulkOptionsWindow = document.querySelector(".more-actions__bulk");
+  bulkOptionsWindow.addEventListener("click", handleBulkActions);
+  const selectAllBtn = document.querySelector(".select-all__toggler__checkbox");
+  selectAllBtn.addEventListener("click", selectAllHandler);
+  const searchForm = document.querySelector(".search-bar");
+  searchForm.addEventListener("submit", userSearch);
+  const sortBtns = document.querySelectorAll(".sort-arrows");
+  sortBtns.forEach((btn) => btn.addEventListener("click", handleUserSort));
+};
+addEventListeners();

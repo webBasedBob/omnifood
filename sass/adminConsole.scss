@@ -254,7 +254,9 @@ label {
   position: relative;
   font-size: 1.6rem;
   color: $color-text-gray-light;
+  cursor: pointer;
   & ion-icon {
+    cursor: pointer;
     position: absolute;
     &:first-child {
       top: -100%;
@@ -266,6 +268,9 @@ label {
     color: $color-text-gray-dark;
     font-size: 1.8rem;
     transform: translateX(-1px);
+  }
+  & .sort-arrow__ascending.active {
+    transform: translateX(-1px) translateY(-2px);
   }
 }
 

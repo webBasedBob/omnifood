@@ -120,7 +120,6 @@ const sortUsers = function (sortBy, direction) {
   userTableRows.forEach((tableRow) => usersContainter.append(tableRow));
 };
 
-// sortUsers("type", "ascending");
 const findUsersByEmail = function (email, usersArr) {
   const searchingRegEx = new RegExp(email.toLowerCase());
   const foundUsersArr = usersArr.filter((user) => {
@@ -142,7 +141,7 @@ const selectAllUsers = function () {
     checklist.checked = true;
   });
 };
-// selectAllUsers();
+
 const deselectAllUsers = function () {
   const checklists = document.querySelectorAll(
     `.users-table__body input[type="checkbox"`
@@ -151,7 +150,6 @@ const deselectAllUsers = function () {
     checklist.checked = false;
   });
 };
-// deselectAllUsers();
 
 let moreOptionsTargetEmail;
 
@@ -175,50 +173,22 @@ const placeUserOptions = function (coords) {
   }
 };
 
-const userOptionsUIManipulation = function (e) {
-  if (e.target.tagName !== "ION-ICON") return;
-
-  const optionsContainer = document.querySelector(".more-actions__single-user");
-  const contentContainer = document.querySelector(".content-area");
-  moreOptionsTargetEmail =
-    e.target.closest("tr").children[1].children[0].innerText;
-
-  const changePositionBasedOnScroll = function () {
-    placeUserOptions(e.target.getBoundingClientRect());
-  };
-
-  const removeScrollEvent = function () {
-    contentContainer.removeEventListener("scroll", changePositionBasedOnScroll);
-  };
-
+const handleClosingOptionsModal = function (userOptionsClass) {
+  const optionsContainer = document.querySelector(`.${userOptionsClass}`);
   const closeOptionsWindow = function () {
     optionsContainer.classList.add("hidden");
   };
-
-  const observeClassChange = new MutationObserver((mutations) => {
-    if (
-      mutations.some((mutation) => {
-        return mutation.attributeName == "class";
-      })
-    ) {
-      if (!optionsContainer.classList.contains("hidden")) {
-        return;
-      }
-      removeScrollEvent();
-      observeClassChange.disconnect();
-    }
-  });
-
   const closeOnOutsideClick = function (e) {
     if (
-      e.target.closest(".more-actions__single-user") ||
-      e.target.closest(".users-table__body__row__options")
+      e.target.closest(`.${userOptionsClass}`) ||
+      (userOptionsClass === "more-actions__single-user"
+        ? e.target.closest(".users-table__body__row__options")
+        : e.target.closest(`.bulk-actions-btn`))
     )
       return;
     closeOptionsWindow();
     document.removeEventListener("click", closeOnOutsideClick);
   };
-
   const observerOptions = {
     root: null,
     rootMargin: "-100px 0px 0px 0px",
@@ -234,13 +204,43 @@ const userOptionsUIManipulation = function (e) {
     observerCallback,
     observerOptions
   );
+  document.addEventListener("click", closeOnOutsideClick);
+  exitViewportObserver.observe(optionsContainer);
+};
 
+const userOptionsUIManipulation = function (e) {
+  if (e.target.tagName !== "ION-ICON") return;
+
+  const optionsContainer = document.querySelector(".more-actions__single-user");
+  const contentContainer = document.querySelector(".content-area");
+  moreOptionsTargetEmail =
+    e.target.closest("tr").children[1].children[0].innerText;
+
+  const changePositionBasedOnScroll = function () {
+    placeUserOptions(e.target.getBoundingClientRect());
+  };
+
+  const removeScrollEvent = function () {
+    contentContainer.removeEventListener("scroll", changePositionBasedOnScroll);
+  };
+  const observeClassChange = new MutationObserver((mutations) => {
+    if (
+      mutations.some((mutation) => {
+        return mutation.attributeName == "class";
+      })
+    ) {
+      if (!optionsContainer.classList.contains("hidden")) {
+        return;
+      }
+      removeScrollEvent();
+      observeClassChange.disconnect();
+    }
+  });
   optionsContainer.classList.remove("hidden");
   placeUserOptions(e.target.getBoundingClientRect());
   contentContainer.addEventListener("scroll", changePositionBasedOnScroll);
   observeClassChange.observe(optionsContainer, { attributes: true });
-  document.addEventListener("click", closeOnOutsideClick);
-  exitViewportObserver.observe(optionsContainer);
+  handleClosingOptionsModal("more-actions__single-user");
 };
 
 const userActionOptions = {
@@ -304,6 +304,40 @@ const handleUserOptions = async function (e) {
   const actionToTake = e.target.dataset.action;
   userActionOptions[actionToTake]();
 };
+const toggleBulkOptionsWindow = function () {
+  const bulkOptionsWindow = document.querySelector(".more-actions__bulk");
+  bulkOptionsWindow.classList.toggle("hidden");
+  handleClosingOptionsModal("more-actions__bulk");
+};
+
+const handleBulkActions = function (e) {
+  if (e.target.tagName !== "P") return;
+
+  const actionToTake = e.target.dataset.action;
+  const tableRows = Array.from(
+    document.querySelectorAll(".users-table__body__row")
+  );
+  const checkedRows = tableRows.filter((row) => {
+    return row.children[0].children[0].checked;
+  });
+  if (actionToTake !== "export") {
+    const emails = checkedRows.map((row) => {
+      return row.children[1].children[0].innerText;
+    });
+    emails.forEach((email) => {
+      moreOptionsTargetEmail = email;
+      userActionOptions[actionToTake]();
+    });
+  } else {
+    const data = checkedRows.map((row) => {
+      return [
+        row.children[1].children[0].innerText,
+        row.children[2].children[0].innerText,
+      ];
+    });
+    exportToCsv("Omnifood_Accounts.csv", data);
+  }
+};
 
 const addEventListeners = function () {
   const table = document.querySelector(".users-table");
@@ -312,5 +346,44 @@ const addEventListeners = function () {
     ".more-actions__single-user"
   );
   userOptionsWindow.addEventListener("click", handleUserOptions);
+  const bulkActionBtn = document.querySelector(".bulk-actions-btn");
+  bulkActionBtn.addEventListener("click", toggleBulkOptionsWindow);
+  const bulkOptionsWindow = document.querySelector(".more-actions__bulk");
+  bulkOptionsWindow.addEventListener("click", handleBulkActions);
 };
 addEventListeners();
+
+function exportToCsv(filename, rows) {
+  const processRow = function (row) {
+    let finalVal = "";
+    row.forEach((rowSubElm, index) => {
+      const innerValue = rowSubElm === null ? "" : rowSubElm.toString();
+      let result = innerValue.replace(/"/g, '""');
+      if (result.search(/("|,|\n)/g) >= 0) result = '"' + result + '"';
+      if (index > 0) finalVal += ",";
+      finalVal += result;
+    });
+    return finalVal + "\n";
+  };
+
+  let csvFile = "";
+  rows.forEach((row) => {
+    csvFile += processRow(row);
+  });
+
+  const blob = new Blob([csvFile], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    navigator.msSaveBlob(blob, filename);
+  } else {
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", filename);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}

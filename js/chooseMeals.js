@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 import { toTitleCase } from "./reusableFunctions.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
+import { storeIngredient, getIngredients } from "./liveDatabaseFunctions.js";
 const breadcrumbsFunctionality = function (e) {
   if (e.target.classList.contains("active")) return;
   const goToRecipesBtn = document.querySelector(".breadcrumb__second");
@@ -57,9 +57,14 @@ const displayNotLoggedInScreen = function () {
   const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
   notLoggedInScreen.classList.remove("hidden");
 };
+let evaluatedIngredients;
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     displayPageContent();
+    user = curUser;
+    evaluatedIngredients = await getIngredients(curUser.uid);
+    console.log(evaluatedIngredients);
+    renderAllIngredients();
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
@@ -70,29 +75,32 @@ const folder = "ingredients/";
 const listRef = ref(storage, folder);
 
 // Find all the prefixes and items.
-listAll(listRef)
-  .then((res) => {
-    const parentContainer = document.querySelector(".ingredients-to-evaluate");
-    res.items.forEach((itemRef) => {
-      console.log();
-      getDownloadURL(ref(storage, itemRef._location.path_)).then((url) => {
-        renderIngredient(
-          parentContainer,
-          extractIngredientName(itemRef._location.path_),
-          url
-        );
-      });
-    });
-  })
-  .catch((error) => {
-    // Uh-oh, an error occurred!
+const renderAllIngredients = async function () {
+  const ingredients = await listAll(listRef);
+  const ingrToEvaluateContainer = document.querySelector(
+    ".ingredients-to-evaluate"
+  );
+
+  ingredients.items.forEach(async (itemRef) => {
+    const url = await getDownloadURL(ref(storage, itemRef._location.path_));
+    const ingredientName = extractIngredientName(itemRef._location.path_);
+    if (ingredientName in evaluatedIngredients) {
+      renderEvaluatedIngredient(
+        evaluatedIngredients[ingredientName],
+        ingredientName,
+        url
+      );
+    } else {
+      renderIngredientToEvaluate(ingrToEvaluateContainer, ingredientName, url);
+    }
   });
+};
 
 const extractIngredientName = function (url) {
   return url.slice(12, url.indexOf("."));
 };
 
-const renderIngredient = function (parentElm, name, url) {
+const renderIngredientToEvaluate = function (parentElm, name, url) {
   const html = `
                 <div class="evaluation-component">
                 <div class="evaluation-btn evaluation-btn__dislike">
@@ -114,21 +122,50 @@ const renderIngredient = function (parentElm, name, url) {
   parentElm.insertAdjacentHTML("afterbegin", html);
 };
 
+const renderEvaluatedIngredient = function (evaluation, name, url) {
+  const likedIngrContainer = document.querySelector(
+    ".evaluated-ingredients__liked .evaluated-ingredients__list"
+  );
+  const dislikedIngrContainer = document.querySelector(
+    ".evaluated-ingredients__disliked .evaluated-ingredients__list"
+  );
+  const parentElm =
+    evaluation === "liked" ? likedIngrContainer : dislikedIngrContainer;
+  const html = `
+                <figure class="ingredient">
+                  <img
+                    src=${url}
+                    alt="${name}-image"
+                    class="ingredient__img"
+                  />
+                  <p class="ingredient__text">${toTitleCase(name)}</p>
+                </figure>
+                `;
+
+  parentElm.insertAdjacentHTML("afterbegin", html);
+};
+
 function evaluateIngredient(e) {
   if (!e.target.classList.contains("evaluation-btn")) return;
-  const targetContainer = e.target.classList.contains("evaluation-btn__like")
-    ? document.querySelector(
-        ".evaluated-ingredients__liked .evaluated-ingredients__list"
-      )
-    : document.querySelector(
-        ".evaluated-ingredients__disliked .evaluated-ingredients__list"
-      );
+  const likeBtnPressed = e.target.classList.contains("evaluation-btn__like");
+  const likedIngrContainer = document.querySelector(
+    ".evaluated-ingredients__liked .evaluated-ingredients__list"
+  );
+  const dislikedIngrContainer = document.querySelector(
+    ".evaluated-ingredients__disliked .evaluated-ingredients__list"
+  );
+  const targetContainer = likeBtnPressed
+    ? likedIngrContainer
+    : dislikedIngrContainer;
   const ingredientElement = e.target
     .closest(".evaluation-component")
     .querySelector("figure");
   targetContainer.append(ingredientElement);
   const parentElement = e.target.closest(".evaluation-component");
   parentElement.remove();
+  const evaluation = likeBtnPressed ? "liked" : "disliked";
+  const ingredient = ingredientElement.children[1].innerText.toLowerCase();
+  storeIngredient(user.uid, ingredient, evaluation);
 }
 
 const retreiveRecipesFromApi = async function (url) {

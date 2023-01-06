@@ -93,20 +93,21 @@ body {
   justify-content: center;
   color: #fff;
   box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.151);
-  & ion-icon {
+  & svg {
     height: 3.2rem;
     width: 3.2rem;
+    box-shadow: none;
   }
   &__dislike {
     background-color: $color-red;
 
-    & ion-icon {
+    & svg {
       transform: translateY(5%);
     }
   }
   &__like {
     background-color: $color-green;
-    & ion-icon {
+    & svg {
       transform: translateY(-5%);
     }
   }
@@ -350,13 +351,13 @@ $height-recipe-card: 45rem;
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 40px 10px rgba(51, 51, 51, 0.151);
-    & ion-icon {
+    & svg {
       height: 3.2rem;
       width: 3.2rem;
     }
     &__dislike {
       color: $color-red;
-      & ion-icon {
+      & svg {
         transform: scale(1.2);
       }
     }

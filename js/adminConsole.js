@@ -74,6 +74,10 @@ const getUsersFromFirebase = async function () {
 const renderUsers = function (usersArray) {
   const usersContainter = document.querySelector(".users-table__body");
   usersContainter.innerHTML = "";
+  const optionsIcon = `<svg name="ellipsis-horizontal" class="icon options-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+</svg>
+`;
   usersArray.forEach((user) => {
     const html = `
     <tr class="users-table__body__row">
@@ -91,7 +95,7 @@ const renderUsers = function (usersArray) {
         }</p>
       </td>
       <td class="users-table__body__row__options">
-        <ion-icon name="ellipsis-horizontal"></ion-icon>
+        ${optionsIcon}
       </td>
     </tr>`;
     usersContainter.insertAdjacentHTML("beforeend", html);
@@ -204,7 +208,7 @@ const handleClosingOptionsModal = function (userOptionsClass) {
 };
 
 const userOptionsUIManipulation = function (e) {
-  if (e.target.tagName !== "ION-ICON") return;
+  if (e.target.tagName !== "svg") return;
 
   const optionsContainer = document.querySelector(".more-actions__single-user");
   const contentContainer = document.querySelector(".content-area");
@@ -385,7 +389,7 @@ const handleUserSort = function (e) {
     .classList.contains("sort-arrows__email")
     ? "email"
     : "role";
-
+  /////////get here and make them work properly
   const relevantArrowsForCriterion = Array.from(
     document.querySelectorAll(`.sort-arrows__${sortingCriterion} *`)
   );
@@ -425,7 +429,7 @@ const addEventListeners = function () {
   selectAllBtn.addEventListener("click", selectAllHandler);
   const searchForm = document.querySelector(".search-bar");
   searchForm.addEventListener("submit", userSearch);
-  const sortBtns = document.querySelectorAll(".sort-arrows");
+  const sortBtns = document.querySelectorAll(".sort-component");
   sortBtns.forEach((btn) => btn.addEventListener("click", handleUserSort));
 };
 addEventListeners();

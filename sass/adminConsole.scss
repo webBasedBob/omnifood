@@ -83,7 +83,7 @@ label {
   &__icon {
     position: relative;
     color: $color-panel-icon;
-    ion-icon {
+    svg {
       width: 5.4rem;
       height: 5.4rem;
       padding: 1.4rem;
@@ -179,8 +179,10 @@ label {
   align-items: center;
   justify-content: space-between;
   @include search-bar-btns();
-  & ion-icon {
-    transform: translateX(1rem);
+  & svg {
+    color: #fff;
+    height: 1.6rem;
+    transform: translateX(1rem) rotate(90deg);
   }
 }
 .more-actions {
@@ -255,22 +257,24 @@ label {
   font-size: 1.6rem;
   color: $color-text-gray-light;
   cursor: pointer;
-  & ion-icon {
+  & svg {
     cursor: pointer;
     position: absolute;
     &:first-child {
       top: -100%;
+      transform: rotate(-90deg) scale(0.7);
     }
     &:last-child {
+      transform: rotate(90deg) scale(0.7);
     }
   }
   & .active {
     color: $color-text-gray-dark;
     font-size: 1.8rem;
-    transform: translateX(-1px);
+    transform: rotate(-90deg) scale(0.7) translateX(-1px);
   }
   & .sort-arrow__ascending.active {
-    transform: translateX(-1px) translateY(-2px);
+    transform: rotate(-90deg) scale(0.7) translateX(0px) translateY(0px);
   }
 }
 
@@ -293,9 +297,7 @@ label {
     }
     &__options {
       cursor: pointer;
-      & ion-icon {
-        width: 2rem;
-        height: 2rem;
+      & svg {
         padding: 0.5rem 2rem;
       }
     }

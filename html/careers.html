@@ -5,21 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="../img/favicon.png" />
-    <link rel="stylesheet" href="../css/careers.css" />
-    <link rel="stylesheet" href="../css/general.css" />
-    <link rel="stylesheet" href="../css/careers-queries.css" />
+    <link rel="stylesheet" href="../sass/careers.scss" />
+    <link rel="stylesheet" href="../sass/general.scss" />
+    <link rel="stylesheet" href="../sass/careers-queries.scss" />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-    ></script>
     <script
       defer
       type="module"
@@ -28,8 +20,10 @@
     <title>Omnifood &mdash; Careers</title>
   </head>
   <body>
+    <img class="favicon__location hidden" src="../img/favicon.png"></img>
+    <a href ="jobResult.html" class="expanded-result-src hidden"></a>
     <header class="header">
-      <a href="../index.html">
+      <a href="./index.html">
         <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
       </a>
 
@@ -37,6 +31,14 @@
         <ul class="main-nav-list">
           <li>
             <a class="main-nav-link" href="./careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./chooseMeals.html">Choose Meals</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./adminConsole.html"
+              >Admin Console</a
+            >
           </li>
           <li>
             <a class="main-nav-link" href="./recipeDirectory.html">Recipes</a>
@@ -48,8 +50,38 @@
       </nav>
 
       <button class="btn-mobile-nav">
-        <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
-        <ion-icon class="icon-mobile-nav" name="close-outline"></ion-icon>
+        <svg
+        name="menu-outline"
+        class="icon-mobile-nav"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        />
+      </svg>
+      <svg
+        name="close-outline"
+        class="icon-mobile-nav"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
       </button>
     </header>
 
@@ -76,22 +108,37 @@
           class="main-search-field"
           placeholder="Keywords..."
         />
-        <ion-icon class="clean-search-field" name="close-outline"></ion-icon>
+        <svg class="icon 
+icon clean-search-field" name="close-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        
+        
         <button class="btn-search-main">Search</button>
         <button class="show-mobile-filters-btn">
-          <ion-icon name="filter"></ion-icon>
+          <svg class= "icon" name=" filter" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+          </svg>
+          
+        
         </button>
       </div>
       <section class="main-body">
         <div class="filters-and-results">
           <div class="filters">
             <button class="mobile-filters-close-btn">
-              <ion-icon name="close"></ion-icon>
+              <svg class= "icon" name="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              
             </button>
             <div class="filters-overview">
               <div class="filter-name">
                 <p>Filters</p>
-                <ion-icon name="chevron-up-outline"></ion-icon>
+               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+</svg>
+
               </div>
               <div class="applied-filters"></div>
               <button class="remove-filters">Remove filters</button>
@@ -99,7 +146,10 @@
             <div class="city-filters filter-container">
               <div class="filter-name">
                 <p>City</p>
-                <ion-icon name="chevron-up-outline"></ion-icon>
+               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+</svg>
+
               </div>
               <ul class="filters-list">
                 <li class="individual-filter">
@@ -119,7 +169,10 @@
             <div class="category-filters filter-container">
               <div class="filter-name">
                 <p>Category</p>
-                <ion-icon name="chevron-up-outline"></ion-icon>
+               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+</svg>
+
               </div>
               <ul class="filters-list test-hide-filters">
                 <li class="individual-filter">
@@ -173,7 +226,10 @@
             <div class="experience-filters filter-container">
               <div class="filter-name">
                 <p>Experience</p>
-                <ion-icon name="chevron-up-outline"></ion-icon>
+               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+</svg>
+
               </div>
               <ul class="filters-list">
                 <li class="individual-filter">
@@ -205,10 +261,13 @@
           <div class="other-filters">
             <div class="popular-filters">
               <p>Popular filters :</p>
-              <ion-icon
-                class="filter-carousel-arr filter-carousel-arr-left"
-                name="chevron-back-outline"
-              ></ion-icon>
+              <svg class="icon 
+filter-carousel-arr filter-carousel-arr-left"
+              name="chevron-back-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+              
+          
               <div class="popular-filters-carousel">
                 <p
                   class="filters-carousel-item"
@@ -241,10 +300,13 @@
                   Human Resources
                 </p>
               </div>
-              <ion-icon
-                class="filter-carousel-arr filter-carousel-arr-right"
-                name="chevron-forward-outline"
-              ></ion-icon>
+              <svg class="icon 
+filter-carousel-arr filter-carousel-arr-right"
+              name="chevron-forward-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+              
+          
             </div>
             <p class="results-number"></p>
             <div class="sort-results">

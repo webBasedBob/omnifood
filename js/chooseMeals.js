@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  listAll,
+  uploadBytes,
+} from "firebase/storage";
 import { toTitleCase } from "./reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
@@ -120,10 +126,19 @@ const extractIngredientName = function (url) {
 };
 
 const renderIngredientToEvaluate = function (parentElm, name, url) {
+  const dislikeBtnIcon = `<svg class="evaluation-btn evaluation-btn__dislike" name="thumbs-down-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 15h2.25m8.024-9.75c.011.05.028.1.052.148.591 1.2.924 2.55.924 3.977a8.96 8.96 0 01-.999 4.125m.023-8.25c-.076-.365.183-.75.575-.75h.908c.889 0 1.713.518 1.972 1.368.339 1.11.521 2.287.521 3.507 0 1.553-.295 3.036-.831 4.398C20.613 14.547 19.833 15 19 15h-1.053c-.472 0-.745-.556-.5-.96a8.95 8.95 0 00.303-.54m.023-8.25H16.48a4.5 4.5 0 01-1.423-.23l-3.114-1.04a4.5 4.5 0 00-1.423-.23H6.504c-.618 0-1.217.247-1.605.729A11.95 11.95 0 002.25 12c0 .434.023.863.068 1.285C2.427 14.306 3.346 15 4.372 15h3.126c.618 0 .991.724.725 1.282A7.471 7.471 0 007.5 19.5a2.25 2.25 0 002.25 2.25.75.75 0 00.75-.75v-.633c0-.573.11-1.14.322-1.672.304-.76.93-1.33 1.653-1.715a9.04 9.04 0 002.86-2.4c.498-.634 1.226-1.08 2.032-1.08h.384" />
+</svg>
+`;
+  const likeBtnIcon = `<svg class="evaluation-btn evaluation-btn__like" name="thumbs-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+</svg>
+`;
+
   const html = `
     <div class="evaluation-component">
       <div class="evaluation-btn evaluation-btn__dislike">
-        <ion-icon class="evaluation-btn evaluation-btn__dislike" name="thumbs-down-outline"></ion-icon>
+        ${dislikeBtnIcon}
       </div>
       <figure class="ingredient">
         <img
@@ -134,7 +149,7 @@ const renderIngredientToEvaluate = function (parentElm, name, url) {
         <p class="ingredient__text">${toTitleCase(name)}</p>
       </figure>
       <div class="evaluation-btn evaluation-btn__like">
-        <ion-icon class="evaluation-btn evaluation-btn__like" name="thumbs-up-outline"></ion-icon>
+        ${likeBtnIcon}
       </div>
     </div>`;
   parentElm.insertAdjacentHTML("afterbegin", html);
@@ -419,16 +434,70 @@ const renderNextRecipeCard = function () {
   }
 };
 // these 2 functions must be refactored (DRY principle)
-const swipeRight = function () {
+
+const saveBlobToFirebase = async function (blob, blobName) {
+  //takes a blob and stores it to firebase cloud storage
+  //firebase cloud storage accepts only blobs or files
+  try {
+    const storage = getStorage();
+    const blobRef = ref(storage, `recipeImages/${blobName}.jpeg`);
+    await uploadBytes(blobRef, blob);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getImgUrl = async function (imgName) {
+  //gets the URL of the image storead as a blob on firebase cloud storage
+  //img name is the corresponding recipe's ID
+  try {
+    const storage = getStorage();
+    const imgRef = ref(storage, `recipeImages/${imgName}.jpeg`);
+    const url = await getDownloadURL(imgRef);
+    return url;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchWithCORS = async function (url) {
+  //image response  from edamam API lack CORS headers, so
+  //i use this CORS proxy API to make requests and return responses to me with the CORS headers
+  const corsApiUrl = "https://cors-anywhere.herokuapp.com/";
+  return await fetch(corsApiUrl + url);
+};
+
+const createBlobImg = async function (imgSrc) {
+  //takes a img src URL, fetches it through CORS proxy API and
+  //turns the returned img into a blob
+  const img = await fetchWithCORS(imgSrc);
+  const blob = await img.blob();
+  return blob;
+};
+
+const storeImgAndReturnUrl = async function (imgSrc, imgName) {
+  //gets an img from a URL, turns it into a blob, stores the blob to firebase storage,
+  //gets it's URl back and returns it
+  const blob = await createBlobImg(imgSrc);
+  await saveBlobToFirebase(blob, imgName);
+  const url = await getImgUrl(imgName);
+  return url;
+};
+
+const swipeRight = async function () {
   const recipeCard = document.querySelector(".recipe-card-component");
   const recipeName = recipeCard.children[1].children[0].innerText;
   const recipeImageSrc = recipeCard.children[0].currentSrc;
   const recipeID = recipeCard.dataset.recipeid;
   console.log(recipeID);
-  storeRecipe(user.uid, recipeID, recipeImageSrc, recipeName, "liked");
   renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
   recipeCard.remove();
   renderNextRecipeCard();
+  const firebaseRecipeImgSrc = await storeImgAndReturnUrl(
+    recipeImageSrc,
+    recipeID
+  );
+  storeRecipe(user.uid, recipeID, firebaseRecipeImgSrc, recipeName, "liked");
 };
 
 const swipeLeft = function () {
@@ -437,7 +506,8 @@ const swipeLeft = function () {
   const recipeImageSrc = recipeCard.children[0].currentSrc;
   const recipeID = recipeCard.dataset.recipeid;
   console.log(recipeID);
-  storeRecipe(user.uid, recipeID, recipeImageSrc, recipeName, "disliked");
+  createBlobImg(`https://spoonacular.com/recipeImages/637876-556x370.jpg`);
+  storeRecipe(user.uid, recipeID, "", recipeName, "disliked");
   recipeCard.remove();
   renderNextRecipeCard();
 };

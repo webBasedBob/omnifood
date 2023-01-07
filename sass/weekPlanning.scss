@@ -1,6 +1,7 @@
 // gradients for main color https://mycolor.space/?hex=%23E67E22&sub=1
 $color-background: #fdf2e9;
 $color-background-light: #fdf5ed;
+$color-background-light2: #fef8f2; //not used yet
 $color-red: #e35a5c;
 $color-green: #00b258;
 
@@ -55,7 +56,7 @@ body {
   line-height: 1;
   font-weight: 400;
   color: #555;
-
+  position: relative;
   /* Only works if there is nothing absolutely positioned in relation to body */
   overflow-x: hidden;
 }
@@ -71,6 +72,7 @@ svg[name="chevron-down"] {
   background-color: $color-background;
   height: 87vh;
   overflow: hidden;
+  position: relative;
 }
 .liked-recipes {
   display: flex;
@@ -83,8 +85,16 @@ svg[name="chevron-down"] {
     display: none;
   }
 }
-
-.liked-recipes .meal-component {
+.meal-component.dragging-liked,
+.meal-component.dragging-chosen {
+  position: absolute !important;
+  z-index: 1000 !important;
+}
+.placeholder-hovered {
+  background: #fff !important;
+}
+.liked-recipes .meal-component,
+.dragging-liked.meal-component {
   cursor: pointer;
   margin: 0;
   display: flex;
@@ -92,14 +102,15 @@ svg[name="chevron-down"] {
   border-radius: 5px;
   background-color: $color-background-light;
   box-shadow: 0 0 15px 5px rgba(17, 17, 17, 0.096);
-
-  &__img {
+  //must not use & as a placeholder for .meal-componrnt for drag and drop to word
+  //OR refactoring needed
+  .meal-component__img {
     width: 30%;
     object-fit: cover;
     border-radius: 5px;
     margin: 1rem;
   }
-  &__title {
+  .meal-component__title {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -142,7 +153,7 @@ svg[name="chevron-down"] {
   display: flex;
   &__arrow {
     text-align: center;
-    transform: scale(1.1) translateY(0px) translateX(8px);
+    transform: scale(1.1) translateY(0px) translateX(0px);
   }
 }
 
@@ -252,7 +263,8 @@ $height-recipe-card: 36rem;
   gap: 3rem;
 }
 
-.chosen-meal-component .meal-component {
+.chosen-meal-component .meal-component,
+.dragging-chosen.meal-component {
   cursor: pointer;
   border-radius: 12px;
   box-shadow: 0 20px 30px 10px rgba(51, 51, 51, 0.151);
@@ -265,7 +277,7 @@ $height-recipe-card: 36rem;
   justify-content: space-between;
   // background-color: #00b258;
   // gap: 5rem;
-  &__img {
+  .meal-component__img {
     width: $width-recipe-card - 10rem;
     height: $width-recipe-card - 10rem;
     overflow: hidden;
@@ -278,7 +290,7 @@ $height-recipe-card: 36rem;
     margin-top: 6rem;
     margin-bottom: 4rem;
   }
-  &__title {
+  .meal-component__title {
     color: $color-gray-1;
     font-size: $font-size-medium-2;
     font-weight: 300;

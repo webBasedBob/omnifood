@@ -137,6 +137,8 @@ svg[name="chevron-down"] {
   // background-color: #fefbf8;
   grid-column: 1/-1;
   align-items: center;
+  text-transform: capitalize;
+  position: relative;
 }
 
 .current-week {
@@ -151,9 +153,15 @@ svg[name="chevron-down"] {
   border-radius: 10px;
   margin-right: 3rem;
   display: flex;
+  transition: all 0.3s;
+  position: relative;
   &__arrow {
     text-align: center;
     transform: scale(1.1) translateY(0px) translateX(0px);
+  }
+  &:hover {
+    background-color: $color-main;
+    color: $color-background;
   }
 }
 
@@ -173,21 +181,23 @@ svg[name="chevron-down"] {
     border-radius: 50%;
     &__semicircle {
       z-index: 1;
-      height: 5rem;
+      height: 3rem;
       width: 100%;
+      border-radius: 50%;
       &__arrow {
         display: none;
       }
       &__top {
-        border-top-right-radius: 100%;
-        border-top-left-radius: 100%;
+        // border-top-right-radius: 100%;
+        // border-top-left-radius: 100%;
         // overflow: hidden;
-        transform: translateY(2.8rem);
+        transform: translateY(1.3rem);
       }
       &__bottom {
-        border-bottom-right-radius: 100%;
-        border-bottom-left-radius: 100%;
+        // border-bottom-right-radius: 100%;
+        // // border-bottom-left-radius: 100%;
         // overflow: hidden;
+        transform: translateY(-1.3rem);
       }
     }
     &__initial {
@@ -224,10 +234,10 @@ svg[name="chevron-down"] {
   font-weight: 600;
 }
 .week-calandar__weekday.active .week-calandar__weekday__semicircle__bottom {
-  transform: translateY(-1rem);
+  transform: translateY(-1.3rem);
   & .week-calandar__weekday__semicircle__arrow {
     display: inline-block;
-    transform: translateY(2rem) scale(1.2);
+    transform: translateY(1.2rem) scale(1);
   }
 }
 
@@ -369,6 +379,43 @@ $height-recipe-card: 36rem;
     }
     &__save {
       color: $color-green;
+    }
+  }
+}
+
+.available-weeks {
+  position: absolute;
+  left: -5rem;
+  // bottom: -100%;
+  bottom: 4rem;
+  transform: translateY(100%);
+  width: fit-content;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 20px 10px rgba(153, 153, 153, 0.363);
+  z-index: 100;
+  border: 1px solid $color-main;
+  border-radius: 10px;
+  font-size: 2rem;
+  &__week {
+    width: 20rem;
+    padding: 1rem 3rem 1rem 3rem;
+    color: $color-gray-1;
+    box-shadow: inset 0 0 0 0 $color-background;
+
+    transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    &:hover {
+      box-shadow: inset 290px 0 0 0 $color-main;
+      color: $color-background;
+    }
+    &:first-child {
+      margin-top: 2rem;
+    }
+    &:last-child {
+      margin-bottom: 2rem;
     }
   }
 }

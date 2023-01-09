@@ -2,13 +2,6 @@
 //refactor it for reusability later!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!1
 import { initializeApp } from "firebase/app";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  listAll,
-  uploadBytes,
-} from "firebase/storage";
 import { toTitleCase } from "./reusableFunctions.js";
 import {
   ActionCodeURL,
@@ -22,7 +15,23 @@ import {
   storeRecipe,
   getRecipes,
 } from "./liveDatabaseFunctions.js";
+import {
+  getDatabase,
+  set,
+  ref,
+  get,
+  onValue,
+  child,
+  push,
+  update,
+} from "firebase/database";
 
+//
+//to do:
+//handle errors
+//
+//
+//
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -35,8 +44,7 @@ const firebaseConfig = {
   measurementId: "G-1DT1EYNVPW",
 };
 const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-// const storageRef = ref(storage, "ingredients/");
+
 const auth = getAuth();
 
 let user;
@@ -44,6 +52,9 @@ onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     user = curUser;
     renderFirebaseRecipes();
+    initCalendarComponent();
+    renderPlan();
+    addEventListeners();
   } else {
   }
 });
@@ -57,17 +68,23 @@ const renderFirebaseRecipes = async function () {
     const likedRecipes = Object.entries(recipes).filter((recipe) => {
       return recipe[1].evaluation === "liked";
     });
+    const likedMealsContainer = document.querySelector(`.liked-recipes`);
     likedRecipes.forEach((recipe) => {
-      renderLikedRecipe(recipe[1].image, recipe[1].recipeName, recipe[0]);
+      renderMeal(
+        recipe[1].image,
+        recipe[1].recipeName,
+        recipe[0],
+        likedMealsContainer
+      );
     });
   } catch (error) {
     console.error(error);
   }
 };
-const renderLikedRecipe = function (imageSrc, name, recipeId) {
+const renderMeal = function (imageSrc, name, recipeId, container) {
   //when a user press the like button on a recipe,
   //it is rendereb by this function in the liked recipes container
-  const container = document.querySelector(".liked-recipes");
+
   const html = `
       <figure data-recipeid = ${recipeId} class="meal-component">
           <img draggable="false" src=${imageSrc}
@@ -77,7 +94,34 @@ const renderLikedRecipe = function (imageSrc, name, recipeId) {
   container.insertAdjacentHTML("afterbegin", html);
 };
 
-const dragRecipe = function (e) {
+const appendMealPlaceholder = function (container) {
+  const html = `
+      <figure class="meal-component meal-placeholder">
+        <div class="plus-icon">
+          <svg
+            class="icon"
+            name="add-outline"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+        </div>
+      </figure>`;
+  container.insertAdjacentHTML("afterbegin", html);
+};
+
+const dragMeal = function (e) {
+  //handles all it takes to enable drag and drop for meal components
+
   const targetIsMealComponent = e.target.closest(".meal-component");
   if (!targetIsMealComponent) return;
 
@@ -93,31 +137,6 @@ const dragRecipe = function (e) {
   let recipeContainer;
   let recipeClone;
   let draggedMealClass;
-
-  const appendMealPlaceholder = function (container) {
-    const html = `
-        <figure class="meal-component meal-placeholder">
-          <div class="plus-icon">
-            <svg
-              class="icon"
-              name="add-outline"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </div>
-        </figure>`;
-    container.insertAdjacentHTML("afterbegin", html);
-  };
 
   const updateElemBelow = function (event) {
     //gets the element below the clone we moving with the pointer
@@ -255,9 +274,9 @@ const generateAvailableWeeks = function () {
     const weekGenerator = weekComponentGenerator(current);
     return (
       prev +
-      `<p data-weekid=${
-        weekGenerator.next().value
-      } class="available-weeks__week">
+      `<p data-weekid=${weekGenerator.next().value} class="${
+        current === 0 ? "active " : ""
+      }available-weeks__week">
     ${weekGenerator.next().value}
   </p>`
     );
@@ -341,8 +360,6 @@ const initCalendarComponent = function () {
     .insertAdjacentHTML("afterbegin", html);
 };
 
-initCalendarComponent();
-
 const handleWeeksWindowOutsideClick = function (e) {
   //closes the available weeks pop-up if click is outside it
 
@@ -363,52 +380,198 @@ const handleWeeksWindowDisplay = function () {
   document.addEventListener("click", handleWeeksWindowOutsideClick);
 };
 
-const handleCurrentWeekChange = function (e) {
+const handleWeekChange = async function (e) {
   // generates a new week calendar comonent based on and replaces the current one
   //if no weekday  equals today's date, the first weekday becomes the active one
+  const target = e.target;
+  if (!target.classList.contains("available-weeks__week")) return;
+  highlightElm("active", target);
+  await storePlanData();
+  resetPlanMeals();
 
-  if (!e.target.classList.contains("available-weeks__week")) return;
-  const weekId = e.target.dataset.weekid;
+  const weekId = target.dataset.weekid;
   const weekCalendarHtml = generateWeekCalendar(weekId);
   const weekCalendarContainer = document.querySelector(".week-calandar");
   weekCalendarContainer.innerHTML = weekCalendarHtml;
   const currentWeekNameContainer = document.querySelector(".current-week p");
-  currentWeekNameContainer.innerText = e.target.innerText;
+  currentWeekNameContainer.innerText = target.innerText;
   const activeWeekdayExists = document.querySelector(
     ".week-calandar__weekday.active"
   );
   if (!activeWeekdayExists) {
-    document.querySelector(".week-calandar__weekday").classList.add("active");
+    const forstDayOfWeek = document.querySelector(".week-calandar__weekday");
+    highlightElm("active", forstDayOfWeek);
+  }
+  renderPlan();
+};
+async function firebasePostPlanData(userId, weekdayId, dataToStore) {
+  //stores(in firebase) the plan user made (consisting of the two meals and delivery time) for a certain date
+  const db = getDatabase();
+  set(ref(db, `users/${userId}/plan/${weekdayId}`), dataToStore);
+}
+
+function firebaseGetPlanData(uid, weekdayId) {
+  //gets the user data for a certain date
+  //data represents the meals user saved for a certain date
+  return new Promise((resolve, reject) => {
+    const db = getDatabase();
+    onValue(ref(db, `users/${uid}/plan/${weekdayId}`), (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+}
+
+const renderPlan = async function () {
+  //gets user data from firebase and renders  it  in the weekday plan component
+  const currentDayData = await getPlanData();
+
+  if (!currentDayData) return;
+
+  const chosenMealContainers = Array.from(
+    document.querySelectorAll(".chosen-meal-component")
+  );
+  let containerCounter = 0;
+
+  for (recipeId in currentDayData) {
+    const chosenMealContainer = chosenMealContainers[containerCounter];
+    const chosenMealPlaceholder = chosenMealContainer.querySelector("figure");
+    chosenMealPlaceholder.remove();
+
+    renderMeal(
+      currentDayData[recipeId].image,
+      currentDayData[recipeId].recipeName,
+      recipeId,
+      chosenMealContainer
+    );
+
+    const deliveryTimeElem = chosenMealContainer.querySelector("select");
+    deliveryTimeElem.value = currentDayData[recipeId].deliveryTime;
+    containerCounter++;
   }
 };
 
-const handleWeekdayClick = function (e) {
-  //only the clicked weekday ends up being active
+const highlightElm = function (classToadd, elmToHighlight) {
+  //removes the class from all siblings and adds it to the target element only
 
-  const weekdayTarget = e.target.closest(".week-calandar__weekday");
-  if (!weekdayTarget) return;
-  if (weekdayTarget.classList.contains("active")) return;
-
-  const weekdayElems = document.querySelectorAll(".week-calandar__weekday");
-  weekdayElems.forEach((elem) => {
-    elem.classList.remove("active");
+  const siblings = Array.from(elmToHighlight.parentElement.children);
+  siblings.forEach((sibling) => {
+    sibling.classList.remove(classToadd);
   });
-  weekdayTarget.classList.add("active");
+  elmToHighlight.classList.add(classToadd);
+};
+
+const handleWeekdayClick = async function (e) {
+  // handler for when the user clicks on another weekday
+  //stores the current weekday plan in firebase before selecting
+  //the weekday user clicked on -> plan data is rendered for the latter one
+
+  const targetWeekday = e.target.closest(".week-calandar__weekday");
+  if (!targetWeekday) return;
+  if (targetWeekday.classList.contains("active")) return;
+  await storePlanData();
+  highlightElm("active", targetWeekday);
+  resetPlanMeals();
+  renderPlan();
+};
+
+const resetPlanMeals = function () {
+  //removes the meals from the component and inserts meal placeholders in their places
+
+  const planMealContainers = document.querySelectorAll(
+    ".chosen-meal-component"
+  );
+  planMealContainers.forEach((container) => {
+    if (container.classList.contains("meal-placeholder")) return;
+    const mealElem = container.querySelector("figure");
+    mealElem.remove();
+    appendMealPlaceholder(container);
+  });
+};
+
+const getPlanData = async function () {
+  //gets plan data from firebase for the selected weekday
+
+  const targetDay = document.querySelector(".active.week-calandar__weekday");
+  const targetDayId = targetDay.dataset.dateid;
+  const planDataForTargetDay = await firebaseGetPlanData(user.uid, targetDayId);
+  return planDataForTargetDay;
+};
+
+const storePlanData = async function () {
+  //stores plan data for the selected weekday in firebase
+
+  const planDayMeals = document.querySelectorAll(
+    ".chosen-meal-component .meal-component"
+  );
+  const currentPlanDay = document.querySelector(
+    ".active.week-calandar__weekday"
+  );
+  const planDayId = currentPlanDay.dataset.dateid;
+  let planData = {};
+  const mealPlaceholder = document.querySelectorAll(
+    ".chosen-meal-component .meal-component.meal-placeholder"
+  );
+  if (mealPlaceholder.length === 1) {
+    alert(
+      "You can't save the plan for this day while containing only one meal. Please add one more or remove both"
+    );
+    return;
+  }
+  planDayMeals.forEach(async (meal) => {
+    if (meal.classList.contains("meal-placeholder")) return;
+    const recipeId = meal.dataset.recipeid;
+    const recipeImg = meal.querySelector("img").src;
+    const recipeName = meal.querySelector("h2").innerText;
+    const deliveryTime = meal
+      .closest(".chosen-meal-component")
+      .querySelector("#delivery-times").value;
+
+    planData[recipeId] = {
+      recipeName: recipeName,
+      image: recipeImg,
+      deliveryTime: deliveryTime,
+    };
+  });
+  await firebasePostPlanData(user.uid, planDayId, planData);
+};
+
+const handleSaveBtnClick = function () {
+  //save button must save the current weekday plan data and move to the next one
+  //so the event handler generates a click on the next weekday
+  //if the current weekday is the last, it generates click on next week
+
+  const currentWeekDay = document.querySelector(
+    ".active.week-calandar__weekday"
+  );
+  const nextWeekDay = currentWeekDay.nextSibling;
+  if (nextWeekDay && nextWeekDay.nodeName !== "#text") {
+    nextWeekDay.click();
+  } else {
+    const currentWeek = document.querySelector(".active.available-weeks__week");
+    const nextWeek = currentWeek.nextSibling;
+    if (nextWeek) {
+      nextWeek.click();
+    }
+  }
 };
 
 const addEventListeners = function () {
   const likedRecipesContainer = document.querySelector(".liked-recipes");
-  likedRecipesContainer.addEventListener("pointerdown", dragRecipe);
+  likedRecipesContainer.addEventListener("pointerdown", dragMeal);
 
   const chosenRecipesContainer = document.querySelector(
     ".chosen-meal-component-wrapper"
   );
-  chosenRecipesContainer.addEventListener("pointerdown", dragRecipe);
+  chosenRecipesContainer.addEventListener("pointerdown", dragMeal);
   const chooseWeekBtn = document.querySelector(".current-week");
   chooseWeekBtn.addEventListener("click", handleWeeksWindowDisplay);
   const weeksWindow = document.querySelector(".available-weeks");
-  weeksWindow.addEventListener("click", handleCurrentWeekChange);
+  weeksWindow.addEventListener("click", handleWeekChange);
   const calendarComponent = document.querySelector(".calendar-component");
   calendarComponent.addEventListener("click", handleWeekdayClick);
+  const saveBtn = document.querySelector(".chosen-meal-btns__btn__save");
+  saveBtn.addEventListener("click", handleSaveBtnClick);
+  const resetBtn = document.querySelector(".chosen-meal-btns__btn__reset");
+  resetBtn.addEventListener("click", resetPlanMeals);
 };
-addEventListeners();
+// addEventListeners();

@@ -59,6 +59,7 @@ body {
   position: relative;
   /* Only works if there is nothing absolutely positioned in relation to body */
   overflow-x: hidden;
+  background-color: $color-background;
 }
 svg[name="chevron-down"] {
   height: 2rem;
@@ -73,6 +74,8 @@ svg[name="chevron-down"] {
   height: 87vh;
   overflow: hidden;
   position: relative;
+  max-width: 130rem;
+  margin: 0 auto;
 }
 .liked-recipes {
   display: flex;
@@ -252,11 +255,11 @@ svg[name="chevron-down"] {
 .choose-meal-section {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
   align-items: center;
   grid-column: 1/-1;
   height: 100%;
-  margin-top: 6rem;
+  margin-top: 4rem;
 }
 
 .chosen-meal-component-wrapper {
@@ -385,9 +388,9 @@ $height-recipe-card: 36rem;
 
 .available-weeks {
   position: absolute;
-  left: -5rem;
+  left: -4rem;
   // bottom: -100%;
-  bottom: 4rem;
+  bottom: 2rem;
   transform: translateY(100%);
   width: fit-content;
   background-color: #fff;
@@ -418,4 +421,8 @@ $height-recipe-card: 36rem;
       margin-bottom: 2rem;
     }
   }
+}
+.available-weeks__week.active {
+  background-color: $color-main;
+  color: $color-background;
 }

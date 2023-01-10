@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Console</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../sass/resetFile.scss" />
+    <link rel="stylesheet" href="../sass/recruiterConsole.scss" />
+    <link rel="stylesheet" href="../sass/general.scss" />
+    <script type="module" src="../js/recruiterConsole.js"></script>
+  </head>
+  <body>
+    <div class="more-actions more-actions__single-job hidden">
+      <p data-action="active" class="more-actions__action">
+        Status change: Active
+      </p>
+      <p data-action="inactive" class="more-actions__action">
+        Status change: Inactive
+      </p>
+      <p data-action="reset" class="more-actions__action">
+        Reset applicants no.
+      </p>
+      <p data-action="delete" class="more-actions__action">Delete job</p>
+      <p data-action="export" class="more-actions__action">Export applicants</p>
+    </div>
+    <header class="header">
+      <a href="./index.html">
+        <img class="logo" alt="Omnifood logo" src="../img/omnifood-logo.png" />
+      </a>
+
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="./careers.html">Careers</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./chooseMeals.html">Choose Meals</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./adminConsole.html"
+              >Admin Console</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="./recipeDirectory.html">Recipes</a>
+          </li>
+          <li>
+            <a class="main-nav-link" href="./accConsole.html">Account</a>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="btn-mobile-nav">
+        <svg
+          name="menu-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+        <svg
+          name="close-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </header>
+    <div class="not-logged-in-screen hidden">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
+    <div class="page-layout hidden">
+      <div class="admin-panel">
+        <div class="admin-panel__button">
+          <div class="admin-panel__icon">
+            <svg
+              name="stats-chart"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+              />
+            </svg>
+          </div>
+          <p class="admin-panel__button__text solve-spacing">Statistics</p>
+        </div>
+        <div class="admin-panel__button active">
+          <div class="admin-panel__icon">
+            <svg
+              name="people"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+              />
+            </svg>
+
+            <svg
+              name="settings"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </div>
+          <p class="admin-panel__button__text">Job management</p>
+        </div>
+      </div>
+
+      <main class="content-area">
+        <div>
+          <h2 class="content-title">Job Management</h2>
+        </div>
+        <div class="search-container">
+          <div class="select-all">
+            <div class="select-all__toggler">
+              <input
+                type="checkbox"
+                id="select-all-checkbox"
+                class="select-all__toggler__checkbox"
+              />
+            </div>
+            <label for="select-all-checkbox" class="select-all__text"
+              >Select all</label
+            >
+          </div>
+          <form class="search-bar">
+            <input type="text" class="search-bar__text-input" />
+            <button type="submit" class="search-bar__search-btn">Search</button>
+          </form>
+          <button class="bulk-actions-btn">
+            <span>Actions</span>
+            <svg
+              name="caret-down"
+              class="icon bulk-actions-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <div class="hidden more-actions more-actions__bulk">
+            <p data-action="active" class="more-actions__action">
+              Status change: Active
+            </p>
+            <p data-action="inactive" class="more-actions__action">
+              Status change: Inactive
+            </p>
+            <p data-action="reset" class="more-actions__action">
+              Reset applicants no.
+            </p>
+            <p data-action="delete" class="more-actions__action">Delete jobs</p>
+            <p data-action="export" class="more-actions__action">
+              Export applicants
+            </p>
+          </div>
+        </div>
+
+        <table class="jobs-table">
+          <thead class="jobs-table__head">
+            <tr class="jobs-table__head__row">
+              <th></th>
+              <th class="sort-component">
+                <p>Job Title</p>
+                <div class="sort-arrows sort-arrows__title">
+                  <svg
+                    class="sort-arrow sort-arrow__ascending"
+                    name="caret-up"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <svg
+                    class="sort-arrow sort-arrow__descending"
+                    name="caret-down"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th class="sort-component">
+                <p>Job ID</p>
+                <div class="sort-arrows sort-arrows__jobid">
+                  <svg
+                    class="sort-arrow sort-arrow__ascending"
+                    name="caret-up"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <svg
+                    class="sort-arrow sort-arrow__descending"
+                    name="caret-down"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th class="sort-component">
+                <p>Status</p>
+                <div class="sort-arrows sort-arrows__status">
+                  <svg
+                    class="sort-arrow sort-arrow__ascending"
+                    name="caret-up"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <svg
+                    class="sort-arrow sort-arrow__descending"
+                    name="caret-down"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th class="sort-component">
+                <p>Applicants</p>
+                <div class="sort-arrows sort-arrows__applicants">
+                  <svg
+                    class="sort-arrow sort-arrow__ascending"
+                    name="caret-up"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <svg
+                    class="sort-arrow sort-arrow__descending"
+                    name="caret-down"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="jobs-table__body"></tbody>
+        </table>
+      </main>
+    </div>
+  </body>
+</html>

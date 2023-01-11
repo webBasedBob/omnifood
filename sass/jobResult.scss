@@ -1,12 +1,19 @@
 /* ******************
 ***    main section - full screen result-full details
 ********************* */
+body {
+  // position: relative;
+}
 
 .result-fully-displayed {
   width: 100vw;
   height: 100vh;
   display: grid;
   grid-template-columns: 2fr 3fr;
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+  left: 0;
 }
 /* result summary section - the left side of the screen */
 .result-summary {
@@ -42,21 +49,25 @@
   /* position: relative; */
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color: #fff;
 }
 .full-screen-nav-btns {
   display: flex;
   justify-content: space-between;
-  font-size: 2.4rem;
+  // font-size: 2.4rem;
   color: #45260a;
   padding: 0 1rem;
 }
 
-.full-screen-nav-btns svg {
+.full-screen-nav-btns.btn {
   background-color: #fdf2e9;
   border-radius: 400px;
-  padding: 0.8rem;
+  padding: 1rem;
   cursor: pointer;
+  width: 5rem;
+  height: 5rem;
 }
+
 .full-screen-separating-line {
   height: 2px;
   width: 100%;

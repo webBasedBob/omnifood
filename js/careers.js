@@ -1,118 +1,65 @@
 import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 import {
-  getDatabase,
-  ref,
-  onValue,
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-import { toTitleCase } from "./reusableFunctions.js";
+  toTitleCase,
+  enableCarouselFunctionality,
+} from "./reusableFunctions.js";
+
+//
+//firebase related code
+//
+
 let database = [];
 
-const mobileNavFunctionality = function () {
-  const btnNavEl = document.querySelector(".btn-mobile-nav");
-  const headerEl = document.querySelector(".header");
-
-  btnNavEl.addEventListener("click", function () {
-    headerEl.classList.toggle("nav-open");
-  });
-};
-mobileNavFunctionality();
-
-const retrieveJobsFromFirebase = function () {
-  const firebaseConfig = {
-    apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
-    authDomain: "omnifood-custom-version.firebaseapp.com",
-    databaseURL:
-      "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "omnifood-custom-version",
-    storageBucket: "omnifood-custom-version.appspot.com",
-    messagingSenderId: "1094073505469",
-    appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
-    measurementId: "G-1DT1EYNVPW",
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const dbFirebase = getDatabase(app);
-  const reference = ref(dbFirebase, "jobOpenings");
-  onValue(reference, (snapshot) => {
-    database = snapshot.val();
-    addMissingData(database);
-  });
+const firebaseConfig = {
+  apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+  authDomain: "omnifood-custom-version.firebaseapp.com",
+  databaseURL:
+    "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "omnifood-custom-version",
+  storageBucket: "omnifood-custom-version.appspot.com",
+  messagingSenderId: "1094073505469",
+  appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+  measurementId: "G-1DT1EYNVPW",
 };
 
-const addMissingData = function (incompleteJobsArr) {
-  incompleteJobsArr.forEach(
-    (job) => (job.niceToHave = job.niceToHave ? job.niceToHave : [])
-  );
-};
+const app = initializeApp(firebaseConfig);
+const dbFirebase = getDatabase(app);
 
-const createSearchCriteria = function () {
-  const firstPage = document.querySelector(".section-first-interaction");
-  const searchInputField = firstPage.classList.contains("hidden")
-    ? document.querySelector(".main-search-field")
-    : document.querySelector(".first-interaction-search-field");
-  const filtersCheckboxes = document.querySelectorAll(
-    "input[type ='checkbox']"
-  );
-  const SearchCriteriaObj = {
-    location: [],
-    category: [],
-    experience: [],
-  };
-  SearchCriteriaObj.keywords = searchInputField.value
-    .toLowerCase()
-    .trim()
-    .split(" ")
-    .filter((el) => el !== "");
-  filtersCheckboxes.forEach((checkbox) => {
-    if (checkbox.checked) {
-      const filterCategory = checkbox.id.slice(0, checkbox.id.indexOf("-"));
-      const filterName = checkbox.name;
-      SearchCriteriaObj[filterCategory].push(filterName);
-    }
-  });
-  return SearchCriteriaObj;
-};
-
-const createKeywordsRegEx = function (keywordsArr) {
-  const result =
-    keywordsArr.length === 1 ? keywordsArr[0] : keywordsArr.join("|");
-  return new RegExp(result);
-};
-const filterDatabase = function (searchCriteriaObj) {
-  const noSearchCriteria = Object.values(searchCriteriaObj).every(
-    (value) => value.length == 0
-  );
-  if (noSearchCriteria) return database;
-  let keywordsRegex = createKeywordsRegEx(searchCriteriaObj.keywords);
-  const jobsFilteredByKeywords = database
-    .map((job) => JSON.stringify(job))
-    .filter((job) => job.toLowerCase().match(keywordsRegex))
-    .map((job) => JSON.parse(job));
-  //check if all filters are unckecked -
-  const noFiltersToApply = Object.entries(searchCriteriaObj).every((value) => {
-    if (value[0] == "keywords") return true;
-    else return value[1].length == 0;
-  });
-  if (noFiltersToApply) return jobsFilteredByKeywords;
-  const jobsArrayIsEmpty = jobsFilteredByKeywords.length == 0;
-  if (jobsArrayIsEmpty) return;
-  const jobsFilteredByAllCriteria = jobsFilteredByKeywords.filter((job) => {
-    for (let criterion in searchCriteriaObj) {
-      if (criterion == "keywords") continue;
-      const criterionIsNotEmpty = searchCriteriaObj[criterion].length != 0;
-      if (criterionIsNotEmpty) {
-        const jobDoesNotMeetTheCriterion = !searchCriteriaObj[
-          criterion
-        ].includes(job[criterion]);
-        if (jobDoesNotMeetTheCriterion) return false;
+const retrieveJobsFromFirebase = async function () {
+  //gets the job data from firebase and stores it in global var database
+  return new Promise((resolve, reject) => {
+    const reference = ref(dbFirebase, "jobOpenings");
+    onValue(reference, (snapshot) => {
+      responseData = snapshot.val();
+      addMissingData(responseData);
+      for (job in responseData) {
+        database.push({ [job]: responseData[job] });
       }
-    }
-    return true;
+      resolve("");
+    });
   });
-  return jobsFilteredByAllCriteria;
+};
+
+//data manipulation code
+
+const addMissingData = function (incompleteJobs) {
+  //nice to have skills section is empty for some of the jobs
+  //firebase deletes the nodes with null/empty values
+  //so I must init them to prevent later errors
+  for (jobId in incompleteJobs) {
+    incompleteJobs[jobId].niceToHave = incompleteJobs[jobId].niceToHave
+      ? incompleteJobs[jobId].niceToHave
+      : [];
+  }
 };
 
 const createRelevanceScores = function (searchKeywords, rawDataBase) {
+  //creates the relevance scores when a search is executed,
+  //they are based on the keywords inputed by user in search field,
+  //so no keywords => no relevance scores
+  //for every keyword found in a a job, the job gets some points
+  // the points are added up in a final score
   const noKeywords = searchKeywords.length === 0;
   const databaseIsEmpty = rawDataBase.length === 0;
   if (noKeywords || databaseIsEmpty) return;
@@ -151,16 +98,229 @@ const createRelevanceScores = function (searchKeywords, rawDataBase) {
   });
 };
 
-const displayJobResults = function (jobsArr) {
+const getJobById = function (id) {
+  const targetJob = database.find((elm) => {
+    return Object.keys(elm)[0] === id;
+  });
+  return targetJob;
+};
+const createSearchCriteria = function () {
+  //at every search execution this iterates through all relevant inputs (text and checkboxes)
+  //and creates an object with all data (text inputs and the checked checkboxes)
+  const firstPage = document.querySelector(".section-first-interaction");
+  const searchInputField = firstPage.classList.contains("hidden")
+    ? document.querySelector(".main-search-field")
+    : document.querySelector(".first-interaction-search-field");
+  const filtersCheckboxes = document.querySelectorAll(
+    "input[type ='checkbox']"
+  );
+  const SearchCriteriaObj = {
+    location: [],
+    category: [],
+    experience: [],
+  };
+  SearchCriteriaObj.keywords = searchInputField.value
+    .toLowerCase()
+    .trim()
+    .split(" ")
+    .filter((el) => el !== "");
+  filtersCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const filterCategory = checkbox.id.slice(0, checkbox.id.indexOf("-"));
+      const filterName = checkbox.name;
+      SearchCriteriaObj[filterCategory].push(filterName);
+    }
+  });
+  return SearchCriteriaObj;
+};
+
+const createKeywordsRegEx = function (keywordsArr) {
+  //creates a regex from the text input from the user on search execution
+  const result =
+    keywordsArr.length === 1 ? keywordsArr[0] : keywordsArr.join("|");
+  return new RegExp(result);
+};
+const filterDatabase = function (searchCriteriaObj) {
+  //filters the database(jobs retrieved from firebase) based on search criteria object
+  //a job entry gets into resulting array if :
+  //it contains any of the search keywords inside it (title/body)
+  //AND satisfies all the filters( eg location: remote, experience: mid-leve)
+
+  const noSearchCriteria = Object.values(searchCriteriaObj).every(
+    (value) => value.length == 0
+  );
+  if (noSearchCriteria) return database;
+  let keywordsRegex = createKeywordsRegEx(searchCriteriaObj.keywords);
+  const jobsFilteredByKeywords = database
+    .map((job) => JSON.stringify(job))
+    .filter((job) => job.toLowerCase().match(keywordsRegex))
+    .map((job) => JSON.parse(job));
+  //check if all filters are unckecked -
+  const noFiltersToApply = Object.entries(searchCriteriaObj).every((value) => {
+    if (value[0] == "keywords") return true;
+    else return value[1].length == 0;
+  });
+  if (noFiltersToApply) return jobsFilteredByKeywords;
+  const jobsArrayIsEmpty = jobsFilteredByKeywords.length == 0;
+  if (jobsArrayIsEmpty) return;
+  const jobsFilteredByAllCriteria = jobsFilteredByKeywords.filter((jobObj) => {
+    let job = jobObj[Object.keys(jobObj)[0]];
+    for (let criterion in searchCriteriaObj) {
+      if (criterion == "keywords") continue;
+      const criterionIsNotEmpty = searchCriteriaObj[criterion].length != 0;
+      if (criterionIsNotEmpty) {
+        const jobDoesNotMeetTheCriterion = !searchCriteriaObj[
+          criterion
+        ].includes(job[criterion]);
+        if (jobDoesNotMeetTheCriterion) return false;
+      }
+    }
+    return true;
+  });
+  return jobsFilteredByAllCriteria;
+};
+
+const jobSearch = function () {
+  //puts together all the functions related to job search
+  //(data search and UI renering, and manipulation)
+  //sorts the results by relevance if keywords are present
+  //otherwise , sort by date is executed
+  const searchCriteria = createSearchCriteria();
+  const resultRawData = filterDatabase(searchCriteria);
+  const sortingCriterion =
+    searchCriteria.keywords.length === 0 ? "date" : "relevance";
+  createRelevanceScores(searchCriteria.keywords, resultRawData);
+  renderJobResults(resultRawData);
+  showNumberOfResults(resultRawData.length);
+  sortResults(sortingCriterion);
+  highlightSortingCriterion(sortingCriterion);
+  const firstPage = document.querySelector(".section-first-interaction");
+  if (firstPage.classList.contains("hidden")) return;
+  showMainPage();
+  syncSearchInputField();
+};
+
+const buildExpandedResult = function (resultToExpandObj) {
+  //builds the job the user clicked on before the actual rendering
+  //takes the id from dataset and gets the job from global database var based on it
+  const resultToExpand = resultToExpandObj[Object.keys(resultToExpandObj)[0]];
+  resultToExpand.jobId = Object.keys(resultToExpandObj)[0];
+  const expandedResultContainer = document.querySelector(
+    ".result-fully-displayed"
+  );
+  const experienceGlossary = {
+    none: "No Experience",
+    entry: "Entry-Level ( &lt; 2 years )",
+    mid: "Mid-Level ( 2-5 years )",
+    senior: "Senior ( &gt; 5 years )",
+  };
+  let resultSummaryHTML = `
+        <div class="result-summary">
+          <div class="date-posted-wrapper">
+            <p>Job full details</p>
+            <p>Posted on ${resultToExpand.publishingDateStr}</p>
+          </div>
+          <h1 class="full-screen-job-title">${toTitleCase(
+            resultToExpand.title
+          )}</h1>
+          <div class="full-screen-salary">
+            <ion-icon name="cash-outline"></ion-icon>
+            <p><strong>${resultToExpand.salary.slice(
+              0,
+              resultToExpand.salary.indexOf("k") + 1
+            )}</strong> / year</p>
+          </div>
+          <div class="full-screen-experience">
+            <ion-icon name="briefcase-outline"></ion-icon>
+            <p>${experienceGlossary[resultToExpand.experience]}</p>
+          </div>
+          <div class="full-screen-location">
+            <ion-icon name="location-outline"></ion-icon>
+            <p>${toTitleCase(resultToExpand.location)}</p>
+          </div>
+        </div>`;
+  expandedResultContainer.insertAdjacentHTML("afterbegin", resultSummaryHTML);
+
+  const addListItems = function (source, containerClass) {
+    const listContainer = document.querySelector(containerClass);
+    listContainer.innerHTML = "";
+    source.forEach((listItem) => {
+      let listItemHTML = `<li>${listItem}</li>`;
+      listContainer.insertAdjacentHTML("afterbegin", listItemHTML);
+    });
+  };
+  addListItems(
+    resultToExpand.responsabilities,
+    ".full-screen-result-responsabilities"
+  );
+  addListItems(
+    resultToExpand.requirements,
+    ".full-screen-result-requirements-must-have"
+  );
+  addListItems(
+    resultToExpand.niceToHave,
+    ".full-screen-result-requirements-nice-to-have"
+  );
+};
+
+//
+//UI related code
+//
+const showMainPage = function () {
+  //displays the job results section after the first job search execution
+  const firstFrame = document.querySelector(".section-first-interaction");
+  const mainPage = document.querySelector(".section-main-content");
+  firstFrame.classList.add("hidden");
+  mainPage.classList.remove("hidden");
+};
+
+const filtersCarouselInit = function () {
+  //on page load, the carousel's container is hodden,
+  //so it can't be initialized, so i used mutation observer to listen for classchange
+  //on container, and then init the carousel
+  const targetElem = document.querySelector(".section-main-content");
+  const callback = (mutationList, observer) => {
+    for (const mutation of mutationList) {
+      if (mutation.attributeName !== "class") return;
+      enableCarouselFunctionality(
+        "popular-filters-carousel",
+        "filters-carousel-item",
+        "filter-carousel-arr-left",
+        "filter-carousel-arr-right"
+      );
+      observer.disconnect();
+    }
+  };
+  const observer = new MutationObserver(callback);
+  observer.observe(targetElem, { attributes: true });
+};
+
+const mobileNavFunctionality = function () {
+  const btnNavEl = document.querySelector(".btn-mobile-nav");
+  const headerEl = document.querySelector(".header");
+
+  btnNavEl.addEventListener("click", function () {
+    headerEl.classList.toggle("nav-open");
+  });
+};
+
+const renderJobResults = function (jobsArr) {
   const searchResultsContainer = document.querySelector(".search-results");
   searchResultsContainer.innerHTML = "";
-  jobsArr.forEach((job) => {
+  const logoSrc =
+    document.querySelector(".favicon__location").attributes.src.value;
+  const heartIcon = `<svg class="icon" name="heart-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+</svg>
+`;
+  jobsArr.forEach((jobObj) => {
+    let job = jobObj[Object.keys(jobObj)[0]];
     let html = `
-    <div data-jobid = ${job.ID} data-relevancescore = ${
+    <div data-jobid = ${Object.keys(jobObj)[0]} data-relevancescore = ${
       job.relevancePoints
     } class="search-result">
     <img
-    src="./img/favicon.png"
+    src= ${logoSrc}
     class="result-omnifood-logo"
     alt="omnifood logo"
     />  
@@ -175,7 +335,7 @@ const displayJobResults = function (jobsArr) {
           </div>
           <div class="result-buttons">
           <div class="save-job">
-          <ion-icon name="heart-outline"></ion-icon>
+          ${heartIcon}
           <p>Save Job</p>
           </div>
           <button class="quick-apply">Quick apply</button>
@@ -196,6 +356,10 @@ const syncSearchInputField = function () {
 
 const showNumberOfResults = function (noOfResults) {
   const numberOfResultsContainer = document.querySelector(".results-number");
+  const resultsNoPreviewMobileFilterSearchBtn = document.querySelector(
+    ".mobile-filters-search-btn strong"
+  );
+  resultsNoPreviewMobileFilterSearchBtn.innerText = `${noOfResults}`;
   numberOfResultsContainer.innerHTML = "";
   numberOfResultsContainer.insertAdjacentHTML(
     "afterbegin",
@@ -205,29 +369,8 @@ const showNumberOfResults = function (noOfResults) {
   );
 };
 
-const jobSearch = function () {
-  const searchCriteria = createSearchCriteria();
-  const resultRawData = filterDatabase(searchCriteria);
-  const sortingCriterion =
-    searchCriteria.keywords.length === 0 ? "date" : "relevance";
-  createRelevanceScores(searchCriteria.keywords, resultRawData);
-  displayJobResults(resultRawData);
-  showNumberOfResults(resultRawData.length);
-  sortResults(sortingCriterion);
-  const firstPage = document.querySelector(".section-first-interaction");
-  if (firstPage.classList.contains("hidden")) return;
-  showMainPage();
-  syncSearchInputField();
-};
-
-const showMainPage = function () {
-  const firstFrame = document.querySelector(".section-first-interaction");
-  const mainPage = document.querySelector(".section-main-content");
-  firstFrame.classList.add("hidden");
-  mainPage.classList.remove("hidden");
-};
-
 const sortResults = function (sortingCriterion) {
+  //sorts the job results DOM elements based on one of 3 criteria
   const resultsContainer = document.querySelector(".search-results");
   const resultsArray = Array.from(document.querySelectorAll(".search-result"));
   const collectionOfSortingMethods = {
@@ -256,17 +399,46 @@ const sortResults = function (sortingCriterion) {
   resultsArray.sort(collectionOfSortingMethods[sortingCriterion]);
   resultsArray.forEach((result) => resultsContainer.append(result));
 };
+const displayFullscreenJob = function () {
+  const fullscreenJobContainer = document.querySelector(
+    ".result-fully-displayed"
+  );
+  fullscreenJobContainer.classList.remove("hidden");
+  const resultsContainer = document.querySelector(".section-main-content");
+  resultsContainer.classList.add("hidden");
+};
 
 const openFullJobDetails = function (e) {
-  const logoWasClicked = e.target.classList.contains("result-omnifood-logo");
-  const jobTitleWasClicked = e.target.classList.contains("overview-job-title");
-  if (logoWasClicked || jobTitleWasClicked) {
-    const id = e.target.closest(".search-result").dataset.jobid;
-    window.open(`/omnifood/html/jobResult.html#${id}`);
+  //handles the user clicking on a job -> opens it in full screen
+  if (e) {
+    const logoWasClicked = e.target.classList.contains("result-omnifood-logo");
+    const jobTitleWasClicked =
+      e.target.classList.contains("overview-job-title");
+    if (logoWasClicked || jobTitleWasClicked) {
+      window.location.hash = e.target.closest(".search-result").dataset.jobid;
+    }
   }
+  const id = window.location.hash.slice(1);
+  const targetJob = getJobById(id);
+  if (!targetJob) return;
+  buildExpandedResult(targetJob);
+  displayFullscreenJob();
+};
+
+const closeFullScreenJob = function () {
+  const expandedResultContainer = document.querySelector(
+    ".result-fully-displayed"
+  );
+  expandedResultContainer.classList.add("hidden");
+  const resultsContainer = document.querySelector(".section-main-content");
+  resultsContainer.classList.remove("hidden");
+  resetFullDetailsWindow();
+  window.location.hash = "";
 };
 
 const resetFullDetailsWindow = function () {
+  //full screen job container's feelds must be
+  //emptied for it to be reusable for future job click
   const elmToRemove = document.querySelector(".result-summary");
   elmToRemove.remove();
   const elmToEmptyOut = [
@@ -327,7 +499,24 @@ const uncheckFilter = function (e) {
   e.target.closest(".applied-filter").classList.toggle("hidden");
 };
 
-//remove applied filters
+const unhighlightCarouselFilters = function () {
+  const filters = document.querySelectorAll(".filters-carousel-item");
+  filters.forEach((filter) => {
+    filter.classList.remove("selected");
+  });
+};
+
+const highlightCarouselFilter = function (e) {
+  const id = e.target.id;
+  const filters = Array.from(
+    document.querySelectorAll(".filters-carousel-item")
+  );
+  const filterToUnselect = filters.find(
+    (filter) => filter.dataset.filterId === id
+  );
+  if (!filterToUnselect) return;
+  filterToUnselect.classList.toggle("selected");
+};
 
 const removeAllAppliedFilters = function () {
   const allAppliedFilters = document.querySelectorAll(".applied-filter");
@@ -339,6 +528,29 @@ const removeAllAppliedFilters = function () {
   );
   allFilterCheckboxes.forEach((filter) => (filter.checked = false));
 };
+const handleMobileFiltersDisplay = function () {
+  const searchResults = document.querySelector(".search-results");
+  searchResults.classList.toggle("hidden");
+  const mobileFiltersContainer = document.querySelector(".filters");
+  mobileFiltersContainer.classList.toggle("flex");
+};
+
+const highlightSortingCriterion = function (sortingCriterion) {
+  const sortCriteriaElms = Array.from(
+    document.querySelectorAll(".sort-results button")
+  );
+  sortCriteriaElms.forEach((element) => {
+    element.classList.remove("sort-active");
+  });
+  const elmToHighlight = sortCriteriaElms.find((elm) => {
+    return elm.innerText.toLowerCase() === sortingCriterion;
+  });
+  elmToHighlight.classList.add("sort-active");
+};
+
+//
+// Adding event listeners
+//
 
 const addEventListeners = function () {
   const searchResultsContainer = document.querySelector(".search-results");
@@ -351,6 +563,7 @@ const addEventListeners = function () {
   removeAllAppliedFiltersBtn.addEventListener("click", function () {
     removeAllAppliedFilters();
     jobSearch();
+    unhighlightCarouselFilters();
   });
   appliedFiltersContainer.addEventListener("click", function (e) {
     uncheckFilter(e);
@@ -361,16 +574,63 @@ const addEventListeners = function () {
     if (e.target.localName == "input") {
       jobSearch();
       toggleAppliedFilterVisibility(e);
+      highlightCarouselFilter(e);
     }
   });
+
   mainSearchBtn.addEventListener("click", jobSearch);
   searchResultsContainer.addEventListener("click", openFullJobDetails);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") jobSearch();
   });
   firstPageSearchBtn.addEventListener("click", jobSearch);
+  const mobileFiltersBtns = [
+    document.querySelector(".show-mobile-filters-btn"),
+    document.querySelector(".mobile-filters-close-btn"),
+    document.querySelector(".mobile-filters-search-btn"),
+  ];
+  mobileFiltersBtns.forEach((btn) =>
+    btn.addEventListener("click", handleMobileFiltersDisplay)
+  );
+  const sortContainer = document.querySelector(".sort-results");
+  sortContainer.addEventListener("click", function (e) {
+    if (e.target.localName !== "button") return;
+    const sortingCriterion = e.target.innerText.toLowerCase();
+    highlightSortingCriterion(sortingCriterion);
+    sortResults(sortingCriterion);
+  });
+  const carousel = document.querySelector(".popular-filters-carousel");
+  carousel.addEventListener("click", function (e) {
+    if (e.target.localName !== "p") return;
+    const id = e.target.dataset.filterId;
+    const filter = document.querySelector(`#${id}`);
+    filter.click();
+  });
+  const closeFullScreenJobBtn = document.querySelector(
+    ".full-screen-close-btn"
+  );
+
+  closeFullScreenJobBtn.addEventListener("click", closeFullScreenJob);
 };
 
-retrieveJobsFromFirebase();
-insertAppliedFiltersInHTML();
-addEventListeners();
+//
+// actual function calls and their sequence
+//
+
+const urlCheckForJobId = function () {
+  if (!window.location.hash) return;
+  const id = window.location.hash.slice(1);
+  if (!getJobById(id)) return;
+  openFullJobDetails(null, id);
+  jobSearch();
+  displayFullscreenJob();
+};
+const init = async function () {
+  await retrieveJobsFromFirebase();
+  urlCheckForJobId();
+  filtersCarouselInit();
+  mobileNavFunctionality();
+  insertAppliedFiltersInHTML();
+  addEventListeners();
+};
+init();

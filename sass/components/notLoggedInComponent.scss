@@ -1,0 +1,57 @@
+.not-logged-in-screen {
+  color: #999;
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  & h3 {
+    font-size: 5rem;
+    letter-spacing: 8px;
+  }
+  & p {
+    margin-top: 2rem;
+    font-size: 3rem;
+    letter-spacing: 3px;
+  }
+}
+.auth-me {
+  margin-top: 5rem;
+  background-color: #e67e22;
+  border: none;
+  font-size: 2rem;
+  padding: 1.6rem 3.2rem;
+  border-radius: 9px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s;
+  position: relative;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  &:active {
+    transform: translateY(7px);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
+  }
+
+  &::after {
+    border-radius: 9px;
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.3s;
+    background-color: #e67e22;
+  }
+
+  &:hover::after {
+    transform: scaleX(1.5) scaleY(1.7);
+    opacity: 0;
+  }
+}

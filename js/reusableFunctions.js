@@ -1,3 +1,5 @@
+import { ErrorEvent, NotificationEvent } from "./customEvents.js";
+
 export const toTitleCase = function (str) {
   const charArray = Array.from(str.trim().toLowerCase());
   const capitalizeNextCharacter = function (currentCharIndex) {
@@ -104,4 +106,36 @@ export const cleanStrFromSymbolsAndUselessSpaces = function (str) {
     return true;
   });
   return trimmedCharArr.join("");
+};
+
+export const hidePageContent = function () {
+  const pageContent = [document.querySelector(".page-layout")];
+  pageContent.forEach((section) => {
+    section.classList.add("hidden");
+  });
+};
+
+export const displayPageContent = function () {
+  const pageContent = [document.querySelector(".page-layout")];
+  pageContent.forEach((section) => {
+    section.classList.remove("hidden");
+  });
+};
+export const displayNotLoggedInScreen = function () {
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.remove("hidden");
+};
+export const hasCustomRole = async function (user, role) {
+  const token = await user.getIdTokenResult();
+  return token.claims[role];
+};
+export const displayNotAuthorizedScreen = function (role) {
+  const notAutorizedContainer = document.querySelector(".not-logged-in-screen");
+  notAutorizedContainer.innerHTML = `<h3>Access denied</h3>
+  <p>You need to be an ${toTitleCase(role)} to access this page</p>`;
+  displayNotLoggedInScreen();
+};
+
+export const displayNotification = function (notificationText) {
+  document.dispatchEvent(new NotificationEvent(notificationText));
 };

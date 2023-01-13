@@ -1,0 +1,28 @@
+.action-result-notification-pop-up {
+  position: absolute;
+  bottom: 0;
+  left: 10rem;
+  width: 48rem;
+  height: 10rem;
+  /* transform: translateY(2rem); */
+  background-color: #fff;
+  display: flex;
+  padding: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.2);
+  & .checkmark-icon {
+    color: green;
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+  & .notification-text {
+    font-size: 1.6rem;
+    max-width: 80%;
+  }
+  & .close-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    cursor: pointer;
+  }
+}

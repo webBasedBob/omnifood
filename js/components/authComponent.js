@@ -6,7 +6,12 @@ import {
   signOut,
   sendPasswordResetEmail,
 } from "firebase/auth";
-class AuthModal {
+import { throwError } from "../reusableFunctions.js";
+import ErrorPopup from "./errorComponent.js";
+import Notification from "../components/notificationComponent.js";
+import BaseComponent from "./baseClassComponent.js";
+
+class AuthModal extends BaseComponent {
   firebaseConfig = {
     apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
     authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -23,95 +28,10 @@ class AuthModal {
   firebaseAuth = getAuth(this.firebaseApp);
   user;
 
-  modalHTML = `
-    <div class="auth-overlay-container hidden">
-    <div class="auth-modal">
-      <div class="choose-action-container">
-        <button data-event = "switch-auth-method" class="choose-action-btn choose-action-login btn-active">
-          LOGIN
-        </button>
-        <button data-event = "switch-auth-method" class="choose-action-btn choose-action-sign-up">SIGN UP</button>
-      </div>
-
-      <form action="" class="action-elements-container login-container">
-        <label for="login-email" class="auth-input-label">Email</label>
-        <input type="email" id="login-email" class="auth-text-input" required />
-        <label for="login-psw" class="auth-input-label">Password</label>
-        <input
-          type="password"
-          id="login-psw"
-          class="auth-text-input"
-          required
-        />
-        <div class="remember-me-container">
-          <input type="checkbox" id="remember-me" checked />
-          <label for="remember-me">Remember me</label>
-        </div>
-        <input  data-event = "log-in" type="submit" value="LOGIN" class="take-action-btn login-btn" />
-        <a href="#" data-event = "display-forgot-psw" class="forgot-psw">Forgot Password?</a>
-      </form>
-      <form class="action-elements-container sign-up-container hidden">
-        <label for="sign-up-email" class="auth-input-label">Email</label>
-        <input
-          type="email"
-          id="sign-up-email"
-          class="auth-text-input"
-          required
-        />
-        <label for="sign-up-psw" class="auth-input-label">Password</label>
-        <input
-          type="password"
-          id="sign-up-psw"
-          class="auth-text-input"
-          required
-          pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-          title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
-        />
-        <input
-          type="submit"
-          value="SIGN UP"
-          data-event = "sign-up"
-          class="take-action-btn sign-up-btn"
-        />
-      </form>
-      <form class="action-elements-container forgot-psw-container hidden">
-        <label for="forgot-psw-email" class="auth-input-label">Email</label>
-        <input
-          type="email"
-          id="forgot-psw-email"
-          class="auth-text-input"
-          required
-        />
-        <input
-          type="submit"
-          value="Send password reset email"
-          data-event = "forgot-psw"
-          class="take-action-btn reset-psw-btn"
-        />
-      </form>
-    </div>
-      <div class="overlay">
-        <svg
-          name="close-circle-outline"
-          data-event = "close-auth-modal"
-          class="auth-modal-close-btn"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </div>
-    </div>`;
   constructor() {
-    this.render();
+    super();
     this.modal = document.querySelector(`.auth-modal`);
-    this.overlay = document.querySelector(`.auth-overlay-container`);
+    this.component = document.querySelector(`.auth-overlay-container`);
     this.modalFormsContainers = document.querySelectorAll(
       ".action-elements-container"
     );
@@ -120,14 +40,6 @@ class AuthModal {
       document.querySelector(".choose-action-container").children
     );
     document.addEventListener("click", this.handleEvents.bind(this));
-  }
-  display() {
-    this.overlay.classList.remove("hidden");
-    // this.modal.classList.remove("hidden");
-  }
-  hide() {
-    this.overlay.classList.add("hidden");
-    // this.modal.classList.add("hidden");
   }
   hideForms() {
     this.modalFormsContainers.forEach((formContainer) => {
@@ -141,9 +53,6 @@ class AuthModal {
     );
     this.hideForms();
     this.forgotPswForm.classList.remove("hidden");
-  }
-  render() {
-    document.body.insertAdjacentHTML("afterbegin", this.modalHTML);
   }
   handleEvents(e) {
     const targetElmClass = e.target.dataset.event;
@@ -169,6 +78,14 @@ class AuthModal {
         break;
       case "close-auth-modal":
         this.hide();
+        break;
+      //this is a handler from error modal component - must refactor later
+      case "close-error-popup":
+        ErrorPopup.hide();
+        break;
+      //this handler is for notification component - must refactor
+      case "close-notification":
+        Notification.hide();
         break;
     }
   }
@@ -199,9 +116,10 @@ class AuthModal {
     const password = document.querySelector("#sign-up-psw").value;
     try {
       await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
+      this.hide();
       // renderNotification("Account created, you are now logged in!");
     } catch (error) {
-      // errorHandler.renderError(error);
+      throwError(error.code);
     }
   }
   async logIn(e) {
@@ -213,14 +131,15 @@ class AuthModal {
     const password = document.querySelector("#login-psw").value;
     try {
       const logIn = await signInWithEmailAndPassword(
-        this.firebaeAuth,
+        this.firebaseAuth,
         email,
         password
       );
+      this.hide();
       // user = logIn.user;
       // console.log(user);
     } catch (error) {
-      // errorHandler.renderError(error);
+      throwError(error.code);
     }
   }
   sendEmailForgotPsw(e) {
@@ -236,12 +155,99 @@ class AuthModal {
       await sendPasswordResetEmail(this.firebaseAuth, targetEmail);
       // renderNotification("Password reset email sent, check your inbox!");
     } catch (error) {
-      // errorHandler.renderError(error);
+      throwError(error.code);
     }
   }
   // actions
   async logOut() {
     await signOut(this.firebaseAuth);
+  }
+  getHTML() {
+    return `
+      <div class="auth-overlay-container hidden">
+      <div class="auth-modal">
+        <div class="choose-action-container">
+          <button data-event = "switch-auth-method" class="choose-action-btn choose-action-login btn-active">
+            LOGIN
+          </button>
+          <button data-event = "switch-auth-method" class="choose-action-btn choose-action-sign-up">SIGN UP</button>
+        </div>
+  
+        <form action="" class="action-elements-container login-container">
+          <label for="login-email" class="auth-input-label">Email</label>
+          <input type="email" id="login-email" class="auth-text-input" required />
+          <label for="login-psw" class="auth-input-label">Password</label>
+          <input
+            type="password"
+            id="login-psw"
+            class="auth-text-input"
+            required
+          />
+          <div class="remember-me-container">
+            <input type="checkbox" id="remember-me" checked />
+            <label for="remember-me">Remember me</label>
+          </div>
+          <input  data-event = "log-in" type="submit" value="LOGIN" class="take-action-btn login-btn" />
+          <a href="#" data-event = "display-forgot-psw" class="forgot-psw">Forgot Password?</a>
+        </form>
+        <form class="action-elements-container sign-up-container hidden">
+          <label for="sign-up-email" class="auth-input-label">Email</label>
+          <input
+            type="email"
+            id="sign-up-email"
+            class="auth-text-input"
+            required
+          />
+          <label for="sign-up-psw" class="auth-input-label">Password</label>
+          <input
+            type="password"
+            id="sign-up-psw"
+            class="auth-text-input"
+            required
+            pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
+          />
+          <input
+            type="submit"
+            value="SIGN UP"
+            data-event = "sign-up"
+            class="take-action-btn sign-up-btn"
+          />
+        </form>
+        <form class="action-elements-container forgot-psw-container hidden">
+          <label for="forgot-psw-email" class="auth-input-label">Email</label>
+          <input
+            type="email"
+            id="forgot-psw-email"
+            class="auth-text-input"
+            required
+          />
+          <input
+            type="submit"
+            value="Send password reset email"
+            data-event = "forgot-psw"
+            class="take-action-btn reset-psw-btn"
+          />
+        </form>
+      </div>
+        <div class="overlay">
+          <svg
+            name="close-circle-outline"
+            data-event = "close-auth-modal"
+            class="auth-modal-close-btn"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>`;
   }
 }
 

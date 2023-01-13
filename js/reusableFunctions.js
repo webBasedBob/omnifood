@@ -135,6 +135,9 @@ export const displayNotAuthorizedScreen = function (role) {
   <p>You need to be an ${toTitleCase(role)} to access this page</p>`;
   displayNotLoggedInScreen();
 };
+export const throwError = function (errorCode) {
+  document.dispatchEvent(new ErrorEvent(errorCode));
+};
 
 export const displayNotification = function (notificationText) {
   document.dispatchEvent(new NotificationEvent(notificationText));

@@ -1,5 +1,36 @@
-class ErrorPopup {
-  html = `
+import BaseComponent from "./baseClassComponent.js";
+
+class ErrorPopup extends BaseComponent {
+  errorCodesDictionary = {
+    "auth/network-request-failed":
+      "Operation failed due to network issues, please check your internet connection",
+    "auth/email-already-in-use":
+      "The email you entered is already associated with an account, please log in instead",
+    "auth/wrong-password": "Wrong password, please try again!",
+    "auth/too-many-requests":
+      "Access to this account has been temporarily disabled due to many failed login attempts. Reset your password or log in later!",
+    "auth/user-not-found":
+      "Email adress does not match any account, please make sure it is spelled correctly or create an new account!",
+    "auth/quota-exceeded":
+      "The maximim number of name changes was exceeded, please try again later!",
+    default: "An unexpected error occurred, please try again later",
+  };
+
+  constructor() {
+    super();
+    this.component = document.querySelector(".error-overlay");
+    this.errorMessageContainer = this.component.querySelector(".error-message");
+  }
+  display(errorEvent) {
+    const errorCode = errorEvent.detail.errorCode;
+    this.errorMessageContainer.innerText =
+      this.errorCodesDictionary[errorCode] ||
+      errorCode ||
+      this.errorCodesDictionary.default;
+    super.display();
+  }
+  getHTML() {
+    return `
     <div class="error-overlay hidden">
       <div class="error-modal">
         <svg
@@ -21,42 +52,6 @@ class ErrorPopup {
         <button data-event= "close-error-popup" class="close-error-modal-btn">Dismiss</button>
       </div>
     </div>`;
-
-  errorCodesDictionary = {
-    "auth/network-request-failed":
-      "Operation failed due to network issues, please check your internet connection",
-    "auth/email-already-in-use":
-      "The email you entered is already associated with an account, please log in instead",
-    "auth/wrong-password": "Wrong password, please try again!",
-    "auth/too-many-requests":
-      "Access to this account has been temporarily disabled due to many failed login attempts. Reset your password or log in later!",
-    "auth/user-not-found":
-      "Email adress does not match any account, please make sure it is spelled correctly or create an new account!",
-    "auth/quota-exceeded":
-      "The maximim number of name changes was exceeded, please try again later!",
-    default: "An unexpected error occurred, please try again later",
-  };
-
-  constructor() {
-    this.render();
-    this.errorModal = document.querySelector(".error-overlay");
-    this.errorMessageContainer =
-      this.errorModal.querySelector(".error-message");
-  }
-  render() {
-    document.body.insertAdjacentHTML("afterbegin", this.html);
-  }
-  display(errorEvent) {
-    console.log(errorEvent);
-    const errorCode = errorEvent.detail.errorCode;
-    this.errorMessageContainer.innerText =
-      this.errorCodesDictionary[errorCode] ||
-      errorCode ||
-      this.errorCodesDictionary.default;
-    this.errorModal.classList.remove("hidden");
-  }
-  hide() {
-    this.errorModal.classList.add("hidden");
   }
 }
 

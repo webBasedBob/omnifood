@@ -1,5 +1,23 @@
-class Notification {
-  html = `
+import BaseComponent from "./baseClassComponent.js";
+
+class Notification extends BaseComponent {
+  constructor() {
+    super();
+    this.component = document.querySelector(
+      ".action-result-notification-pop-up"
+    );
+    this.messageContainer = document.querySelector(".notification-text");
+  }
+  display(notificationEvent) {
+    const notificationText = notificationEvent.detail.notificationText;
+    this.messageContainer.innerText = notificationText;
+    super.display();
+    setTimeout(() => {
+      this.hide();
+    }, 3000);
+  }
+  getHTML() {
+    return `
   <div class="action-result-notification-pop-up hidden">
   <svg
     name="checkmark-circle"
@@ -31,24 +49,6 @@ class Notification {
     />
   </svg>
 </div>`;
-  constructor() {
-    this.render();
-    this.modal = document.querySelector(".action-result-notification-pop-up");
-    this.messageContainer = document.querySelector(".notification-text");
-  }
-  render() {
-    document.body.insertAdjacentHTML("afterbegin", this.html);
-  }
-  display(notificationEvent) {
-    const notificationText = notificationEvent.detail.notificationText;
-    this.messageContainer.innerText = notificationText;
-    this.modal.classList.remove("hidden");
-    setTimeout(() => {
-      this.hide();
-    }, 3000);
-  }
-  hide() {
-    this.modal.classList.add("hidden");
   }
 }
 

@@ -1,0 +1,176 @@
+.complaint-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.section-title {
+  font-weight: 500;
+}
+.complaint-table-wrapper {
+  height: 30rem;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.complaint-table {
+  &__full-size {
+    // transform: translateY(-2rem);
+    width: 100%;
+    border-collapse: collapse;
+  }
+  // max-width: 60rem;
+  padding-top: 2rem;
+  font-weight: 300;
+
+  & th:nth-child(1) {
+    width: 70%;
+    text-align: start;
+    font-weight: 300;
+  }
+  & th:nth-child(2) {
+    width: 30%;
+    font-weight: 300;
+  }
+  & td {
+    padding: 1rem 0;
+  }
+  & tr:not(tr:last-child) {
+    border-bottom: 2px solid rgba(153, 153, 153, 0.233);
+  }
+  &__header {
+  }
+  &__complaint-name {
+    font-weight: 300;
+  }
+  &__complaint-status {
+    text-align: center;
+    font-weight: 300;
+    color: #888;
+  }
+}
+.leave-complaint-btn {
+  align-self: flex-end;
+  border: none;
+  padding: 1rem 3rem;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
+  color: #fff;
+  font-size: 2rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+//complaint modal
+
+.complaint-modal__overlay {
+  position: absolute;
+  z-index: 100;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
+}
+.complaint-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  font-size: 2rem;
+  color: #555;
+  gap: 2rem;
+  background-color: #fff;
+  padding: 5rem 3rem;
+  border-radius: 15px;
+  width: 80vw;
+}
+.complaint-modal__close-btn svg {
+  height: 3rem;
+  position: absolute;
+  top: 2rem;
+
+  right: 2rem;
+  cursor: pointer;
+}
+
+.complaint-modal__title {
+  padding-bottom: 2rem;
+  color: #666;
+  font-weight: 300;
+}
+.complaint-modal__subject {
+  font-size: inherit;
+  padding: 1rem;
+  color: #555;
+  border: none;
+  border-bottom: 2px solid #999;
+}
+.complaint-modal__text {
+  font-size: inherit;
+  padding: 1rem;
+  color: #555;
+  border: none;
+  // height: 10rem;
+  white-space: normal;
+  border-bottom: 2px solid #999;
+  margin-bottom: 2rem;
+}
+.complaint-modal__submit-btn {
+  font-size: inherit;
+  border: none;
+  color: #fff;
+  padding: 1rem 3rem;
+  border-radius: 15px;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
+  cursor: pointer;
+}
+
+//complaint response
+//admin page
+.complaint-modal__overlay__old-complaint .complaint-modal {
+  // width: 37rem;
+}
+.complaint-modal__subject {
+}
+.complaint-modal__admin-response {
+  font-size: inherit;
+  padding: 1rem;
+  color: #555;
+  border: none;
+}
+.complaint-modal__compaint-text {
+  font-size: inherit;
+  padding: 1rem;
+  color: #555;
+  border: none;
+  border-bottom: 2px solid #999;
+}
+.complaint-modal__text__response {
+  resize: none;
+}
+
+@media (max-width: 700px) {
+  .leave-complaint-btn {
+    align-self: center;
+  }
+  .complaint-table-wrapper {
+    height: 50vh;
+  }
+  .complaint-modal {
+    width: 98vw;
+  }
+}
+@media (max-width: 500px) {
+  .complaint-table tbody tr {
+    display: flex;
+    flex-direction: column;
+  }
+  .complaint-table th {
+    position: absolute;
+    top: -9999999px;
+  }
+  .complaint-table__complaint-status {
+    place-self: start;
+  }
+}

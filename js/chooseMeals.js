@@ -6,7 +6,7 @@ import {
   listAll,
   uploadBytes,
 } from "firebase/storage";
-import { toTitleCase } from "./reusableFunctions.js";
+import { toTitleCase, extractRecipeId } from "./reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
   storeIngredient,
@@ -16,16 +16,23 @@ import {
 } from "./liveDatabaseFunctions.js";
 const breadcrumbsFunctionality = function (e) {
   if (e.target.classList.contains("active")) return;
-  const goToRecipesBtn = document.querySelector(".breadcrumb__second");
-  const goToIngredientsBtn = document.querySelector(".breadcrumb__first");
-  const ingredientsContainer = document.querySelector(".ingredients-wrapper");
-  const recipesContainer = document.querySelector(
-    ".recipe-suggestions-wrapper"
-  );
-  goToRecipesBtn.classList.toggle("active");
-  goToIngredientsBtn.classList.toggle("active");
-  ingredientsContainer.classList.toggle("hidden");
-  recipesContainer.classList.toggle("hidden");
+  const breadcrumbs = [
+    document.querySelector(".breadcrumb__second"),
+    document.querySelector(".breadcrumb__first"),
+  ];
+  const elmsToToggleVisibility = [
+    document.querySelector(".ingredients-wrapper"),
+    document.querySelector(".recipe-suggestions-wrapper"),
+    document.querySelector(".display-evaluated-ingredients-btn"),
+    document.querySelector(".display-liked-recipes-btn"),
+  ];
+
+  breadcrumbs.forEach((breadcrumb) => {
+    breadcrumb.classList.toggle("active");
+  });
+  elmsToToggleVisibility.forEach((elm) => {
+    elm.classList.toggle("hidden");
+  });
 };
 
 const firebaseConfig = {
@@ -221,10 +228,6 @@ const retreiveRecipesFromApi = async function (url) {
   // console.log(rawResult, jsonResult);
   let recipesArr = jsonResult.hits.map((result) => result.recipe);
   return recipesArr;
-};
-const extractRecipeId = function (recipe) {
-  const id = recipe.uri.slice(recipe.uri.indexOf("recipe_") + 7);
-  return id;
 };
 
 const getRandomInt = function (min, max) {
@@ -573,7 +576,6 @@ const renderRecipeCard = function (recipe) {
   <h2 class="recipe-card-component__title">
   ${toTitleCase(recipe.label)}
   </h2>
-  <p class="recipe-card-component__subtitle">Ingredients</p>
   ${dada(recipe)}
 
   </div>

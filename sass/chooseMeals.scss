@@ -41,6 +41,8 @@ body {
   grid-template-columns: 2fr 4fr;
   justify-content: center;
   height: 79vh;
+  max-width: 150rem;
+  margin: 0 auto;
 }
 
 .ingredients-to-evaluate {
@@ -49,13 +51,13 @@ body {
   gap: 2rem;
   align-items: center;
   padding: 0rem 3rem 3rem 3rem;
-  height: 110%;
+  height: 105%;
   overflow-y: scroll;
   padding: 3rem 0;
   &::-webkit-scrollbar {
     display: none;
   }
-  transform: translateY(-10%);
+  transform: translateY(-5%);
 }
 .evaluation-component {
   display: flex;
@@ -112,6 +114,22 @@ body {
     }
   }
 }
+.display-evaluated-ingredients-btn,
+.display-liked-recipes-btn {
+  padding: 1.2rem 3rem;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
+  color: #fdf2e9;
+  justify-self: center;
+  align-self: start;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 80%);
+  border-radius: 15px;
+  z-index: 100;
+  display: none;
+}
+
 .evaluated-ingredients {
   width: 100%;
   &__list {
@@ -170,16 +188,21 @@ body {
   }
 }
 
-$width-recipe-card: 32rem;
-$height-recipe-card: 45rem;
+$width-recipe-card: 27rem;
+$height-recipe-card: 37rem;
 
 .recipe-suggestions-wrapper {
   @include wrapper();
-  grid-template-columns: 2fr 3fr;
+  max-width: 150rem;
+  margin: 0 auto;
+  grid-template-columns: 60rem auto;
+  justify-items: center;
+  align-items: center;
+  height: 70vh;
 }
 .liked-recipes {
   margin-left: 5rem;
-  margin: 0 0 3rem 5rem;
+  margin: 3rem 0 3rem 5rem;
   box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.05);
   padding: 3.2rem;
   padding-top: 7rem;
@@ -187,6 +210,7 @@ $height-recipe-card: 45rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 100%;
+  width: 100%;
   overflow: scroll;
   row-gap: 3rem;
   column-gap: 3rem;
@@ -247,6 +271,8 @@ $height-recipe-card: 45rem;
   align-items: center;
   justify-content: center;
   gap: 4.4rem;
+  width: fit-content;
+  height: fit-content;
   &__card-container {
     width: $width-recipe-card;
     height: $height-recipe-card;
@@ -264,7 +290,7 @@ $height-recipe-card: 45rem;
   position: relative;
   &__img {
     width: $width-recipe-card - 7rem;
-    height: 20rem;
+    height: 17rem;
     border-radius: 12px;
     align-self: center;
     overflow: hidden;
@@ -275,7 +301,7 @@ $height-recipe-card: 45rem;
     z-index: 1;
   }
   &__text-wrapper {
-    padding: 15rem 4rem 4rem 4rem;
+    padding: 15rem 2rem 4rem 2rem;
     letter-spacing: 2px;
     display: flex;
     flex-direction: column;
@@ -287,8 +313,8 @@ $height-recipe-card: 45rem;
     font-size: $font-size-medium-2;
     font-weight: 300;
     letter-spacing: 2px;
-    padding: 2rem;
     text-align: center;
+    padding-bottom: 2rem;
   }
   &__subtitle {
     font-size: $font-size-small-2;
@@ -343,8 +369,8 @@ $height-recipe-card: 45rem;
   gap: 5rem;
   z-index: 20;
   &__btn {
-    height: 5.6rem;
-    width: 5.6rem;
+    height: 4.8rem;
+    width: 4.8rem;
     border-radius: 1000px;
     background-color: #fff;
     display: flex;
@@ -352,8 +378,8 @@ $height-recipe-card: 45rem;
     justify-content: center;
     box-shadow: 0 0 40px 10px rgba(51, 51, 51, 0.151);
     & svg {
-      height: 3.2rem;
-      width: 3.2rem;
+      height: 3rem;
+      width: 3rem;
     }
     &__dislike {
       color: $color-red;
@@ -373,6 +399,7 @@ $height-recipe-card: 45rem;
   // left: 4rem;
   font-size: $font-size-small-1;
   padding: 0 4rem 2rem 6.4rem;
+  position: relative;
 }
 .breadcrumb {
   width: fit-content;
@@ -449,5 +476,271 @@ $height-recipe-card: 45rem;
   &:hover::after {
     transform: scaleX(1.5) scaleY(1.7);
     opacity: 0;
+  }
+}
+
+//
+//
+// Queries for ingredients part
+//
+//
+
+@media (min-width: 1800px) {
+  html {
+    font-size: 75% !important;
+  }
+}
+@media (max-width: 1100px) {
+  html {
+    font-size: 50% !important;
+  }
+  .ingredients-wrapper {
+    height: 89vh;
+  }
+  .evaluation-btn {
+    height: 6.6rem;
+    width: 6.6rem;
+    & svg {
+      height: 4.4rem;
+      width: 4.4rem;
+    }
+  }
+}
+@media (max-width: 800px) {
+  .evaluated-ingredients-wrapper {
+    display: none;
+    width: fit-content;
+    padding: 4rem;
+    padding-top: 3rem;
+    margin: 0;
+    margin-top: 3rem;
+    height: 80vh !important;
+  }
+  .ingredients-to-evaluate {
+    // display: none;
+  }
+  .ingredients-to-evaluate {
+    width: fit-content;
+    padding: 4rem;
+    transform: translateY(-0%);
+    padding-top: 3rem;
+    margin-top: 3rem;
+  }
+  .ingredients-wrapper {
+    grid-template-columns: auto;
+    width: 100%;
+    padding-top: 3rem;
+  }
+  .display-evaluated-ingredients-btn {
+    display: inline-block;
+  }
+}
+@media (max-width: 600px) {
+  .display-evaluated-ingredients-btn {
+    padding: 1.6rem;
+    width: 50%;
+  }
+  .evaluated-ingredients-wrapper {
+    // display: none;
+    width: fit-content;
+    padding: 1rem;
+    padding-top: 3rem;
+    margin: 0;
+    margin-top: 3rem;
+    height: 80vh !important;
+  }
+}
+@media (max-width: 400px) {
+  .ingredients-to-evaluate {
+    padding: 1rem;
+  }
+  .display-evaluated-ingredients-btn {
+    width: 60%;
+  }
+  .evaluated-ingredients {
+    & .ingredient {
+      width: 15rem;
+      &__img {
+        height: 3.4rem;
+        width: 3.4rem;
+      }
+      &__text {
+        width: 9rem;
+      }
+    }
+  }
+  .evaluation-component {
+    gap: 5px;
+    & .ingredient {
+      width: auto;
+      gap: 5px;
+      &__img {
+        height: 4.4rem;
+        width: 4.4rem;
+        &__text {
+        }
+      }
+    }
+  }
+  .evaluation-btn {
+    height: 5rem;
+    width: 5rem;
+    box-shadow: 0 0 10px 5px rgba(51, 51, 51, 0.151);
+    & svg {
+      height: 4rem;
+      width: 4rem;
+    }
+  }
+
+  .breadcrumbs {
+    padding: 1rem;
+    padding-right: 0;
+    & .breadcrumb {
+      &__first {
+        padding: 1rem 3rem 1rem 2.4rem;
+      }
+      &__second {
+        padding: 1rem 3rem 1rem 3rem;
+      }
+    }
+  }
+}
+
+//
+//
+// Queries for meals part
+//
+//
+
+@media (min-width: 1800px) {
+  html {
+    font-size: 75% !important;
+  }
+  .swiper-component {
+    transform: scale(1.2);
+    translate: 0 5%;
+  }
+}
+@media (max-width: 1100px) {
+  // html {
+  //   font-size: 50% !important;
+  // }
+  // .ingredients-wrapper {
+  //   height: 89vh;
+  // }
+  // .recipe-suggestions-wrapper {
+  //   grid-template-columns: 55rem auto;
+  // }
+  // // .swiper-component {
+  // //   transform: scale(1);
+  // //   translate: 0 5%;
+  // // }
+  .liked-recipes {
+    scale: 0.9;
+    //   // margin-left: 0;
+  }
+}
+@media (max-width: 950px) {
+  .recipe-suggestions-wrapper {
+    grid-template-columns: 39rem auto;
+  }
+  .liked-recipes {
+    grid-template-columns: auto;
+    padding: 5rem;
+    padding-top: 7rem;
+    height: 83vh;
+  }
+}
+@media (max-width: 700px) {
+  html {
+    font-size: 56.25%;
+  }
+  .display-liked-recipes-btn {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 1rem;
+    width: 50%;
+  }
+  .liked-recipes {
+    display: none;
+    // padding: 8rem;
+    margin: 0;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2rem;
+  }
+  .swiper-component {
+    // display: none;
+  }
+  .recipe-suggestions-wrapper {
+    grid-template-columns: auto;
+  }
+  .img-and-title-component {
+    // height: 30rem;
+
+    &__title {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .breadcrumbs {
+    padding: 1rem;
+    padding-right: 0;
+    & .breadcrumb {
+      &__first {
+        padding: 1rem 3rem 1rem 2.4rem;
+      }
+      &__second {
+        padding: 1rem 3rem 1rem 3rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 50% !important;
+  }
+  .breadcrumbs {
+    padding: 1rem;
+    padding-right: 0;
+    & .breadcrumb {
+      &__first {
+        padding: 1rem 2.4rem 1rem 2rem;
+      }
+      &__second {
+        padding: 1rem 2.4rem 1rem 2.4rem;
+      }
+    }
+  }
+  .action-btns {
+    &__btn {
+      height: 6rem;
+      width: 6rem;
+      & svg {
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+  }
+  .recipe-card-component {
+    height: 42rem;
+  }
+  .swiper-component {
+    height: 53rem;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+  }
+  .liked-recipes {
+    padding: 5rem;
+    padding-top: 8rem;
+    grid-template-columns: auto;
+  }
+  .img-and-title-component {
+    height: 20rem;
   }
 }

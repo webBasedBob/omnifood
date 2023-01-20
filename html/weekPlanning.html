@@ -83,11 +83,15 @@
     </header>
     <main class="main-content-layout">
       <div class="liked-recipes"></div>
+      <div class="calendar-component"></div>
       <div class="week-plan-component">
-        <div class="calendar-component"></div>
+        <div class="breadcrumbs">
+          <div class="active breadcrumb"></div>
+          <div class="breadcrumb"></div>
+        </div>
         <div class="choose-meal-section">
           <div class="chosen-meal-component-wrapper">
-            <div class="chosen-meal-component">
+            <div class="chosen-meal-component chosen-meal-component__first">
               <figure class="meal-component meal-placeholder">
                 <div class="plus-icon">
                   <svg
@@ -135,7 +139,7 @@
                 </select>
               </div>
             </div>
-            <div class="chosen-meal-component">
+            <div class="chosen-meal-component chosen-meal-component__second">
               <figure class="meal-component meal-placeholder">
                 <div class="plus-icon">
                   <svg

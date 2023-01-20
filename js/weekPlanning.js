@@ -137,6 +137,7 @@ const dragMeal = function (e) {
   let recipeContainer;
   let recipeClone;
   let draggedMealClass;
+  let elemBelow;
 
   const updateElemBelow = function (event) {
     //gets the element below the clone we moving with the pointer
@@ -345,10 +346,9 @@ const initCalendarComponent = function () {
   const weekCalendarHtml = generateWeekCalendar(currentWeekId);
   const currentWeekGenerator = weekComponentGenerator(0);
   const html = `
-  ${generateAvailableWeeks()}
   <div data-currentweekid = "${
     currentWeekGenerator.next().value
-  }" class="current-week"><p>${
+  }" class="current-week"> ${generateAvailableWeeks()}<p>${
     currentWeekGenerator.next().value
   }</p> ${arrowDownSVG("icon current-week__arrow")}</div>
     <div class="week-calandar">

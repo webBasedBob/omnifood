@@ -68,7 +68,7 @@ svg[name="chevron-down"] {
 .main-content-layout {
   display: grid;
   grid-template-columns: 44rem auto;
-  gap: 4.4rem;
+  gap: 1rem;
   padding: 0 3rem;
   background-color: $color-background;
   height: 87vh;
@@ -87,6 +87,8 @@ svg[name="chevron-down"] {
   &::-webkit-scrollbar {
     display: none;
   }
+  grid-column: 1/1;
+  grid-row: 1/3;
 }
 .meal-component.dragging-liked,
 .meal-component.dragging-chosen {
@@ -133,15 +135,33 @@ svg[name="chevron-down"] {
   justify-items: center;
   align-items: center;
   align-content: start;
+  align-self: center;
+  height: fit-content;
+}
+
+.breadcrumbs {
+  display: none;
+  gap: 2rem;
+  grid-column: 1/-1;
+}
+.breadcrumb {
+  display: inline-block;
+  padding: 0.7rem;
+  border-radius: 50%;
+  border: #e67e22 solid 2px;
+}
+.breadcrumb.active {
+  background-color: #e67e22;
 }
 .calendar-component {
   display: flex;
-  // flex-direction: column;
-  // background-color: #fefbf8;
   grid-column: 1/-1;
   align-items: center;
   text-transform: capitalize;
   position: relative;
+  grid-row: 1/1;
+  grid-column: 2/-1;
+  justify-self: center;
 }
 
 .current-week {
@@ -152,15 +172,20 @@ svg[name="chevron-down"] {
   color: $color-gray-1;
   background-color: #fff;
   border: 1px solid $color-main;
-  padding: 1rem 2rem;
+  padding: 1rem 2.4rem 1rem 1rem;
   border-radius: 10px;
-  margin-right: 3rem;
+  margin-right: 0;
   display: flex;
   transition: all 0.3s;
   position: relative;
   &__arrow {
     text-align: center;
-    transform: scale(1.1) translateY(0px) translateX(0px);
+    transform: scale(1.1) translateY(50%) translateX(0px);
+    position: absolute;
+    height: 2rem;
+    word-wrap: 2rem;
+    right: 3px;
+    bottom: 50%;
   }
   &:hover {
     background-color: $color-main;
@@ -173,7 +198,6 @@ svg[name="chevron-down"] {
   gap: 1rem;
   &__weekday {
     cursor: pointer;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -191,15 +215,9 @@ svg[name="chevron-down"] {
         display: none;
       }
       &__top {
-        // border-top-right-radius: 100%;
-        // border-top-left-radius: 100%;
-        // overflow: hidden;
         transform: translateY(1.3rem);
       }
       &__bottom {
-        // border-bottom-right-radius: 100%;
-        // // border-bottom-left-radius: 100%;
-        // overflow: hidden;
         transform: translateY(-1.3rem);
       }
     }
@@ -244,14 +262,6 @@ svg[name="chevron-down"] {
   }
 }
 
-// .chosen-meal-component .meal-component {
-//   &__img {
-//     width: 20rem;
-//   }
-//   &__title {
-//   }
-// }
-
 .choose-meal-section {
   display: flex;
   flex-direction: column;
@@ -290,6 +300,7 @@ $height-recipe-card: 36rem;
   justify-content: space-between;
   // background-color: #00b258;
   // gap: 5rem;
+  padding-bottom: 2rem;
   .meal-component__img {
     width: $width-recipe-card - 10rem;
     height: $width-recipe-card - 10rem;
@@ -300,7 +311,7 @@ $height-recipe-card: 36rem;
     outline-offset: 15px;
     z-index: 1;
     border-radius: 50%;
-    margin-top: 6rem;
+    margin-top: 5rem;
     margin-bottom: 4rem;
   }
   .meal-component__title {
@@ -308,10 +319,15 @@ $height-recipe-card: 36rem;
     font-size: $font-size-medium-2;
     font-weight: 300;
     letter-spacing: 1px;
-    padding: 1rem 2rem 2rem 2rem;
+    padding: 0rem 2rem 0rem 2rem;
     text-align: center;
     text-transform: capitalize;
-    margin-bottom: 3rem;
+    margin-bottom: 0rem;
+    padding-bottom: 0;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 .meal-component.meal-placeholder {
@@ -388,9 +404,9 @@ $height-recipe-card: 36rem;
 
 .available-weeks {
   position: absolute;
-  left: -4rem;
+  left: 0rem;
   // bottom: -100%;
-  bottom: 2rem;
+  bottom: 0rem;
   transform: translateY(100%);
   width: fit-content;
   background-color: #fff;
@@ -425,4 +441,78 @@ $height-recipe-card: 36rem;
 .available-weeks__week.active {
   background-color: $color-main;
   color: $color-background;
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 56.25%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .calendar-component {
+    grid-row: 1/1;
+    justify-self: center;
+    grid-column: 1/-1;
+  }
+  .liked-recipes {
+    grid-row: 2/3;
+  }
+  .breadcrumbs {
+    display: flex;
+  }
+  .chosen-meal-component__second {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .liked-recipes {
+    display: none;
+    position: absolute;
+    grid-column: 1/-1;
+    grid-row: 1/3;
+    z-index: 25;
+    background-color: $color-background;
+  }
+  .breadcrumbs {
+    display: none;
+  }
+  .chosen-meal-component__second {
+    display: flex;
+  }
+  .week-plan-component {
+    grid-column: 1/-1;
+  }
+  .chosen-meal-component-wrapper {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .breadcrumbs {
+    display: flex;
+  }
+  .chosen-meal-component__second {
+    display: none;
+  }
+  .week-plan-component {
+    grid-template-columns: auto;
+  }
+  .week-calandar {
+    width: 100vw;
+    overflow: hidden;
+    justify-content: space-around;
+  }
+  .calendar-component {
+    flex-direction: column;
+    justify-self: start;
+  }
+  .main-content-layout {
+    grid-template-columns: auto;
+    padding: 0;
+  }
+  .current-week {
+    padding: 1rem 3.4rem 1rem 2rem;
+  }
 }

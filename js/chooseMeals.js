@@ -14,24 +14,34 @@ import {
   storeRecipe,
   getRecipes,
 } from "./liveDatabaseFunctions.js";
+import FullscreenRecipe from "./components/fullscreenRecipe.js";
 const breadcrumbsFunctionality = function (e) {
   if (e.target.classList.contains("active")) return;
-  const breadcrumbs = [
-    document.querySelector(".breadcrumb__second"),
-    document.querySelector(".breadcrumb__first"),
-  ];
+  const breadcrumbs = [".breadcrumb__second", ".breadcrumb__first"];
   const elmsToToggleVisibility = [
-    document.querySelector(".ingredients-wrapper"),
-    document.querySelector(".recipe-suggestions-wrapper"),
-    document.querySelector(".display-evaluated-ingredients-btn"),
-    document.querySelector(".display-liked-recipes-btn"),
+    ".ingredients-wrapper",
+    ".recipe-suggestions-wrapper",
+    ".display-evaluated-ingredients-btn",
+    ".display-liked-recipes-btn",
   ];
+  const mobileCloseBtns = [
+    document.querySelector(".close-liked-recipes-window"),
+    document.querySelector(".close-evaluated-ingredients-window"),
+  ];
+  mobileCloseBtns.forEach((btn) => {
+    if (
+      window.getComputedStyle(btn).display !== "none" &&
+      window.getComputedStyle(btn.closest(".window")).display !== "none"
+    ) {
+      btn.click();
+    }
+  });
 
   breadcrumbs.forEach((breadcrumb) => {
-    breadcrumb.classList.toggle("active");
+    document.querySelector(breadcrumb).classList.toggle("active");
   });
   elmsToToggleVisibility.forEach((elm) => {
-    elm.classList.toggle("hidden");
+    document.querySelector(elm).classList.toggle("hidden");
   });
 };
 
@@ -236,6 +246,7 @@ const getRandomInt = function (min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
+console.log(getRandomInt(0, 0));
 const modifyLikedIngrArr = function (likedIngrArr) {
   //take an array made of all ingredients that the user likes
   //some ingredients are labeled as main/principal, for example chicken,
@@ -279,25 +290,26 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   const likedIngredientsSecondary = likedIngrArr.filter((ingr) => {
     return !mainIngredientsCollection.includes(ingr);
   });
+  console.log("oled ingr", likedIngrArr);
   console.log("likedIngredientsmain", likedIngredientsMain);
   console.log("likedIngredientsSecondary", likedIngredientsSecondary);
 
   //because from all liked ingredients only one main ingr wil be used
   //the resulting array length will be calculated based on secondary ingr + the main one
-  const resultArrLength =
-    likedIngredientsSecondary.length + 1 >= 4
-      ? 4
-      : likedIngredientsSecondary.length + 1;
-  const indexes = new Set();
-  const likedIngrArrContainsMainIngredient = mainIngredientsCollection.some(
-    (ingr) => {
-      return likedIngrArr.includes(ingr);
-    }
-  );
+  const numberOfMainIngrToInclude = likedIngredientsMain.length ? 1 : 0;
+  const numberOfSecondaryIngrToInclude =
+    likedIngredientsSecondary.length >= 3
+      ? 3
+      : likedIngredientsSecondary.length;
 
-  while (indexes.size < 1 && likedIngrArrContainsMainIngredient) {
-    const index = getRandomInt(0, likedIngrArr.length - 1);
-    if (mainIngredientsCollection.includes(likedIngrArr[index])) {
+  const resultArrLength =
+    numberOfMainIngrToInclude + numberOfSecondaryIngrToInclude;
+
+  const indexes = new Set();
+
+  while (indexes.size < 1 && likedIngredientsMain.length) {
+    const index = getRandomInt(0, likedIngredientsMain.length - 1);
+    if (mainIngredientsCollection.includes(likedIngredientsMain[index])) {
       indexes.add(index);
     }
   }
@@ -333,7 +345,7 @@ const getRecipesBasedOnUsersIngredients = async function (userId) {
     };
     console.log("ce pula mea");
     const ingredientsObj = await getIngredients(userId);
-    console.log(ingredientsObj);
+    console.log("ingr obj", ingredientsObj);
     const ingredientsArr = ingredientsObj
       ? Object.entries(ingredientsObj)
       : Object.entries(dummyData);
@@ -588,6 +600,68 @@ const renderRecipeCard = function (recipe) {
   container.insertAdjacentHTML("afterbegin", html);
 };
 
+const toggleEvaluatedIngrVisibility = function () {
+  const evaluatedIngrContainer = document.querySelector(
+    ".evaluated-ingredients-wrapper"
+  );
+  const ingrToEvalContainer = document.querySelector(
+    ".ingredients-to-evaluate"
+  );
+  const displayEvaluatedIngrBtn = document.querySelector(
+    ".display-evaluated-ingredients-btn"
+  );
+  const closeEvalIngrWindowBtn = document.querySelector(
+    ".close-evaluated-ingredients-window"
+  );
+
+  evaluatedIngrContainer.classList.toggle("flex");
+  ingrToEvalContainer.classList.toggle("hidden");
+  displayEvaluatedIngrBtn.classList.toggle("hidden");
+  closeEvalIngrWindowBtn.classList.toggle("inline");
+};
+const toggleLikedRecipesVisibility = function () {
+  const likedRecipesContainer = document.querySelector(".liked-recipes");
+  const swiperComponent = document.querySelector(".swiper-component");
+  const displayLikedRecipesBtn = document.querySelector(
+    ".display-liked-recipes-btn"
+  );
+  const closeLikedRecipesWindow = document.querySelector(
+    ".close-liked-recipes-window"
+  );
+
+  likedRecipesContainer.classList.toggle("grid");
+  swiperComponent.classList.toggle("hidden");
+  displayLikedRecipesBtn.classList.toggle("hidden");
+  closeLikedRecipesWindow.classList.toggle("inline");
+};
+
+const handleCloseBtnsVisibility = function () {
+  const closeLikedRecipesWindow = document.querySelector(
+    ".close-liked-recipes-window"
+  );
+  const closeEvalIngrWindowBtn = document.querySelector(
+    ".close-evaluated-ingredients-window"
+  );
+  const viewportWidth = window.innerWidth;
+
+  closeLikedRecipesWindow.classList.add("hidden");
+  closeEvalIngrWindowBtn.classList.add("hidden");
+
+  if (viewportWidth > 800) return;
+  closeEvalIngrWindowBtn.classList.remove("hidden");
+  if (viewportWidth > 700) return;
+  closeLikedRecipesWindow.classList.remove("hidden");
+};
+handleCloseBtnsVisibility();
+
+const debounce = function (callback) {
+  let timer;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(callback, 50);
+  };
+};
+
 const addEventListeners = function () {
   const breadcrumbBtns = document.querySelectorAll(".breadcrumb");
   breadcrumbBtns.forEach((btn) =>
@@ -601,5 +675,34 @@ const addEventListeners = function () {
   const swipeLeftBtn = document.querySelector(".action-btns__btn__dislike");
   swipeRightBtn.addEventListener("click", swipeRight);
   swipeLeftBtn.addEventListener("click", swipeLeft);
+  const displayEvaluatedIngrBtn = document.querySelector(
+    ".display-evaluated-ingredients-btn"
+  );
+  displayEvaluatedIngrBtn.addEventListener(
+    "click",
+    toggleEvaluatedIngrVisibility
+  );
+  const closeEvalIngrWindowBtn = document.querySelector(
+    ".close-evaluated-ingredients-window"
+  );
+  closeEvalIngrWindowBtn.addEventListener(
+    "click",
+    toggleEvaluatedIngrVisibility
+  );
+  const displayLikedRecipesBtn = document.querySelector(
+    ".display-liked-recipes-btn"
+  );
+  displayLikedRecipesBtn.addEventListener(
+    "click",
+    toggleLikedRecipesVisibility
+  );
+  const closeLikedRecipesWindow = document.querySelector(
+    ".close-liked-recipes-window"
+  );
+  closeLikedRecipesWindow.addEventListener(
+    "click",
+    toggleLikedRecipesVisibility
+  );
+  window.addEventListener("resize", debounce(handleCloseBtnsVisibility));
 };
 addEventListeners();

@@ -142,3 +142,7 @@ export const throwError = function (errorCode) {
 export const displayNotification = function (notificationText) {
   document.dispatchEvent(new NotificationEvent(notificationText));
 };
+export const extractRecipeId = function (recipe) {
+  const id = recipe.uri.slice(recipe.uri.indexOf("recipe_") + 7);
+  return id;
+};

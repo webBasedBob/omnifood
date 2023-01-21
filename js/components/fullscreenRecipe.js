@@ -1,31 +1,74 @@
 import BaseComponent from "./baseComponent.js";
-import { toTitleCase, extractRecipeId } from "./../reusableFunctions.js";
+import {
+  toTitleCase,
+  extractRecipeId,
+  throwError,
+} from "./../reusableFunctions.js";
 
-//development paused foe this component
-//the component isn't tested - may be some methods that dont work properly
-
-//please update the html before working on this class, it was changed a bit
-
-class FullscreenRecipe {
+class FullscreenRecipe extends BaseComponent {
   constructor() {
     super();
     this.component = document.querySelector(".full-screen-recipe");
-    this.title = component.querySelector(".title");
-    this.ingredientsList = component.querySelector(".list");
-    this.recipeImage = component.querySelector(".front-image");
+    this.title = this.component.querySelector(".title");
+    this.ingredientsList = this.component.querySelector(".list");
+    this.recipeImage = this.component.querySelector(".front-image");
+    this.recipeSearchResults = [];
   }
-  setCurrentRecipe(recipe) {
-    this.currentRecipe = recipe;
-    this.currentRecipeID = extractRecipeId(recipe);
+
+  open(e) {
+    const recipeId = e.target.closest(".recipe-result").dataset.recipeid;
+    const targetRecipe = this.recipeSearchResults.find((recipe, index) => {
+      this.currentRecipeIndex = index;
+      return recipe.id === recipeId;
+    });
+    this.updateProperties(targetRecipe);
+    this.display();
   }
-  display(recipe) {
+
+  display() {
     this.resetFields();
-    this.insertTitle(recipe.label);
-    recipe.ingredients.forEach((ingrObj) => {
+    this.component.dataset.recipeid = this.currentRecipeID;
+    this.insertTitle(this.currentRecipe.label);
+    this.currentRecipe.ingredients.forEach((ingrObj) => {
       this.insertIngredient(ingrObj.food);
     });
-    this.insertImg(recipe.image);
+    this.insertImg(this.currentRecipe.image);
+    this.hideSiblings();
     super.display();
+  }
+
+  hide() {
+    document.body.style.height = ``;
+    super.hide();
+  }
+
+  hideSiblings() {
+    document.body.style.height = "100vh";
+  }
+
+  nextRecipe() {
+    try {
+      this.currentRecipeIndex++;
+      this.updateProperties(this.recipeSearchResults[this.currentRecipeIndex]);
+      this.display();
+    } catch (error) {
+      throwError("no-recipes-left-end");
+    }
+  }
+
+  prevRecipe() {
+    try {
+      this.currentRecipeIndex--;
+      this.updateProperties(this.recipeSearchResults[this.currentRecipeIndex]);
+      this.display();
+    } catch (error) {
+      throwError("no-recipes-left-beginning");
+    }
+  }
+
+  updateProperties(newRecipe) {
+    this.currentRecipe = newRecipe;
+    this.currentRecipeID = extractRecipeId(newRecipe);
   }
 
   insertTitle(text) {
@@ -37,6 +80,7 @@ class FullscreenRecipe {
       `<p class="list-item">${toTitleCase(text)}</p>`
     );
   }
+
   insertImg(src) {
     this.recipeImage.src = src;
   }
@@ -44,12 +88,30 @@ class FullscreenRecipe {
     this.title.innerText = ``;
     this.ingredientsList.innerText = ``;
     this.recipeImage.src = ``;
+    this.component.dataset.recipeid = ``;
   }
+
   getHTML() {
-    return `<section class="full-screen-recipe">
+    return `<section data-recipeid="" class="full-screen-recipe hidden">
     <div class="content">
+      <div class="close-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
       <div class="text">
-        <div class="close-btn">
+        <div class="save-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -61,11 +123,11 @@ class FullscreenRecipe {
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
             />
           </svg>
         </div>
-  
+
         <div class="next-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -98,32 +160,12 @@ class FullscreenRecipe {
             />
           </svg>
         </div>
-        <div class="save-btn">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-            />
-          </svg>
-        </div>
+
         <h2 class="title"></h2>
-        <div class="list">
-        </div>
+        <div class="list"></div>
       </div>
       <div class="images">
-        <img
-          src=""
-          alt=""
-          class="front-image"
-        />
+        <img src="https://pulamea.com/.jpg" alt="" class="front-image" />
       </div>
     </div>
   </section>`;

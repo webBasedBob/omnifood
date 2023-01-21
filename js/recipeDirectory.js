@@ -1,65 +1,72 @@
 import {
   enableCarouselFunctionality,
   cleanStrFromSymbolsAndUselessSpaces,
+  toTitleCase,
+  throwError,
+  displayNotification,
+  extractRecipeId,
 } from "./reusableFunctions.js";
-// // making the nav sticky
-// const stickyNav = function (entries) {
-//   const [entry] = entries;
-//   if (!entry.isIntersecting) body.classList.add("sticky");
-//   if (entry.isIntersecting) body.classList.remove("sticky");
-// };
 
-// const body = document.querySelector("body");
-// const heroSection = document.querySelector(".section-hero");
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+  updatePhoneNumber,
+  updateEmail,
+  updatePassword,
+  sendPasswordResetEmail,
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  verifyIdToken,
+} from "firebase/auth";
+import ErrorPopup from "./components/errorComponent.js";
+import Notification from "./components/notificationComponent.js";
+import authModal from "./../js/components/authComponent.js";
+import FullscreenRecipe from "./components/fullscreenRecipe.js";
 
-// const navObserver = new IntersectionObserver(stickyNav, {
-//   root: null,
-//   threshold: 0.12,
-// });
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  listAll,
+  uploadBytes,
+} from "firebase/storage";
 
-// navObserver.observe(heroSection);
-// // smooth scroling - used event delegation 😉
-// const heroSectionTextBox = document.querySelector(".hero-text-box");
-// heroSectionTextBox.addEventListener("click", function (e) {
-//   e.preventDefault();
-//   console.log(e.target);
-//   if (e.target.tagName == "A") {
-//     const scrollTo = document.querySelector(e.target.getAttribute("href"));
-//     scrollTo.scrollIntoView({ behavior: "smooth" });
-//   }
-// });
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-// import {
-//   onAuthStateChanged,
-//   getAuth,
-// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
-//   authDomain: "omnifood-custom-version.firebaseapp.com",
-//   databaseURL:
-//     "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
-//   projectId: "omnifood-custom-version",
-//   storageBucket: "omnifood-custom-version.appspot.com",
-//   messagingSenderId: "1094073505469",
-//   appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
-//   measurementId: "G-1DT1EYNVPW",
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const auth = getAuth(app);
-// let user;
-// onAuthStateChanged(auth, (curUser) => {
-//   if (curUser) {
-//     console.log("puls");
-//     console.log(curUser);
-//   } else {
-//   }
-// });
-//
-//
+import {
+  storeIngredient,
+  getIngredients,
+  storeRecipe,
+  getRecipes,
+} from "./liveDatabaseFunctions.js";
 
 //hiding the carousel for now
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+  authDomain: "omnifood-custom-version.firebaseapp.com",
+  databaseURL:
+    "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "omnifood-custom-version",
+  storageBucket: "omnifood-custom-version.appspot.com",
+  messagingSenderId: "1094073505469",
+  appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+  measurementId: "G-1DT1EYNVPW",
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+let user;
+
+onAuthStateChanged(auth, async (curUser) => {
+  if (curUser) {
+    user = auth.currentUser;
+  } else {
+  }
+});
 
 document.querySelector("#trending-foods").classList.add("hidden");
 
@@ -91,8 +98,6 @@ enableCarouselFunctionality(
   "arrow-left",
   "arrow-right"
 );
-
-let searchResults = [];
 
 const createUrl = function () {
   let resultUrl = [`https://api.edamam.com/api/recipes/v2?type=any`];
@@ -140,11 +145,6 @@ const retreiveRecipesFromApi = async function (url) {
   return recipesArr;
 };
 
-const storeRecipesGlobally = function (recipesArr) {
-  searchResults = recipesArr.map((recipe) => {
-    return { ...recipe, id: extractRecipeId(recipe) };
-  });
-};
 const createRelevanceScores = function (recipesArr) {
   recipesArr.forEach((recipe) => {
     recipe.relevanceScore = 0;
@@ -191,7 +191,7 @@ const renderResults = function (recipesArr) {
     <img src="${recipe.images.REGULAR.url}"/>
     <p class="recipe-result-title">${recipe.label}</p>
   </div>`;
-    recipeResultsContainer.insertAdjacentHTML("afterbegin", htmmlToInsert);
+    recipeResultsContainer.insertAdjacentHTML("beforeend", htmmlToInsert);
   });
 };
 const emptyOutResultsContainer = function () {
@@ -220,9 +220,6 @@ const recipeSearch = async function () {
   hideLoader();
 };
 
-//fn to expand the recipe
-//fn to save the recipe to favorites - maybe
-
 const selectFilter = function (e) {
   if (e.target.classList.contains("selected")) {
     e.target.classList.remove("selected");
@@ -241,6 +238,90 @@ const clearSearchInputField = function () {
 const SearchByPressingEnter = function (e) {
   if (e.key === "Enter") recipeSearch();
 };
+
+const storeRecipesGlobally = function (recipesArr) {
+  FullscreenRecipe.recipeSearchResults = recipesArr.map((recipe) => {
+    return { ...recipe, id: extractRecipeId(recipe) };
+  });
+};
+
+//
+//
+//the fowwlowing code is copyed from choosemeals.js
+//
+//
+//
+
+const saveBlobToFirebase = async function (blob, blobName) {
+  //takes a blob and stores it to firebase cloud storage
+  //firebase cloud storage accepts only blobs or files
+  try {
+    const storage = getStorage();
+    const blobRef = ref(storage, `recipeImages/${blobName}.jpeg`);
+    await uploadBytes(blobRef, blob);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getImgUrl = async function (imgName) {
+  //gets the URL of the image storead as a blob on firebase cloud storage
+  //img name is the corresponding recipe's ID
+  try {
+    const storage = getStorage();
+    const imgRef = ref(storage, `recipeImages/${imgName}.jpeg`);
+    const url = await getDownloadURL(imgRef);
+    return url;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchWithCORS = async function (url) {
+  //image response  from edamam API lack CORS headers, so
+  //i use this CORS proxy API to make requests and return responses to me with the CORS headers
+  const corsApiUrl = "https://cors-anywhere.herokuapp.com/";
+  return await fetch(corsApiUrl + url);
+};
+
+const createBlobImg = async function (imgSrc) {
+  //takes a img src URL, fetches it through CORS proxy API and
+  //turns the returned img into a blob
+  const img = await fetchWithCORS(imgSrc);
+  const blob = await img.blob();
+  return blob;
+};
+
+const storeImgAndReturnUrl = async function (imgSrc, imgName) {
+  //gets an img from a URL, turns it into a blob, stores the blob to firebase storage,
+  //gets it's URl back and returns it
+  const blob = await createBlobImg(imgSrc);
+  await saveBlobToFirebase(blob, imgName);
+  const url = await getImgUrl(imgName);
+  return url;
+};
+
+const handleSaveRecipe = async function (e) {
+  if (!user) {
+    throwError("log-in-required");
+    return;
+  }
+  const recipeCard = document.querySelector(".full-screen-recipe");
+  const recipeName = recipeCard.querySelector(".title").innerText;
+  const recipeImageSrc = recipeCard.querySelector("img").src;
+  console.log("imgsrc", recipeImageSrc);
+  const recipeID = recipeCard.dataset.recipeid;
+  console.log("recipeid", recipeID);
+  // renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
+  // recipeCard.remove();
+  // renderNextRecipeCard();
+  const firebaseRecipeImgSrc = await storeImgAndReturnUrl(
+    recipeImageSrc,
+    recipeID
+  );
+  storeRecipe(user.uid, recipeID, firebaseRecipeImgSrc, recipeName, "liked");
+};
+
 const addEventListeners = function () {
   const filtersContainer = document.querySelector(".carousels-container");
   const searchBtn = document.querySelector(".btn-search");
@@ -250,5 +331,37 @@ const addEventListeners = function () {
   searchBtn.addEventListener("click", recipeSearch);
   clearSearchBarBtn.addEventListener("click", clearSearchInputField);
   document.addEventListener("keydown", SearchByPressingEnter);
+
+  //events for full screen recipe
+  const resultsContainer = document.querySelector(".recipe-results");
+  resultsContainer.addEventListener(
+    "click",
+    FullscreenRecipe.open.bind(FullscreenRecipe)
+  );
+  const fullscreenCloseBtn = document.querySelector(
+    ".full-screen-recipe .close-btn"
+  );
+  fullscreenCloseBtn.addEventListener(
+    "click",
+    FullscreenRecipe.hide.bind(FullscreenRecipe)
+  );
+  const saveBtn = document.querySelector(".save-btn");
+  const nextBtn = document.querySelector(".next-btn");
+  const prevBtn = document.querySelector(".prev-btn");
+  saveBtn.addEventListener("click", handleSaveRecipe);
+  nextBtn.addEventListener(
+    "click",
+    FullscreenRecipe.nextRecipe.bind(FullscreenRecipe)
+  );
+  prevBtn.addEventListener(
+    "click",
+    FullscreenRecipe.prevRecipe.bind(FullscreenRecipe)
+  );
+  //error and notif event listeners
+  document.addEventListener("error", ErrorPopup.display.bind(ErrorPopup));
+  document.addEventListener(
+    "notification",
+    Notification.display.bind(Notification)
+  );
 };
 addEventListeners();

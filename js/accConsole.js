@@ -1,6 +1,4 @@
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 import { initializeApp } from "firebase/app";
-// // import {} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -17,7 +15,22 @@ import {
   EmailAuthProvider,
   verifyIdToken,
 } from "firebase/auth";
-//"https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+import {
+  getDatabase,
+  set,
+  ref,
+  get,
+  onValue,
+  child,
+  push,
+  update,
+} from "firebase/database";
+
+import ErrorPopup from "./components/errorComponent.js";
+import Notification from "./components/notificationComponent.js";
+import authModal from "./../js/components/authComponent.js";
+import { throwError, displayNotification } from "./reusableFunctions.js";
+import NotLoggedInScreen from "./components/notLoggedInComponent.js";
 
 const mobileNavFunctionality = function () {
   const btnNavEl = document.querySelector(".btn-mobile-nav");
@@ -30,27 +43,14 @@ const mobileNavFunctionality = function () {
 mobileNavFunctionality();
 
 // DOM manipulation code
-const renderUserInfo = function () {
+const renderUserInfo = async function () {
   const userName = document.querySelector(".acc-info-cur-data.name");
   const userEmail = document.querySelector(".acc-info-cur-data.email");
   const userPhone = document.querySelector(".acc-info-cur-data.phone");
 
   userName.innerText = user.displayName || "-";
   userEmail.innerText = user.email || "-";
-  userPhone.innerText = user.phoneNumber || "-";
-};
-
-const displayNotLoggedInScreen = function () {
-  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
-  notLoggedInScreen.classList.remove("hidden");
-};
-
-const displayAuthModal = function () {
-  const overlay = document.querySelector(".overlay-container");
-  const authModal = document.querySelector(".auth-modal");
-
-  overlay.classList.remove("hidden");
-  authModal.classList.remove("hidden");
+  userPhone.innerText = (await getPhoneNo()) || "-";
 };
 
 const displayAccountConsole = function () {
@@ -63,16 +63,6 @@ const hideAccountConsole = function () {
   const accountConsole = document.querySelector(".console-wrapper");
 
   accountConsole.classList.add("hidden");
-};
-
-const hideAuthModal = function () {
-  const overlay = document.querySelector(".overlay-container");
-  const authModal = document.querySelector(".auth-modal");
-  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
-
-  overlay.classList.add("hidden");
-  authModal.classList.add("hidden");
-  notLoggedInScreen.classList.add("hidden");
 };
 
 const openAccountSetting = function (e) {
@@ -107,86 +97,6 @@ const hideAccInfoEditForm = function (e) {
   editBtn.classList.remove("hidden");
 };
 
-class ErrorHandler {
-  #errorsDictionary = {
-    "auth/network-request-failed":
-      "Operation failed due to network issues, please check your internet connection",
-    "auth/email-already-in-use":
-      "The email you entered is already associated with an account, please log in instead",
-    "auth/wrong-password": "Wrong password, please try again!",
-    "auth/too-many-requests":
-      "Access to this account has been temporarily disabled due to many failed login attempts. Reset your password or log in later!",
-    "auth/user-not-found":
-      "Email adress does not match any account, please make sure it is spelled correctly or create an new account!",
-    "auth/quota-exceeded":
-      "The maximim number of name changes was exceeded, please try again later!",
-  };
-  #errorModal = document.querySelector(".error-overlay");
-  #errorMessageContainer = this.#errorModal.querySelector(".error-message");
-  renderError(error) {
-    this.#errorMessageContainer.innerText =
-      this.#errorsDictionary[error.code] || error.message;
-    this.#errorModal.classList.remove("hidden");
-  }
-}
-const errorHandler = new ErrorHandler();
-
-const closeErrorModal = function () {
-  const errorModalContainer = document.querySelector(".error-overlay");
-  errorModalContainer.classList.add("hidden");
-};
-
-const renderNotification = function (message) {
-  const notificationWindow = document.querySelector(
-    ".action-result-notification-pop-up"
-  );
-  const notifMessageContainer = document.querySelector(".notification-text");
-
-  notifMessageContainer.innerText = message;
-  notificationWindow.classList.remove("hidden");
-  setTimeout(() => {
-    notificationWindow.classList.add("hidden");
-  }, 3000);
-};
-const hideAllAuthForms = function () {
-  const allAuthFormContainers = document.querySelectorAll(
-    ".action-elements-container"
-  );
-
-  allAuthFormContainers.forEach((formContainer) => {
-    if (formContainer.classList.contains("choose-action-container")) return;
-    formContainer.classList.add("hidden");
-  });
-};
-
-const switchAuthMethodForm = function (e) {
-  const chooseAuthMethodTargetBtn = e.target;
-  const neighbourChooseAuthMethodBtn =
-    chooseAuthMethodTargetBtn.nextElementSibling ||
-    chooseAuthMethodTargetBtn.previousElementSibling;
-  const authMethod = chooseAuthMethodTargetBtn.classList.contains(
-    "choose-action-login"
-  )
-    ? "login"
-    : "sign-up";
-  const formElmToDisplay = document.querySelector(`.${authMethod}-container`);
-
-  chooseAuthMethodTargetBtn.classList.add("btn-active");
-  neighbourChooseAuthMethodBtn.classList.remove("btn-active");
-  hideAllAuthForms();
-  formElmToDisplay.classList.remove("hidden");
-};
-
-const displayForgorPswForm = function () {
-  const authFormToDisplay = document.querySelector(".forgot-psw-container");
-  const chooseAuthMethodBtns = Array.from(
-    document.querySelector(".choose-action-container").children
-  );
-
-  chooseAuthMethodBtns.forEach((btn) => btn.classList.remove("btn-active"));
-  hideAllAuthForms();
-  authFormToDisplay.classList.remove("hidden");
-};
 const hideLogOutBtn = function () {
   document.querySelector(".log-out-btn").classList.add("hidden");
 };
@@ -276,14 +186,17 @@ const hasCustomRole = async function (claim) {
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     displayAccountConsole();
-    hideAuthModal();
+    NotLoggedInScreen.hide();
     user = auth.currentUser;
     renderUserInfo();
     displayLogOutBtn();
     console.log(user);
     console.log(await hasCustomRole("recruiter"));
+    renderAdresses();
+    renderDeliveryTimes();
+    renderComplaints();
   } else {
-    displayNotLoggedInScreen();
+    NotLoggedInScreen.display();
     hideLogOutBtn();
   }
 });
@@ -294,38 +207,7 @@ const logOutUser = async function () {
     hideAccountConsole();
     hideLogOutBtn();
   } catch (error) {
-    errorHandler.renderError(error);
-  }
-};
-
-const signUp = async function (e) {
-  e.preventDefault();
-  const signUpForm = document.querySelector(".sign-up-container");
-  if (!signUpForm.reportValidity()) return;
-
-  const email = document.querySelector("#sign-up-email").value;
-  const password = document.querySelector("#sign-up-psw").value;
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    renderNotification("Account created, you are now logged in!");
-  } catch (error) {
-    errorHandler.renderError(error);
-  }
-};
-
-const logIn = async function (e) {
-  e.preventDefault();
-  const loginForm = document.querySelector(".login-container");
-  if (!loginForm.reportValidity()) return;
-
-  const email = document.querySelector("#login-email").value;
-  const password = document.querySelector("#login-psw").value;
-  try {
-    const logIn = await signInWithEmailAndPassword(auth, email, password);
-    user = logIn.user;
-    console.log(user);
-  } catch (error) {
-    errorHandler.renderError(error);
+    throwError(error.code);
   }
 };
 
@@ -340,10 +222,10 @@ const updateAccName = async function (e) {
     await updateProfile(auth.currentUser, {
       displayName: newName,
     });
-    renderNotification("Name updated");
+    displayNotification("Name updated");
     currentNameElm.innerText = newName || "-";
   } catch (error) {
-    errorHandler.renderError(error);
+    throwError(error.code);
   }
 };
 
@@ -365,7 +247,7 @@ const updateEmailOnFirebase = async function (newEmail) {
     await updateEmail(auth.currentUser, newEmail);
     const currentEmailElm = document.querySelector(".acc-info-cur-data.email");
     currentEmailElm.innerText = newEmail;
-    renderNotification("Email changed successfully");
+    displayNotification("Email changed successfully");
   } catch (error) {
     if (error.code === "auth/requires-recent-login") {
       const psw = await promptUserForPsw();
@@ -374,9 +256,9 @@ const updateEmailOnFirebase = async function (newEmail) {
         await reauthenticateWithCredential(user, credentials);
         updateEmailOnFirebase(newEmail);
       } catch (error) {
-        errorHandler.renderError(error);
+        throwError(error.code);
       }
-    } else errorHandler.renderError(error);
+    } else throwError(error.code);
   }
 };
 
@@ -392,7 +274,7 @@ const updatAccEmail = function (e) {
 const changePswOnFirebase = async function (newPassword, oldPsw) {
   try {
     await updatePassword(user, newPassword);
-    renderNotification("Password changed successfully!");
+    displayNotification("Password changed successfully!");
   } catch (error) {
     if (error.code === "auth/requires-recent-login") {
       try {
@@ -400,9 +282,9 @@ const changePswOnFirebase = async function (newPassword, oldPsw) {
         await reauthenticateWithCredential(user, credentials);
         changePswOnFirebase(newPassword);
       } catch (error) {
-        errorHandler.renderError(error);
+        throwError(error.code);
       }
-    } else errorHandler.renderError(error);
+    } else throwError(error.code);
   }
 };
 
@@ -426,9 +308,9 @@ const sendPswResetEmail = async function (email) {
   try {
     const targetEmail = user?.email || email;
     await sendPasswordResetEmail(auth, targetEmail);
-    renderNotification("Password reset email sent, check your inbox!");
+    displayNotification("Password reset email sent, check your inbox!");
   } catch (error) {
-    errorHandler.renderError(error);
+    throwError(error.code);
   }
 };
 
@@ -444,7 +326,7 @@ const forgotPswSendEmail = function (e) {
 const deleteUserAccount = async function (currentPsw) {
   try {
     await deleteUser(user);
-    renderNotification("Account deleted successfully");
+    displayNotification("Account deleted successfully");
   } catch (error) {
     if (error.code === "auth/requires-recent-login") {
       try {
@@ -452,9 +334,9 @@ const deleteUserAccount = async function (currentPsw) {
         await reauthenticateWithCredential(user, credentials);
         deleteUserAccount();
       } catch (error) {
-        errorHandler.renderError(error);
+        throwError(error.code);
       }
-    } else errorHandler.renderError(error);
+    } else throwError(error.code);
   }
 };
 
@@ -463,6 +345,231 @@ const deleteAccount = function () {
   deleteUserAccount(currentPsw);
 };
 
+const handleSectionSelection = function (e) {
+  //handles the display/hide behavior of the page's section
+  const targetBtn = e.target.closest(".console-category");
+  if (!targetBtn) return;
+
+  //style the clicked button only
+  const siblingBtns = document.querySelectorAll(".console-category");
+  siblingBtns.forEach((btn) => {
+    btn.classList.remove("selected");
+  });
+  targetBtn.classList.add("selected");
+
+  //display the target section only
+  const targetSection = document.querySelector(
+    `.${targetBtn.dataset.targetSection}`
+  );
+  const sections = document.querySelectorAll(".content > div");
+  sections.forEach((section) => {
+    section.classList.add("hidden");
+  });
+  targetSection.classList.remove("hidden");
+};
+
+const handleComplaintSubmissionModalDisplay = function () {
+  const modal = document.querySelector(
+    ".complaint-modal__overlay__new-complaint"
+  );
+  modal.classList.toggle("hidden");
+};
+
+const getAdresses = function () {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const adressesReference = ref(db, `users/${user.uid}/adresses`);
+    onValue(adressesReference, (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};
+
+const renderAdresses = async function () {
+  const adresses = await getAdresses();
+  const adressesContainer = document.querySelector(".adresses");
+  adressesContainer.innerHTML = "";
+  for (let adress in adresses) {
+    const html = `
+      <div class="adress">
+        <input type="checkbox" id="${adress}" ${
+      adresses[adress] === "primary" ? "checked" : ""
+    }/>
+        <label for="${adress}" class="acc-info-cur-data adress"
+          >${adress}</label
+        >
+      </div>`;
+    adressesContainer.insertAdjacentHTML("afterbegin", html);
+  }
+};
+
+const addAdress = async function (e) {
+  e.preventDefault();
+  const storedAdresses = await getAdresses();
+  const db = getDatabase(app);
+  const adressesReference = ref(db, `users/${user.uid}/adresses`);
+  const adress = document.querySelector("#add-acc-adress").value;
+  const dataToStore = { [adress]: storedAdresses ? "secondary" : "primary" };
+  update(adressesReference, dataToStore);
+  renderAdresses();
+};
+
+const getDeliveryTimes = function () {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const reference = ref(db, `users/${user.uid}/deliveryTimes`);
+    onValue(reference, (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};
+
+const renderDeliveryTimes = async function () {
+  const deliveryTimes = await getDeliveryTimes();
+  const deliveryTimesContainer = document.querySelector(".delivery-times");
+  deliveryTimesContainer.innerHTML = "";
+  for (let key in deliveryTimes) {
+    const html = `<p class="acc-info-cur-data delivery-time">${key}</p>`;
+    deliveryTimesContainer.insertAdjacentHTML("afterbegin", html);
+  }
+};
+
+const addDeliveryTime = async function (e) {
+  e.preventDefault();
+  const db = getDatabase(app);
+  const adressesReference = ref(db, `users/${user.uid}/deliveryTimes`);
+  const deliveryTime = document.querySelector("#add-delivery-time").value;
+  const dataToStore = {
+    [deliveryTime]: "placeholder",
+  };
+  update(adressesReference, dataToStore);
+  renderDeliveryTimes();
+};
+
+const getPhoneNo = async function () {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const reference = ref(db, `users/${user.uid}/phone`);
+    onValue(reference, (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};
+
+const updatePhoneNoFirebase = function (phoneNo) {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const reference = ref(db, `users/${user.uid}`);
+    update(reference, { phone: phoneNo });
+    resolve("");
+  });
+};
+
+const changePhoneNumber = async function (e) {
+  e.preventDefault();
+  // const formContainer = document.querySelectorAll(".edit-acc-info-section")[2];
+  // if (!formContainer.reportValidity()) return;
+
+  const newPhoneNo = document.querySelector("#change-acc-phone").value;
+  const currentPhoneNo = document.querySelector(".acc-info-cur-data.phone");
+  try {
+    await updatePhoneNoFirebase(newPhoneNo);
+    displayNotification("Phone number updated");
+    currentPhoneNo.innerText = newPhoneNo || "-";
+  } catch (error) {
+    throwError(error.code);
+  }
+};
+
+const storeComplaint = function () {
+  const subject = document.querySelector(".complaint-modal__subject").value;
+  const body = document.querySelector(
+    ".complaint-modal__overlay__new-complaint .complaint-modal__text"
+  ).value;
+  const db = getDatabase(app);
+  const reference = ref(db, `complaints/${user.uid}`);
+  const dataToStore = { [subject]: { body: body } };
+  update(reference, dataToStore);
+};
+
+const resetComplaintForm = function () {
+  const inputToReset = [
+    document.querySelector(
+      ".complaint-modal__overlay__new-complaint .complaint-modal__subject"
+    ),
+    document.querySelector(
+      ".complaint-modal__overlay__new-complaint .complaint-modal__text"
+    ),
+  ];
+  inputToReset.forEach((elm) => {
+    elm.value = "";
+  });
+};
+
+const submitComplaint = async function () {
+  storeComplaint();
+  resetComplaintForm();
+  handleComplaintSubmissionModalDisplay();
+};
+
+const getComplaints = function () {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const reference = ref(db, `complaints/${user.uid}`);
+    onValue(reference, (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};
+
+const renderComplaints = async function () {
+  const complaints = await getComplaints();
+  const complaintsContainer = document.querySelector(".complaint-table tbody");
+  complaintsContainer.innerHTML = "";
+  for (let complaint in complaints) {
+    const html = `
+    <tr>
+    <td class="complaint-table__complaint-name">
+    ${complaint}
+    </td>
+    <td class="complaint-table__complaint-status">${
+      complaints[complaint].status || "pending"
+    }</td>
+    </tr>`;
+    complaintsContainer.insertAdjacentHTML("afterbegin", html);
+  }
+};
+
+const getComplaint = function (complainSubject) {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase(app);
+    const reference = ref(db, `complaints/${user.uid}/${complainSubject}`);
+    onValue(reference, (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};
+const renderOldComplaint = function (complaintObj) {
+  document.querySelector(".complaint-modal__title").innerText =
+    complaintObj.subject || "";
+  document.querySelector(".complaint-modal__compaint-text").innerText =
+    complaintObj.body || "";
+  document.querySelector(".complaint-modal__text__response").innerText =
+    complaintObj.adminResponseBody || "No response yet, complaint is pending";
+};
+const toggleOldComplaintVisibility = function () {
+  document
+    .querySelector(".complaint-modal__overlay__old-complaint")
+    .classList.toggle("hidden");
+};
+const openComplaint = async function (e) {
+  if (!e.target.classList.contains("complaint-table__complaint-name")) return;
+  const firebaseComplaint = await getComplaint(e.target.innerText);
+  const targetComplaint = { subject: e.target.innerText, ...firebaseComplaint };
+  console.log(targetComplaint);
+  renderOldComplaint(targetComplaint);
+  toggleOldComplaintVisibility();
+};
 //
 //
 //
@@ -471,7 +578,7 @@ const deleteAccount = function () {
 //
 //
 const addEventListeners = function () {
-  const authMeBtn = document.querySelector(".auth-me");
+  // const authMeBtn = document.querySelector(".auth-me");
   const expandedSettingsContainer = document.querySelector(
     ".acc-actions-container"
   );
@@ -484,18 +591,7 @@ const addEventListeners = function () {
   const changePswBtn = document.querySelector(".change-psw-btn");
   const sendPswResetBtn = document.querySelector(".send-psw-reset-btn");
   const deleteAccBtn = document.querySelector(".delete-acc-btn");
-  const closeErrorModalBtn = document.querySelector(".close-error-modal-btn");
-  const forgotPswSwndEmail = document.querySelector(
-    ".take-action-btn.reset-psw-btn"
-  );
-  const displaySignUpFormBtn = document.querySelector(".choose-action-sign-up");
-  const displayLoginFormBtn = document.querySelector(".choose-action-login");
-  const displayForgotPswFormBtn = document.querySelector(".forgot-psw");
-  const signUpBtn = document.querySelector(".sign-up-btn");
-  const loginBtn = document.querySelector(".login-btn");
-  const logOutBtn = document.querySelector(".log-out-btn");
-  const authModalCloseBtn = document.querySelector(".auth-modal-close-btn");
-  authMeBtn.addEventListener("click", displayAuthModal);
+
   expandedSettingsContainer.addEventListener("click", openAccountSetting);
   editAccInfoBtns.forEach((btn) => {
     btn.addEventListener("click", displayAccInfoEditForm);
@@ -511,18 +607,45 @@ const addEventListeners = function () {
   changePswBtn.addEventListener("click", changeAccPsw);
   sendPswResetBtn.addEventListener("click", sendPswResetEmail);
   deleteAccBtn.addEventListener("click", deleteAccount);
-  closeErrorModalBtn.addEventListener("click", closeErrorModal);
-  forgotPswSwndEmail.addEventListener("click", forgotPswSendEmail);
-  displaySignUpFormBtn.addEventListener("click", switchAuthMethodForm);
-  displayLoginFormBtn.addEventListener("click", switchAuthMethodForm);
 
-  displayForgotPswFormBtn.addEventListener("click", displayForgorPswForm);
-  signUpBtn.addEventListener("click", signUp);
-  loginBtn.addEventListener("click", logIn);
+  const logOutBtn = document.querySelector(".log-out-btn");
   logOutBtn.addEventListener("click", logOutUser);
-  authModalCloseBtn.addEventListener("click", () => {
-    hideAuthModal();
-    displayNotLoggedInScreen();
+  //new event listeners
+  document.addEventListener("error", ErrorPopup.display.bind(ErrorPopup));
+  document.addEventListener(
+    "notification",
+    Notification.display.bind(Notification)
+  );
+  const pageSubsections = document.querySelector(".console-categories-panel");
+  pageSubsections.addEventListener("click", handleSectionSelection);
+  const newComplaintVisibilityBtns = [
+    document.querySelector(".leave-complaint-btn"),
+    document.querySelector(
+      ".complaint-modal__overlay__new-complaint .complaint-modal__close-btn"
+    ),
+  ];
+  newComplaintVisibilityBtns.forEach((btn) => {
+    btn.addEventListener("click", handleComplaintSubmissionModalDisplay);
   });
+  const addAdressBtn = document.querySelector(".add-adress-btn");
+  addAdressBtn.addEventListener("click", addAdress);
+
+  const addDeliveryTimeBtn = document.querySelector(".add-delivery-time-btn");
+  addDeliveryTimeBtn.addEventListener("click", addDeliveryTime);
+  const changePhoneNoBtn = document.querySelector(".change-phone-btn");
+  changePhoneNoBtn.addEventListener("click", changePhoneNumber);
+  const submitComplaintBtn = document.querySelector(
+    ".complaint-modal__submit-btn"
+  );
+  submitComplaintBtn.addEventListener("click", submitComplaint);
+  const complaintsContainer = document.querySelector(".complaint-table tbody");
+  complaintsContainer.addEventListener("click", openComplaint);
+  const closeOldComplaintModalBtn = document.querySelector(
+    ".complaint-modal__overlay__old-complaint .complaint-modal__close-btn"
+  );
+  closeOldComplaintModalBtn.addEventListener(
+    "click",
+    toggleOldComplaintVisibility
+  );
 };
 addEventListeners();

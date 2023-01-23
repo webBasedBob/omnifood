@@ -605,18 +605,25 @@ li:not(li:first-child) .acc-info-elm {
   .acc-expanded-setting {
     grid-template-columns: auto;
   }
-  .acc-expanded-setting label {
-    grid-column: 1/-1;
-    grid-row: 1/1;
+  .expanded-delete-acc {
+    &.acc-expanded-setting label {
+      grid-column: 1/-1;
+      grid-row: 1/1;
+    }
+    &.acc-expanded-setting input {
+      grid-column: 1/-1;
+      grid-row: 2/2;
+      width: 100%;
+    }
+    &.acc-expanded-setting button {
+      grid-column: 1/-1;
+      grid-row: 3/3;
+    }
   }
-  .acc-expanded-setting input {
-    grid-column: 1/-1;
-    grid-row: 2/2;
-    width: 100%;
-  }
-  .acc-expanded-setting button {
-    grid-column: 1/-1;
-    grid-row: 3/3;
+  .expanded-change-psw {
+    &.acc-expanded-setting button {
+      grid-column: 1/-1;
+    }
   }
 }
 @media (max-width: 380px) {

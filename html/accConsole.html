@@ -66,7 +66,9 @@
       </div>
     </div>
 
-    <div class="complaint-modal__overlay hidden">
+    <div
+      class="complaint-modal__overlay complaint-modal__overlay__new-complaint hidden"
+    >
       <div class="complaint-modal">
         <div class="complaint-modal__close-btn">
           <svg
@@ -170,11 +172,28 @@
 
     <main class="console-wrapper hidden">
       <section class="console-categories-panel">
-        <div class="console-category plan">Plan</div>
-        <div class="console-category subscription">Subscription</div>
-        <div class="console-category careers">Careers</div>
-        <div class="console-category complaint">Complaint</div>
-        <div class="console-category settings selected">Settings</div>
+        <!-- <div data-targetcontent="" class="console-category plan">Plan</div>
+        <div data-targetcontent="" class="console-category subscription">
+          Subscription
+        </div> -->
+        <div
+          data-targetcontent="account-info"
+          class="console-category acc-info"
+        >
+          Account info
+        </div>
+        <div
+          data-targetcontent="complaint-section"
+          class="console-category complaint"
+        >
+          Complaints
+        </div>
+        <div
+          data-targetcontent="acc-settings-panel"
+          class="console-category settings selected"
+        >
+          Settings
+        </div>
       </section>
       <section class="content">
         <div class="back-btn hidden">
@@ -193,7 +212,7 @@
             />
           </svg>
         </div>
-        <div class="complaint-section">
+        <div class="complaint-section hidden">
           <h2 class="section-title">Your Complaints</h2>
           <table class="complaint-table">
             <thead>
@@ -211,68 +230,7 @@
                   <th class="complaint-table__header"></th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-                <tr>
-                  <td class="complaint-table__complaint-name">
-                    A crapat aplicatia
-                  </td>
-                  <td class="complaint-table__complaint-status">Pending</td>
-                </tr>
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
           <button class="leave-complaint-btn">Leave a Complaint</button>
@@ -375,43 +333,24 @@
             <li class="edit-section-is-open">
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Adresses</h4>
-                <div class="adresses">
-                  <div class="adress">
-                    <input type="checkbox" id="first-adress" />
-                    <label for="first-adress" class="acc-info-cur-data adress"
-                      >pulancur</label
-                    >
-                  </div>
-                  <div class="adress">
-                    <input type="checkbox" id="second-adress" />
-                    <label for="second-adress" class="acc-info-cur-data adress"
-                      >pulancur2</label
-                    >
-                  </div>
-                  <div class="adress">
-                    <input type="checkbox" id="third-adress" />
-                    <label for="third-adress" class="acc-info-cur-data adress"
-                      >pulancur3</label
-                    >
-                  </div>
-                </div>
+                <div class="adresses"></div>
                 <button class="edit-acc-info">Add</button>
               </div>
               <form class="edit-acc-info-section hidden">
-                <label for="change-acc-adress" class="auth-input-label"
-                  >New adress</label
+                <label for="add-acc-adress" class="auth-input-label"
+                  >Add adress</label
                 >
                 <input
                   type="text"
-                  id="change-acc-adress"
+                  id="add-acc-adress"
                   class="auth-text-input"
                   autocomplete="off"
                 />
                 <button
                   type="submit"
-                  class="edit-acc-info-save-changes change-adress-btn"
+                  class="edit-acc-info-save-changes add-adress-btn"
                 >
-                  Save
+                  Add
                 </button>
                 <button type="reset" class="edit-acc-info-cancel-btn">
                   Cancel
@@ -421,49 +360,24 @@
             <li class="edit-section-is-open">
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Delivery Times</h4>
-                <div class="delivery-times">
-                  <div class="delivery-times">
-                    <input type="checkbox" id="first-delivery-time" />
-                    <label
-                      for="first-delivery-time"
-                      class="acc-info-cur-data delivery-time"
-                      >dsdsdsds</label
-                    >
-                  </div>
-                  <div class="delivery-time">
-                    <input type="checkbox" id="second-delivery-time" />
-                    <label
-                      for="second-delivery-time"
-                      class="acc-info-cur-data delivery-time"
-                      >puladsfsdgfdgncur2</label
-                    >
-                  </div>
-                  <div class="delivery-time">
-                    <input type="checkbox" id="third-delivery-time" />
-                    <label
-                      for="third-delivery-time"
-                      class="acc-info-cur-data delivery-time"
-                      >puldfsfdgsancur3</label
-                    >
-                  </div>
-                </div>
+                <div class="delivery-times"></div>
                 <button class="edit-acc-info">Add</button>
               </div>
               <form class="edit-acc-info-section hidden">
-                <label for="change-acc-adress" class="auth-input-label"
-                  >New Delivery Time</label
+                <label for="add-delivery-time" class="auth-input-label"
+                  >Add Delivery Time</label
                 >
                 <input
                   type="text"
-                  id="change-acc-adress"
+                  id="add-delivery-time"
                   class="auth-text-input"
                   autocomplete="off"
                 />
                 <button
                   type="submit"
-                  class="edit-acc-info-save-changes change-adress-btn"
+                  class="edit-acc-info-save-changes add-delivery-time-btn"
                 >
-                  Save
+                  Add
                 </button>
                 <button type="reset" class="edit-acc-info-cancel-btn">
                   Cancel

@@ -65,6 +65,7 @@ body {
   align-items: center;
   width: fit-content;
   & .ingredient {
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -73,6 +74,7 @@ body {
     border-radius: 1000px;
     padding: 1rem;
     box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.068);
+    transition: all 1s;
     &__img {
       height: 6.4rem;
       width: 6.4rem;
@@ -85,7 +87,15 @@ body {
     }
   }
 }
+.scale-zero {
+  scale: 0.1;
+}
 .evaluation-btn {
+  transition: all 0.1s;
+  z-index: 20;
+  &:active {
+    transform: scale(0.8);
+  }
   height: 5rem;
   width: 5rem;
   // background-color: #cf711f;
@@ -95,6 +105,7 @@ body {
   justify-content: center;
   color: #fff;
   box-shadow: 0 0 30px 10px rgba(51, 51, 51, 0.151);
+
   & svg {
     height: 3.2rem;
     width: 3.2rem;
@@ -211,6 +222,9 @@ $height-recipe-card: 37rem;
   height: 70vh;
 }
 .liked-recipes {
+  z-index: 2000000000;
+  background-color: #fdf2e9;
+  position: relative;
   margin-left: 5rem;
   margin: 3rem 0 3rem 5rem;
   box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.05);
@@ -300,13 +314,14 @@ $height-recipe-card: 37rem;
 
 .recipe-card-component {
   border-radius: 12px;
-  box-shadow: 0 20px 30px 10px rgba(51, 51, 51, 0.151);
+  box-shadow: 0 5px 30px 10px rgba(51, 51, 51, 0.151);
   width: $width-recipe-card;
   height: $height-recipe-card;
   background: $gradient-main;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
+  // transition: box-shadow 0.5s;
   &__img {
     width: $width-recipe-card - 7rem;
     height: 17rem;
@@ -640,26 +655,7 @@ $height-recipe-card: 37rem;
     translate: 0 5%;
   }
 }
-@media (max-width: 1100px) {
-  // html {
-  //   font-size: 50% !important;
-  // }
-  // .ingredients-wrapper {
-  //   height: 89vh;
-  // }
-  // .recipe-suggestions-wrapper {
-  //   grid-template-columns: 55rem auto;
-  // }
-  // // .swiper-component {
-  // //   transform: scale(1);
-  // //   translate: 0 5%;
-  // // }
-  .liked-recipes {
-    margin: 5rem;
-    // scale: 0.9;
-    //   // margin-left: 0;
-  }
-}
+
 @media (max-width: 950px) {
   .recipe-suggestions-wrapper {
     grid-template-columns: 39rem auto;

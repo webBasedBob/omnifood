@@ -6,7 +6,7 @@ import {
   listAll,
   uploadBytes,
 } from "firebase/storage";
-import { toTitleCase, extractRecipeId } from "./reusableFunctions.js";
+import { toTitleCase, extractRecipeId, debounce } from "./reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
   storeIngredient,
@@ -15,6 +15,8 @@ import {
   getRecipes,
 } from "./liveDatabaseFunctions.js";
 import FullscreenRecipe from "./components/fullscreenRecipe.js";
+import { getFunctions, httpsCallable } from "firebase/functions";
+
 const breadcrumbsFunctionality = function (e) {
   if (e.target.classList.contains("active")) return;
   const breadcrumbs = [".breadcrumb__second", ".breadcrumb__first"];
@@ -102,9 +104,7 @@ onAuthStateChanged(auth, async (curUser) => {
     console.log(evaluatedIngredients);
     renderAllIngredients();
     renderFirebaseRecipes();
-    await checkAgainstEvaluatedRecipes(curUser.uid, []);
-    await getRecipesBasedOnUsersIngredients(curUser.uid);
-    renderNextRecipeCard();
+    recipeSwiperInit();
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
@@ -199,26 +199,72 @@ function evaluateIngredient(e) {
   //when an ingredient from evaluation component is evaluated (liked or disliked)
   //it is removed from the component, moved to the evaluated column (UI)
   //and it is stored in the cloud as evaluated ingredient for current user
-  if (!e.target.classList.contains("evaluation-btn")) return;
-  const likeBtnPressed = e.target.classList.contains("evaluation-btn__like");
-  const likedIngrContainer = document.querySelector(
-    ".evaluated-ingredients__liked .evaluated-ingredients__list"
+  //the animation of this action is also handled here
+  const clickedBtn = e.target.closest("div");
+  const windowWidth = window.innerWidth;
+  if (!clickedBtn.classList.contains("evaluation-btn")) return;
+  const likeBtnPressed = clickedBtn.classList.contains("evaluation-btn__like");
+  const evaluationComponent = clickedBtn.closest(".evaluation-component");
+  const ingredientElement = evaluationComponent.querySelector("figure");
+
+  let evaluation;
+  let color;
+  let notClickedBtn;
+  let destinationContainer;
+  const COLOR_RED = "#e35a5c";
+  const COLOR_GREEN = "#00b258";
+
+  //init vars based on the btn that was clicked (like/dislike)
+  if (likeBtnPressed) {
+    evaluation = "liked";
+    color = COLOR_GREEN;
+    notClickedBtn = e.target
+      .closest(".evaluation-component")
+      .querySelector(".evaluation-btn__dislike");
+    destinationContainer = document.querySelector(
+      ".evaluated-ingredients__liked .evaluated-ingredients__list"
+    );
+  } else {
+    evaluation = "disliked";
+    color = COLOR_RED;
+    notClickedBtn = e.target
+      .closest(".evaluation-component")
+      .querySelector(".evaluation-btn__like");
+    destinationContainer = document.querySelector(
+      ".evaluated-ingredients__disliked .evaluated-ingredients__list"
+    );
+  }
+  //need this function to add as a handler at animationend and then remove it
+  const moveIngredientToDestination = function () {
+    destinationContainer.append(ingredientElement);
+    const ingredient = ingredientElement.children[1].innerText.toLowerCase();
+    ingredientElement.classList.add("ingredient-pop");
+    evaluationComponent.remove();
+    storeIngredient(user.uid, ingredient, evaluation);
+    ingredientElement.removeEventListener(
+      "animationend",
+      moveIngredientToDestination
+    );
+    setTimeout(() => {
+      ingredientElement.classList.remove("ingredient-pop");
+      ingredientElement.classList.remove(
+        windowWidth <= 800 ? "eval-ingredient-top" : "eval-ingredient-side"
+      );
+    }, 1500);
+  };
+
+  //here starts the actual execution of actions
+  clickedBtn.classList.add("btn-jump");
+  notClickedBtn.classList.add("gray-btn");
+  ingredientElement.classList.add(
+    windowWidth <= 800 ? "eval-ingredient-top" : "eval-ingredient-side"
   );
-  const dislikedIngrContainer = document.querySelector(
-    ".evaluated-ingredients__disliked .evaluated-ingredients__list"
+  ingredientElement.style.backgroundColor = color;
+
+  ingredientElement.addEventListener(
+    "animationend",
+    moveIngredientToDestination
   );
-  const targetContainer = likeBtnPressed
-    ? likedIngrContainer
-    : dislikedIngrContainer;
-  const ingredientElement = e.target
-    .closest(".evaluation-component")
-    .querySelector("figure");
-  targetContainer.append(ingredientElement);
-  const parentElement = e.target.closest(".evaluation-component");
-  parentElement.remove();
-  const evaluation = likeBtnPressed ? "liked" : "disliked";
-  const ingredient = ingredientElement.children[1].innerText.toLowerCase();
-  storeIngredient(user.uid, ingredient, evaluation);
 }
 
 //
@@ -246,7 +292,7 @@ const getRandomInt = function (min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
-console.log(getRandomInt(0, 0));
+
 const modifyLikedIngrArr = function (likedIngrArr) {
   //take an array made of all ingredients that the user likes
   //some ingredients are labeled as main/principal, for example chicken,
@@ -325,7 +371,7 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   });
   return result;
 };
-const getRecipesBasedOnUsersIngredients = async function (userId) {
+const getRecipesBasedOnUsersIngredients = async function (userId, noOfResults) {
   //gets ingredients the user evaluated from clud
   //splits them into 2 arrays, liked and disliked
   //modify all plural ingredients to a singular form
@@ -386,7 +432,7 @@ const getRecipesBasedOnUsersIngredients = async function (userId) {
     console.log(likedIngredients);
     console.log(dislikedIngredients);
 
-    while (recipesToEvaluate.length < 25) {
+    while (recipesToEvaluate.length < noOfResults) {
       const url = createIngredientsBasedUrl(
         modifyLikedIngrArr(likedIngredients),
         dislikedIngredients
@@ -440,12 +486,11 @@ const createIngredientsBasedUrl = function (likedIngr, dislikedIngr) {
   resultUrl.push("random=true");
   return resultUrl.join("&");
 };
-
 const renderNextRecipeCard = function () {
-  renderRecipeCard(recipesToEvaluate[0]);
-  recipesToEvaluate.shift();
+  renderRecipeCard(recipesToEvaluate.shift());
+  handleRecipesStack();
   if (recipesToEvaluate.length < 10) {
-    getRecipesBasedOnUsersIngredients(user.uid);
+    getRecipesBasedOnUsersIngredients(user.uid, 25);
   }
 };
 // these 2 functions must be refactored (DRY principle)
@@ -474,19 +519,15 @@ const getImgUrl = async function (imgName) {
     console.log(error);
   }
 };
-
-const fetchWithCORS = async function (url) {
-  //image response  from edamam API lack CORS headers, so
-  //i use this CORS proxy API to make requests and return responses to me with the CORS headers
-  const corsApiUrl = "https://cors-anywhere.herokuapp.com/";
-  return await fetch(corsApiUrl + url);
-};
+const functions = getFunctions();
+const getImgBase64 = httpsCallable(functions, "getImgBase64");
 
 const createBlobImg = async function (imgSrc) {
-  //takes a img src URL, fetches it through CORS proxy API and
-  //turns the returned img into a blob
-  const img = await fetchWithCORS(imgSrc);
-  const blob = await img.blob();
+  //takes a img src URL, fetches it on the server side to bypass CORS policy
+  // and turns the result into a blob
+  const base64Img = await getImgBase64(imgSrc);
+  const someMagic = await fetch(`data:image/jpeg;base64,${[base64Img.data]}`);
+  const blob = await someMagic.blob();
   return blob;
 };
 
@@ -499,15 +540,45 @@ const storeImgAndReturnUrl = async function (imgSrc, imgName) {
   return url;
 };
 
-const swipeRight = async function () {
+const swipeRight = async function (e) {
+  //locked class is present only while the swipe animation is executing to
+  //block chaotic behavior + it is set on both buttons
+  const likeBtn = e.target.closest("div");
+  if (likeBtn.classList.contains("locked")) return;
+  document.querySelectorAll(".action-btns__btn").forEach((button) => {
+    button.classList.add("locked");
+  });
+  likeBtn.classList.add("swiper-btn-animation");
   const recipeCard = document.querySelector(".recipe-card-component");
+  recipeCard.classList.add("swipe-right");
+
   const recipeName = recipeCard.children[1].children[0].innerText;
   const recipeImageSrc = recipeCard.children[0].currentSrc;
   const recipeID = recipeCard.dataset.recipeid;
-  console.log(recipeID);
-  renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
-  recipeCard.remove();
-  renderNextRecipeCard();
+
+  //actions to take when the animation is finished
+  const finishSwipeRight = function () {
+    recipeCard.remove();
+    likeBtn.classList.remove("swiper-btn-animation");
+    document.querySelectorAll(".action-btns__btn").forEach((button) => {
+      likeBtn.classList.remove("locked");
+    });
+    renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
+
+    //select the freshly rendered recipe and handle the animation process
+    const renderedRecipe = document.querySelector(".img-and-title-component");
+    renderedRecipe.classList.add("liked-recipe-pop");
+    const removeAnimationClass = function () {
+      renderedRecipe.classList.remove("liked-recipe-pop");
+      renderedRecipe.removeEventListener("animationend", removeAnimationClass);
+    };
+    renderedRecipe.addEventListener("animationend", removeAnimationClass);
+    renderNextRecipeCard();
+    recipeCard.removeEventListener("animationend", finishSwipeRight);
+  };
+  recipeCard.addEventListener("animationend", finishSwipeRight);
+
+  //store the recipe on firebase
   const firebaseRecipeImgSrc = await storeImgAndReturnUrl(
     recipeImageSrc,
     recipeID
@@ -515,16 +586,30 @@ const swipeRight = async function () {
   storeRecipe(user.uid, recipeID, firebaseRecipeImgSrc, recipeName, "liked");
 };
 
-const swipeLeft = function () {
+//similar to the swipe right function : should refactor (DRY principle)
+const swipeLeft = function (e) {
+  const dislikeBtn = e.target.closest("div");
+  if (dislikeBtn.classList.contains("locked")) return;
+
+  document.querySelectorAll(".action-btns__btn").forEach((button) => {
+    dislikeBtn.classList.add("locked");
+  });
+  dislikeBtn.classList.add("swiper-btn-animation");
   const recipeCard = document.querySelector(".recipe-card-component");
+  recipeCard.classList.toggle("swipe-left");
+  const finishSwipeLeft = function () {
+    recipeCard.remove();
+    document.querySelectorAll(".action-btns__btn").forEach((button) => {
+      dislikeBtn.classList.remove("locked");
+    });
+    dislikeBtn.classList.remove("swiper-btn-animation");
+    renderNextRecipeCard();
+    recipeCard.removeEventListener("animationend", finishSwipeLeft);
+  };
+  recipeCard.addEventListener("animationend", finishSwipeLeft);
   const recipeName = recipeCard.children[1].children[0].innerText;
-  const recipeImageSrc = recipeCard.children[0].currentSrc;
   const recipeID = recipeCard.dataset.recipeid;
-  console.log(recipeID);
-  createBlobImg(`https://spoonacular.com/recipeImages/637876-556x370.jpg`);
   storeRecipe(user.uid, recipeID, "", recipeName, "disliked");
-  recipeCard.remove();
-  renderNextRecipeCard();
 };
 
 const renderFirebaseRecipes = async function () {
@@ -559,9 +644,9 @@ const renderLikedRecipe = function (imageSrc, name, recipeId) {
 </figure>`;
   container.insertAdjacentHTML("afterbegin", html);
 };
-function dada(recipe) {
+function getIngredientsHTML(recipe) {
   let result = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 3; i++) {
     if (!recipe.ingredients[i]) break;
     result.push(
       `<p class="recipe-card-component__ingredient">${toTitleCase(
@@ -588,7 +673,7 @@ const renderRecipeCard = function (recipe) {
   <h2 class="recipe-card-component__title">
   ${toTitleCase(recipe.label)}
   </h2>
-  ${dada(recipe)}
+  ${getIngredientsHTML(recipe)}
 
   </div>
   <button class="recipe-card-component__button">
@@ -597,7 +682,7 @@ const renderRecipeCard = function (recipe) {
   </figure>
 `;
   const container = document.querySelector(".swiper-component__card-container");
-  container.insertAdjacentHTML("afterbegin", html);
+  container.insertAdjacentHTML("beforeend", html);
 };
 
 const toggleEvaluatedIngrVisibility = function () {
@@ -654,12 +739,34 @@ const handleCloseBtnsVisibility = function () {
 };
 handleCloseBtnsVisibility();
 
-const debounce = function (callback) {
-  let timer;
-  return function () {
-    clearTimeout(timer);
-    timer = setTimeout(callback, 50);
-  };
+let zIndex = 1000;
+const handleRecipesStack = function () {
+  //the recipes in the swiper component are stacked by absolute positioning
+  //they are ordered using z-index and only a box-shadow is visible for aesthetic reasons
+  document.querySelectorAll(".recipe-card-component").forEach((card, index) => {
+    zIndex--;
+    card.style.zIndex = `${zIndex}`;
+    if (index === 2) {
+      card.style.boxShadow = "";
+      card.querySelector(".recipe-card-component__button").style.boxShadow = "";
+      card.querySelector(".recipe-card-component__img").style.boxShadow = "";
+      return;
+    }
+    card.style.boxShadow = "none";
+    card.querySelector(".recipe-card-component__button").style.boxShadow =
+      "none";
+    card.querySelector(".recipe-card-component__img").style.boxShadow = "none";
+  });
+};
+
+const recipeSwiperInit = async function () {
+  //handles the swiper component at page load
+  await checkAgainstEvaluatedRecipes(user.uid, []);
+  await getRecipesBasedOnUsersIngredients(user.uid, 10);
+  for (let counter = 0; counter < 10; counter++) {
+    renderNextRecipeCard();
+  }
+  handleRecipesStack();
 };
 
 const addEventListeners = function () {
@@ -670,7 +777,10 @@ const addEventListeners = function () {
   const ingredientsEvaluationContainer = document.querySelector(
     ".ingredients-to-evaluate"
   );
-  ingredientsEvaluationContainer.addEventListener("click", evaluateIngredient);
+  ingredientsEvaluationContainer.addEventListener(
+    "pointerdown",
+    evaluateIngredient
+  );
   const swipeRightBtn = document.querySelector(".action-btns__btn__like");
   const swipeLeftBtn = document.querySelector(".action-btns__btn__dislike");
   swipeRightBtn.addEventListener("click", swipeRight);

@@ -1,3 +1,6 @@
+$color-red: #e35a5c;
+$color-green: #00b258;
+
 .acc-options-open {
   animation: acc-options-expand-down 0.5s ease-in;
 }
@@ -94,4 +97,94 @@
   100% {
     transform: scale(1);
   }
+}
+
+.swipe-right {
+  animation: swipe-right 0.5s linear;
+  &::after {
+    opacity: 0;
+    content: "Like";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #56ebc1;
+    font-weight: 700;
+    font-size: 6rem;
+    // text-shadow: #fff 0px 0px px;
+    z-index: 100;
+    border: #56ebc1 0.5rem solid;
+    border-radius: 5px;
+    padding: 1rem;
+    transform: rotate(-30deg) translate(-50%, -50%);
+    animation: fade-in 0.5s;
+  }
+}
+.swipe-left {
+  animation: swipe-left 0.5s linear;
+  &::after {
+    opacity: 0;
+    content: "Dislike";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #f72119;
+    font-weight: 700;
+    font-size: 6rem;
+    // text-shadow: #fff 0px 0px px;
+    border: #f72119 0.5rem solid;
+    border-radius: 5px;
+    padding: 1rem;
+    transform: rotate(30deg) translate(-45%, 65%);
+    animation: fade-in 0.5s;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes swipe-right {
+  0% {
+    transform: translate(0 0) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(133px 0) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(400px, 0px) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-left {
+  0% {
+    transform: translate(0 0) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(-133px 0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-400px, 0px) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+.liked-recipe-pop {
+  animation: pop 0.5s ease-out;
 }

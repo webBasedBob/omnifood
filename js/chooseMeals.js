@@ -371,6 +371,15 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   });
   return result;
 };
+
+//Fisher-Yates shuffle algoirthm - inplace random shuffling
+const randomizeArray = function (arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let randIndex = getRandomInt(0, i);
+    [arr[i], arr[randIndex]] = [arr[randIndex], arr[i]];
+  }
+};
+
 const getRecipesBasedOnUsersIngredients = async function (userId, noOfResults) {
   //gets ingredients the user evaluated from clud
   //splits them into 2 arrays, liked and disliked
@@ -465,7 +474,7 @@ const checkAgainstEvaluatedRecipes = async function (userId, apiRecipesResult) {
       }
     });
   }
-  console.log(recipesToEvaluate);
+  randomizeArray(recipesToEvaluate);
 };
 
 const createIngredientsBasedUrl = function (likedIngr, dislikedIngr) {
@@ -561,7 +570,7 @@ const swipeRight = async function (e) {
     recipeCard.remove();
     likeBtn.classList.remove("swiper-btn-animation");
     document.querySelectorAll(".action-btns__btn").forEach((button) => {
-      likeBtn.classList.remove("locked");
+      button.classList.remove("locked");
     });
     renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
 
@@ -600,7 +609,7 @@ const swipeLeft = function (e) {
   const finishSwipeLeft = function () {
     recipeCard.remove();
     document.querySelectorAll(".action-btns__btn").forEach((button) => {
-      dislikeBtn.classList.remove("locked");
+      button.classList.remove("locked");
     });
     dislikeBtn.classList.remove("swiper-btn-animation");
     renderNextRecipeCard();
@@ -761,7 +770,7 @@ const handleRecipesStack = function () {
 
 const recipeSwiperInit = async function () {
   //handles the swiper component at page load
-  await checkAgainstEvaluatedRecipes(user.uid, []);
+  // await checkAgainstEvaluatedRecipes(user.uid, []);
   await getRecipesBasedOnUsersIngredients(user.uid, 10);
   for (let counter = 0; counter < 10; counter++) {
     renderNextRecipeCard();

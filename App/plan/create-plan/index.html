@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../../general/sass/resetFile.scss" />
+    <link rel="stylesheet" href="../../general/sass/general.scss" />
+    <link rel="stylesheet" href="./style.scss" />
+    <link rel="stylesheet" href="./queries.scss" />
+    <script type="module" defer src="./script.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <a href="./index.html">
+        <img
+          class="logo"
+          alt="Omnifood logo"
+          src="../../img/omnifood-logo.png?as=webp"
+        />
+      </a>
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="../../plan/meals/index.html"
+              >Personalized Meals</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../../plan/create-plan/index.html"
+              >Create Plan</a
+            >
+          </li>
+
+          <li>
+            <a class="main-nav-link" href="../../recipes/index.html"
+              >Browse Recipes</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../../careers/index.html">Careers</a>
+          </li>
+        </ul>
+      </nav>
+      <div data-event="toggle-account-box" class="header-user-profile">
+        <img
+          data-event="toggle-account-box"
+          src="../../img/profile-picture-placeholder.png?as=webp"
+          alt=""
+          class="header-user-profile__img"
+        />
+        <p data-event="display-auth-modal" class="header-log-in-btn">
+          Please Log In
+        </p>
+        <p
+          data-event="toggle-account-box"
+          class="header-user-profile__text"
+        ></p>
+        <div data-event="toggle-account-box" class="header-user-profile__icon">
+          <svg
+            data-event="toggle-account-box"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              data-event="toggle-account-box"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </div>
+        <div class="account-options acc-options-open hidden">
+          <a class="main-nav-link account" href="../../account/index.html"
+            >Account Console</a
+          >
+          <a
+            class="main-nav-link hidden recruiter"
+            href="../../recruiter/index.html"
+            >Recruiter Console</a
+          >
+          <a class="main-nav-link hidden admin" href="../../admin/index.html"
+            >Admin Console</a
+          >
+          <p data-event="log-out" class="log-out-btn">Log Out</p>
+        </div>
+      </div>
+      <button class="btn-mobile-nav">
+        <svg
+          name="menu-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+        <svg
+          name="close-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </header>
+    <main class="main-content-layout">
+      <div class="liked-recipes"></div>
+      <div class="calendar-component"></div>
+      <div class="week-plan-component">
+        <div class="breadcrumbs">
+          <div class="active breadcrumb breadcrumb__first"></div>
+          <div class="breadcrumb breadcrumb__second"></div>
+        </div>
+        <div class="choose-meal-section">
+          <div class="chosen-meal-component-wrapper">
+            <div class="chosen-meal-component chosen-meal-component__first">
+              <figure class="meal-component meal-placeholder">
+                <div class="plus-icon">
+                  <svg
+                    class="icon"
+                    name="add-outline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </div>
+              </figure>
+              <div class="delivery-time-component">
+                <div class="delivery-time-component__icon">
+                  <svg
+                    class="icon"
+                    name="alarm-outline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <select name="delivery-times" id="delivery-times">
+                  <option value="11-am">11 AM</option>
+                  <option value="2-pm">2 PM</option>
+                  <option value="5-pm">5 PM</option>
+                  <option value="7-pm">7 PM</option>
+                </select>
+              </div>
+            </div>
+            <div class="chosen-meal-component chosen-meal-component__second">
+              <figure class="meal-component meal-placeholder">
+                <div class="plus-icon">
+                  <svg
+                    class="icon"
+                    name="add-outline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </div>
+              </figure>
+              <div class="delivery-time-component">
+                <div class="delivery-time-component__icon">
+                  <svg
+                    class="icon"
+                    name="alarm-outline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <select name="delivery-times" id="delivery-times">
+                  <option value="11-am">11 AM</option>
+                  <option value="2-pm">2 PM</option>
+                  <option value="5-pm">5 PM</option>
+                  <option value="7-pm">7 PM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="chosen-meal-btns">
+            <div class="chosen-meal-btns__btn chosen-meal-btns__btn__reset">
+              <svg
+                name="refresh-outline"
+                class="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                />
+              </svg>
+            </div>
+            <div class="chosen-meal-btns__btn chosen-meal-btns__btn__save">
+              <svg
+                name="checkmark-outline"
+                class="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../general/sass/resetFile.scss" />
+    <link rel="stylesheet" href="../../general/sass/general.scss" />
+    <link rel="stylesheet" href="./style.scss" />
+    <link rel="stylesheet" href="./queries.scss" />
+    <script type="module" defer src="./script.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <a href="./index.html">
+        <img
+          class="logo"
+          alt="Omnifood logo"
+          src="../../img/omnifood-logo.png?as=webp"
+        />
+      </a>
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="../../plan/meals/index.html"
+              >Personalized Meals</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../../plan/create-plan/index.html"
+              >Create Plan</a
+            >
+          </li>
+
+          <li>
+            <a class="main-nav-link" href="../../recipes/index.html"
+              >Browse Recipes</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../../careers/index.html">Careers</a>
+          </li>
+        </ul>
+      </nav>
+      <div data-event="toggle-account-box" class="header-user-profile">
+        <img
+          data-event="toggle-account-box"
+          src="../../img/profile-picture-placeholder.png?as=webp"
+          alt=""
+          class="header-user-profile__img"
+        />
+        <p data-event="display-auth-modal" class="header-log-in-btn">
+          Please Log In
+        </p>
+        <p
+          data-event="toggle-account-box"
+          class="header-user-profile__text"
+        ></p>
+        <div data-event="toggle-account-box" class="header-user-profile__icon">
+          <svg
+            data-event="toggle-account-box"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              data-event="toggle-account-box"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </div>
+        <div class="account-options acc-options-open hidden">
+          <a class="main-nav-link account" href="../../account/index.html"
+            >Account Console</a
+          >
+          <a
+            class="main-nav-link hidden recruiter"
+            href="../../recruiter/index.html"
+            >Recruiter Console</a
+          >
+          <a class="main-nav-link hidden admin" href="../../admin/index.html"
+            >Admin Console</a
+          >
+          <p data-event="log-out" class="log-out-btn">Log Out</p>
+        </div>
+      </div>
+      <button class="btn-mobile-nav">
+        <svg
+          name="menu-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+        <svg
+          name="close-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </header>
+    <div class="not-logged-in-screen hidden">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
+    <div class="breadcrumbs hidden">
+      <button class="breadcrumb breadcrumb__first active">
+        Choose Ingredients
+      </button>
+      <button class="breadcrumb breadcrumb__second">Choose Recipes</button>
+      <button class="display-evaluated-ingredients-btn">
+        See your evaluated ingredients
+      </button>
+      <button class="display-liked-recipes-btn hidden">
+        See the meals you liked
+      </button>
+    </div>
+    <section class="ingredients-wrapper hidden">
+      <div class="evaluated-ingredients-wrapper window">
+        <div class="close-evaluated-ingredients-window hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <div class="evaluated-ingredients evaluated-ingredients__liked">
+          <div class="evaluated-ingredients__list"></div>
+        </div>
+        <div class="evaluated-ingredients evaluated-ingredients__disliked">
+          <div class="evaluated-ingredients__list"></div>
+        </div>
+      </div>
+      <div class="ingredients-to-evaluate"></div>
+    </section>
+    <section class="recipe-suggestions-wrapper hidden">
+      <div class="liked-recipes window">
+        <div class="close-liked-recipes-window hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="swiper-component">
+        <div class="swiper-component__card-container"></div>
+
+        <div class="action-btns">
+          <div class="action-btns__btn action-btns__btn__dislike">
+            <svg
+              name="close"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+          <div class="action-btns__btn action-btns__btn__like">
+            <svg
+              name="heart"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

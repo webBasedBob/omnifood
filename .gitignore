@@ -10,7 +10,7 @@ dummyData.js
 firebase.json
 firebaseTest.js
 package-lock.json
-package.json
+# package.json
 # Logs
 logs
 *.log
@@ -22,8 +22,17 @@ firebase-debug.*.log*
 
 # Firebase cache
 .firebase/
+img/ingredients
 
+# obsolite files/directories
+sassssss
+obsolite_js
+obsolite_img
 
+# others
+
+cors.json
+.gitignore
 
 # Firebase config
 

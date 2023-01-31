@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>auth test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../general/sass/resetFile.scss" />
+    <link rel="stylesheet" href="../general/sass/general.scss" />
+    <link rel="stylesheet" href="./style.scss" />
+    <link rel="stylesheet" href="./queries.scss" />
+    <script type="module" defer src="./script.js"></script>
+  </head>
+  <body>
+    <div class="prompt-for-psw-overlay hidden">
+      <div class="prompt-psw-modal">
+        <svg
+          name="alert-circle"
+          class="attention-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <p class="prompt-message">
+          Please provide your password to complete this action
+        </p>
+        <input id="user-psw-reauth" class="auth-text-input" type="password" />
+        <button class="close-psw-prompt-btn">Done</button>
+      </div>
+    </div>
+    <div
+      class="complaint-modal__overlay hidden complaint-modal__overlay__old-complaint"
+    >
+      <div class="complaint-modal">
+        <div class="complaint-modal__close-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <h2 class="complaint-modal__title">A crapat aplicatia</h2>
+        <p class="complaint-modal__compaint-text"></p>
+        <h2 class="complaint-modal__admin-response">Admin Responded:</h2>
+        <p class="complaint-modal__text complaint-modal__text__response"></p>
+      </div>
+    </div>
+
+    <div
+      class="complaint-modal__overlay complaint-modal__overlay__new-complaint hidden"
+    >
+      <div class="complaint-modal">
+        <div class="complaint-modal__close-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <h2 class="complaint-modal__title">Complaint</h2>
+        <input
+          type="text"
+          placeholder="Subject"
+          class="complaint-modal__subject"
+        />
+        <textarea
+          rows="7"
+          placeholder="Text"
+          class="complaint-modal__text"
+        ></textarea>
+
+        <button class="complaint-modal__submit-btn">Submit</button>
+      </div>
+    </div>
+    <header class="header">
+      <a href="./index.html">
+        <img
+          class="logo"
+          alt="Omnifood logo"
+          src="../img/omnifood-logo.png?as=webp"
+        />
+      </a>
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li>
+            <a class="main-nav-link" href="../plan/meals/index.html"
+              >Personalized Meals</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../plan/create-plan/index.html"
+              >Create Plan</a
+            >
+          </li>
+
+          <li>
+            <a class="main-nav-link" href="../recipes/index.html"
+              >Browse Recipes</a
+            >
+          </li>
+          <li>
+            <a class="main-nav-link" href="../careers/index.html">Careers</a>
+          </li>
+        </ul>
+      </nav>
+      <div data-event="toggle-account-box" class="header-user-profile">
+        <img
+          data-event="toggle-account-box"
+          src="../img/profile-picture-placeholder.png?as=webp"
+          alt=""
+          class="header-user-profile__img"
+        />
+        <p data-event="display-auth-modal" class="header-log-in-btn">
+          Please Log In
+        </p>
+        <p
+          data-event="toggle-account-box"
+          class="header-user-profile__text"
+        ></p>
+        <div data-event="toggle-account-box" class="header-user-profile__icon">
+          <svg
+            data-event="toggle-account-box"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              data-event="toggle-account-box"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </div>
+        <div class="account-options acc-options-open hidden">
+          <a class="main-nav-link account" href="../account/index.html"
+            >Account Console</a
+          >
+          <a
+            class="main-nav-link hidden recruiter"
+            href="../recruiter/index.html"
+            >Recruiter Console</a
+          >
+          <a class="main-nav-link hidden admin" href="../admin/index.html"
+            >Admin Console</a
+          >
+          <p data-event="log-out" class="log-out-btn">Log Out</p>
+        </div>
+      </div>
+      <button class="btn-mobile-nav">
+        <svg
+          name="menu-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+        <svg
+          name="close-outline"
+          class="icon-mobile-nav"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </header>
+    <main class="console-wrapper hidden">
+      <section class="console-categories-panel">
+        <div
+          data-targetcontent="account-info"
+          class="console-category acc-info selected"
+        >
+          Account info
+        </div>
+        <div
+          data-targetcontent="complaint-section"
+          class="console-category complaint"
+        >
+          Complaints
+        </div>
+        <div
+          data-targetcontent="acc-settings-panel"
+          class="console-category settings"
+        >
+          Settings
+        </div>
+      </section>
+      <section class="content">
+        <!-- <div class="back-btn hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"
+            />
+          </svg>
+        </div> -->
+        <div class="complaint-section hidden">
+          <h2 class="section-title">Your Complaints</h2>
+          <table class="complaint-table">
+            <thead>
+              <tr>
+                <th class="complaint-table__header">Complaint</th>
+                <th class="complaint-table__header">Status</th>
+              </tr>
+            </thead>
+          </table>
+          <div class="complaint-table-wrapper">
+            <table class="complaint-table complaint-table__full-size">
+              <thead>
+                <tr>
+                  <th class="complaint-table__header"></th>
+                  <th class="complaint-table__header"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <button class="leave-complaint-btn">Leave a Complaint</button>
+        </div>
+        <div class="account-info">
+          <ul class="acc-info-list">
+            <li class="edit-section-is-open">
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Profile Picture</h4>
+                <div class="image-wrapper">
+                  <img
+                    class="acc-info-cur-data picture"
+                    src="https://edamam-product-images.s3.amazonaws.com/web-img/0c2/0c241fe12bbe84fe6a628aba0156c602.JPG?X-Amz-Security-Token=IQoJb3JpZ2luX2VjELP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQCKPOz1Js%2BuZvVW5qBlvBKoKUB6vYi6ypv4uX%2BLkneRIAIgTfqFOY%2B2tLiccpwl6AR4ozJIWgCEACBPhlWNFNTwXD4qzAQIHBAAGgwxODcwMTcxNTA5ODYiDBFipEZ786z9fDpQXSqpBJU%2BgndyhbdslNrWtw6%2BOaJQ8VpRCiClGIkCUDtn7Zk%2Bha1bjaQtt6UHhF9iMx%2BTX38YMJHyYjUZ7gcZqH%2B%2BERtR55L8XiyDTZS4HbTY%2Btz7k1tvs1JChuABt1XSNHgrgzM5AXIX9jR%2BHBOYY%2FmLS%2BitOcxA98WC0UbRlrrhLFGvRgFXqdzmv5w27YpqYLZ0XzFOlJS7HtyriXgR%2FQ11eV76dBgbC8%2B2qZVdFGhyVfxrLNJNuIoZxjfm1hH3G2XgBqRzYABrX1dSHhwAL0jEZkGcbhyHs2cVkKaAqc0v4%2B87FyPF4g2nAFsKk2kX%2FopKsVD9ZgSYVgVXwKw9HjJxTOqYIJa6RFPPvlao2nE%2Fp2SsjWNEqoqbbphpTcBwYLviXv6WNSvRjt9uv%2FF6VOhQ68nSEPcqlwiX889NqzTXCLtmKdREsoTTn6LswvsMNILaztzN5oonB2DTDshgjgEkERqjvbnSZPXflZ5Z31R60o0W4kWLT8wkxmwzlGZkyZGc9B0rdT3k6f4dkDbKw5TUdlTt%2BrNK83eKm7vGn9HQH30kK9nkm9baS6cZiFjnSt9wSJSneUt16J78oNbr5tgbcEK0VBAG3nxMVtsVOesuv3pJ8vqwvIUt8dbsDyBggap6vvtZuaEnvPzYcO2RA31cUQKFKp83T8CKGA6YKynY3VStY7W6vptFAi05eiuEH9Ddt0cMqrX5kvOMoB4H4Iix98C1NMzvWdhKkoQwp42RngY6qQFSAx2RvBBPayUUaWMcl4duR8AChAy8n4JswJzDEUri%2B0MtK9TGThjCJ07aQHNvWj40H8guDZKEFdPBWIX69MuoeEo0DbtSpOItJv4xpJfCDQLc1Dobm%2FUazVbdsucJJoLTlFqQaSvFr0HM8cpIkpzRAD1YLCCZqh4%2BoobwFZCvY93IbLyRPJpMoiG%2F1peBlsEO5r9WEzua8bXkhzsdGYkP9%2BVaA71UOyTv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230115T202229Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=ASIASXCYXIIFCCUJCYWK%2F20230115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7114a91dc9e38f60e0fa012eb6b5de459217bd2394d1d21d4bfb9e93ab4981b7"
+                    alt=""
+                  />
+                  <button class="change-acc-photo">Change</button>
+                </div>
+              </div>
+            </li>
+            <li class="edit-section-is-open">
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Name</h4>
+                <p class="acc-info-cur-data name"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <form class="edit-acc-info-section hidden">
+                <label for="change-acc-name" class="auth-input-label"
+                  >New name</label
+                >
+                <input
+                  type="text"
+                  id="change-acc-name"
+                  class="auth-text-input"
+                  autocomplete="off"
+                />
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-name-btn"
+                >
+                  Save
+                </button>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
+            </li>
+            <li>
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Email</h4>
+                <p class="acc-info-cur-data email"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <form class="edit-acc-info-section hidden">
+                <label for="change-acc-email" class="auth-input-label"
+                  >New email</label
+                >
+                <input
+                  type="email"
+                  id="change-acc-email"
+                  class="auth-text-input"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-email-btn"
+                >
+                  Save
+                </button>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
+            </li>
+            <li>
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Phone</h4>
+                <p class="acc-info-cur-data phone"></p>
+                <button class="edit-acc-info">Edit</button>
+              </div>
+              <form class="edit-acc-info-section hidden">
+                <label for="change-acc-phone" class="auth-input-label"
+                  >New phone no.</label
+                >
+                <input
+                  type="text"
+                  id="change-acc-phone"
+                  class="auth-text-input"
+                />
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes change-phone-btn"
+                >
+                  Save
+                </button>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
+            </li>
+            <li class="edit-section-is-open">
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Adresses</h4>
+                <div class="adresses"></div>
+                <button class="edit-acc-info">Add</button>
+              </div>
+              <form class="edit-acc-info-section hidden">
+                <label for="add-acc-adress" class="auth-input-label"
+                  >Add adress</label
+                >
+                <input
+                  type="text"
+                  id="add-acc-adress"
+                  class="auth-text-input"
+                  autocomplete="off"
+                />
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes add-adress-btn"
+                >
+                  Add
+                </button>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
+            </li>
+            <li class="edit-section-is-open">
+              <div class="acc-info-elm">
+                <h4 class="acc-info-title">Delivery Times</h4>
+                <div class="delivery-times"></div>
+                <button class="edit-acc-info">Add</button>
+              </div>
+              <form class="edit-acc-info-section hidden">
+                <label for="add-delivery-time" class="auth-input-label"
+                  >Add Delivery Time</label
+                >
+                <input
+                  type="text"
+                  id="add-delivery-time"
+                  class="auth-text-input"
+                  autocomplete="off"
+                />
+                <button
+                  type="submit"
+                  class="edit-acc-info-save-changes add-delivery-time-btn"
+                >
+                  Add
+                </button>
+                <button type="reset" class="edit-acc-info-cancel-btn">
+                  Cancel
+                </button>
+              </form>
+            </li>
+          </ul>
+        </div>
+        <div class="acc-settings-panel hidden">
+          <h2 class="section-title manage-acc">Manage Account</h2>
+          <div class="acc-actions-container">
+            <button
+              data-elm-to-display-class="expanded-change-psw"
+              class="acc-action-btn access-change-psw-btn"
+            >
+              Change Password
+            </button>
+            <button
+              data-elm-to-display-class="expanded-forgot-psw"
+              class="acc-action-btn access-forgot-psw-btn"
+            >
+              Forgot Password?
+            </button>
+            <button
+              data-elm-to-display-class="expanded-delete-acc"
+              class="acc-action-btn access-delete-acc-btn"
+            >
+              Delete Account
+            </button>
+          </div>
+          <div class="acc-expanded-setting-wrapper">
+            <form class="acc-expanded-setting expanded-change-psw hidden">
+              <label for="old-psw">Old Password</label>
+              <input
+                class="auth-text-input"
+                type="password"
+                id="old-psw"
+                required
+              />
+              <label for="new-psw">New Password</label>
+              <input
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                class="auth-text-input"
+                type="password"
+                id="new-psw"
+                required
+                title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
+              />
+              <label for="confirm-new-psw">Confirm New Password</label>
+              <input
+                class="auth-text-input"
+                type="password"
+                id="confirm-new-psw"
+                required
+              />
+              <button
+                type="submit"
+                class="acc-related-action-btn btn-overlay change-psw-btn"
+              >
+                Change Password
+              </button>
+            </form>
+            <div class="acc-expanded-setting expanded-forgot-psw hidden">
+              <button class="acc-related-action-btn send-psw-reset-btn">
+                Reset Your Password
+              </button>
+              <p class="forgot-psw-info-txt">
+                You will receive a password reset link on email
+              </p>
+            </div>
+            <form class="acc-expanded-setting expanded-delete-acc hidden">
+              <label for="delete-acc-psw">Password</label>
+              <input
+                class="auth-text-input"
+                type="password"
+                id="delete-acc-psw"
+                required
+              />
+              <button
+                type="submit"
+                class="acc-related-action-btn btn-overlay delete-acc-btn"
+              >
+                Delete Account
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

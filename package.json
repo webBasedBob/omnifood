@@ -1,0 +1,21 @@
+{
+  "name": "omnifood-custom-version",
+  "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
+  "dependencies": {
+    "axios": "^1.2.4",
+    "firebase": "^9.15.0",
+    "ionicons": "^6.0.4"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.2",
+    "node-sass": "^8.0.0",
+    "parcel": "^2.8.2",
+    "process": "^0.11.10",
+    "sharp": "^0.31.3"
+  },
+  "scripts": {
+    "start": "parcel App/home/index.html",
+    "build": "parcel build App/home/index.html",
+    "start-no-cache": "parcel App/home/index.html --no-cache"
+  }
+}

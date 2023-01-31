@@ -1,0 +1,73 @@
+.edit-job-modal-overlay {
+  position: absolute;
+  z-index: 20;
+  height: 100vh;
+  width: 100vw;
+  background-color: #e67d2236;
+  backdrop-filter: blur(5px);
+}
+.edit-job-modal {
+  height: 80%;
+  background-color: #fff;
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4rem;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 1.8rem;
+  color: #555;
+  border-radius: 15px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & label {
+    font-weight: 300;
+    margin-top: 1rem;
+    color: #666;
+  }
+  & input {
+    color: inherit;
+    // border-radius: 5px;
+    border: none;
+    border-bottom: 2px solid rgba(153, 153, 153, 0.527);
+    padding: 5px 1rem;
+  }
+  & select {
+    color: inherit;
+    border: none;
+    border-bottom: 2px solid rgba(153, 153, 153, 0.527);
+    padding: 5px1rem;
+  }
+  & textarea {
+    color: inherit;
+
+    // min-height: 20rem;
+    height: fit-content;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border: 2px solid rgba(153, 153, 153, 0.527);
+    border-radius: 10px;
+    // border-bottom: 2px solid rgba(153, 153, 153, 0.527);
+    padding: 1rem;
+  }
+  & .job-edit-save-btn {
+    background: linear-gradient(to right, #e67e22, #e35a5c);
+    color: #fff;
+    padding: 1rem 3rem;
+    border-radius: 15px;
+  }
+  & .exit-btn {
+    position: absolute;
+    right: 3rem;
+    top: 3rem;
+    cursor: pointer;
+    svg {
+      height: 3rem;
+    }
+  }
+}

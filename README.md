@@ -7,7 +7,7 @@ Subscription based food delivery web app
 - [Tech stack](#tech-stack)
 - [Project walk-through](#walk-through)
 - [Setup/Launch](#setup)
-- [status](#status)
+- [Status](#status)
 
 # Introduction
 
@@ -20,11 +20,11 @@ The purpose of this project is to practice my front-end development skills.
 
 # Tech Stack
 
-HTML5
-SASS
-JavaScript ES6+
-Parcel ^2.8.2
-Firebase (Authentication, Live Database, Cloud Storage, Cloud Functions)
+- HTML5
+- SASS
+- JavaScript ES6+
+- Parcel ^2.8.2
+- Firebase (Authentication, Live Database, Cloud Storage, Cloud Functions)
 
 # Walk Through
 

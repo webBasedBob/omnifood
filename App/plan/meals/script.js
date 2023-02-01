@@ -499,6 +499,8 @@ const createIngredientsBasedUrl = function (likedIngr, dislikedIngr) {
   resultUrl.push("random=true");
   return resultUrl.join("&");
 };
+//this must be throttled to not overload the API
+//or just handle the error of the api for too many requests
 const renderNextRecipeCard = function () {
   renderRecipeCard(recipesToEvaluate.shift());
   handleRecipesStack();

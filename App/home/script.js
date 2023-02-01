@@ -1,5 +1,25 @@
+import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
-
+import AuthModal from "../general/components/authModal/script.js";
+import {
+  ErrorEvent,
+  NotificationEvent,
+  LogInEvent,
+  LogOutEvent,
+} from "../general/js/customEvents.js";
+import {
+  throwError,
+  displayNotification,
+} from "../general/js/reusableFunctions.js";
+import ErrorPopup from "../general/components/errorModal/script.js";
+const eventListeners = function () {
+  // document.addEventListener("error", ErrorPopup.display.bind(ErrorPopup));
+  // document.addEventListener(
+  //   "notification",
+  //   Notification.display.bind(Notification)
+  // );
+};
+eventListeners();
 // console.log("Hello world!");
 
 // const myName = "Jonas Schmedtmann";
@@ -108,7 +128,6 @@ mobileNavFunctionality();
 // }
 // checkFlexGap();
 
-import AuthModal from "../general/components/authModal/script.js";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 const firebaseConfig = {
@@ -127,11 +146,5 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let user;
 
-onAuthStateChanged(auth, async (curUser) => {
-  if (curUser) {
-    user = auth.currentUser;
-    Navigation.init(true, user.displayName, undefined, "admin");
-  } else {
-    Navigation.init(false);
-  }
-});
+import { handleComponentsRelatedEvents } from "../general/js/test";
+document.addEventListener("click", handleComponentsRelatedEvents);

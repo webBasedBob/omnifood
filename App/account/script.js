@@ -28,15 +28,15 @@ import {
 } from "firebase/database";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
+import Notification from "../general/components/notification/script";
+import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script";
 import ErrorPopup from "../general/components/errorModal/script";
-import Notification from "../general/components/notification/script";
 import NotLoggedInScreen from "../general/components/NotLoggedInScreen/script";
 import {
   throwError,
   displayNotification,
 } from "../general/js/reusableFunctions";
-
 const mobileNavFunctionality = function () {
   const btnNavEl = document.querySelector(".btn-mobile-nav");
   const headerEl = document.querySelector(".header");
@@ -660,11 +660,7 @@ const addEventListeners = function () {
   const logOutBtn = document.querySelector(".log-out-btn");
   logOutBtn.addEventListener("click", logOutUser);
   //new event listeners
-  document.addEventListener("error", ErrorPopup.display.bind(ErrorPopup));
-  document.addEventListener(
-    "notification",
-    Notification.display.bind(Notification)
-  );
+
   const pageSubsections = document.querySelector(".console-categories-panel");
   pageSubsections.addEventListener("click", handleSectionSelection);
   const newComplaintVisibilityBtns = [

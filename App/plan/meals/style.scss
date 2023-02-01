@@ -25,6 +25,11 @@ $font-size-table-row: 1.6rem;
 
 $width-panel: 15rem;
 
+@import "../../general/components/authModal/style.scss";
+@import "../../general/components/errorModal/style.scss";
+@import "../../general/components/notification/style.scss";
+@import "../../general/components/navigation/style.scss";
+
 @mixin wrapper() {
   display: grid;
   background-color: $color-background;

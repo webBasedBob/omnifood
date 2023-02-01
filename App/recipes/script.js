@@ -25,9 +25,10 @@ import {
   verifyIdToken,
 } from "firebase/auth";
 
+import Notification from "../general/components/notification/script";
+import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script";
 import ErrorPopup from "../general/components/errorModal/script";
-import Notification from "../general/components/notification/script";
 import FullscreenRecipe from "../general/components/FullscreenRecipe/script";
 
 import {

@@ -31,12 +31,11 @@ class ErrorPopup extends BaseComponent {
   handleEvents() {
     this.component.addEventListener("click", (e) => {
       const targetElmClass = e.target.dataset.event;
-      switch (targetElmClass) {
-        case "close-error-popup":
-          this.hide();
-          break;
+      if (targetElmClass === "close-error-popup") {
+        this.hide();
       }
     });
+    document.addEventListener("error", this.display.bind(this));
   }
   display(errorEvent) {
     const errorCode = errorEvent.detail.errorCode;

@@ -18,8 +18,10 @@ class Notification extends BaseComponent {
           break;
       }
     });
+    document.addEventListener("notification", this.display.bind(this));
   }
   display(notificationEvent) {
+    console.log("ce pula mea");
     const notificationText = notificationEvent.detail.notificationText;
     this.messageContainer.innerText = notificationText;
     super.display();
@@ -44,7 +46,7 @@ class Notification extends BaseComponent {
       clip-rule="evenodd"
     />
   </svg>
-  <p class="notification-text">Succour profile naSuccessfSSuc</p>
+  <p class="notification-text"></p>
   <svg data-event = "close-notification" 
     name="close"
     class="close-icon"

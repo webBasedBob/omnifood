@@ -20,6 +20,9 @@ import {
 } from "../../general/js/liveDatabaseFunctions.js";
 import FullscreenRecipe from "../../general/components/fullScreenRecipe/script.js";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import Notification from "../../general/components/notification/script.js";
+import Navigation from "../../general/components/navigation/script.js";
+import AuthModal from "../../general/components/authModal/script.js";
 
 const breadcrumbsFunctionality = function (e) {
   if (e.target.classList.contains("active")) return;

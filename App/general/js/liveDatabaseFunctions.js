@@ -71,3 +71,12 @@ export const getUserResumes = function (userId) {
     });
   });
 };
+
+export const getUserImage = function (userId) {
+  return new Promise((resolve, reject) => {
+    const db = getDatabase();
+    onValue(ref(db, `users/${userId}/img`), (snapshot) => {
+      resolve(snapshot.val());
+    });
+  });
+};

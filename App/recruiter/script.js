@@ -10,6 +10,9 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, set } from "firebase/database";
+import Notification from "../general/components/notification/script.js";
+import Navigation from "../general/components/navigation/script.js";
+import AuthModal from "../general/components/authModal/script.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",

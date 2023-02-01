@@ -17,7 +17,14 @@ export class NotificationEvent extends CustomEvent {
 }
 export class LogOutEvent extends CustomEvent {
   constructor() {
-    super("logout", {
+    super("logged-out", {
+      bubbles: true,
+    });
+  }
+}
+export class LogInEvent extends CustomEvent {
+  constructor() {
+    super("logged-in", {
       bubbles: true,
     });
   }

@@ -8,7 +8,10 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import NotAuthorizedScreen from "../general/components/NotAuthorizedScreen/script";
+// import NotAuthorizedScreen from "../general/components/NotAuthorizedScreen/script";
+import Notification from "../general/components/notification/script.js";
+import Navigation from "../general/components/navigation/script.js";
+import AuthModal from "../general/components/authModal/script.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -40,7 +43,7 @@ onAuthStateChanged(auth, async (curUser) => {
       hidePageContent();
     }
   } else {
-    displayNotLoggedInScreen();
+    // displayNotLoggedInScreen();
     hidePageContent();
   }
 });

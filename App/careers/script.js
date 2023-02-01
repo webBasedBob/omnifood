@@ -12,6 +12,9 @@ import {
   getUserResumes,
 } from "../general/js/liveDatabaseFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
+import Notification from "../general/components/notification/script.js";
+import Navigation from "../general/components/navigation/script.js";
+import AuthModal from "../general/components/authModal/script.js";
 
 // const app = initializeApp(firebaseConfig);
 // const storage = getStorage(app);
@@ -145,7 +148,7 @@ const createSearchCriteria = function () {
     ? document.querySelector(".main-search-field")
     : document.querySelector(".first-interaction-search-field");
   const filtersCheckboxes = document.querySelectorAll(
-    "input[type ='checkbox']"
+    "filters input[type ='checkbox']"
   );
   const SearchCriteriaObj = {
     location: [],

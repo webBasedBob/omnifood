@@ -38,6 +38,10 @@ $height-recipe-card: 20rem;
   margin: 0;
   box-sizing: border-box;
 }
+@import "../../general/components/authModal/style.scss";
+@import "../../general/components/errorModal/style.scss";
+@import "../../general/components/notification/style.scss";
+@import "../../general/components/navigation/style.scss";
 
 html {
   /* font-size: 10px; */

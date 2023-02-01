@@ -5,11 +5,15 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  onAuthStateChanged,
 } from "firebase/auth";
-import { throwError } from "../../js/reusableFunctions.js";
+import { throwError, renderNotification } from "../../js/reusableFunctions.js";
 import BaseComponent from "../baseComponent/script";
-import { handleComponentsRelatedEvents } from "../../js/test.js";
-document.addEventListener("click", handleComponentsRelatedEvents);
+import {
+  LogInEvent,
+  LogOutEvent,
+  NotificationEvent,
+} from "../../js/customEvents.js";
 
 class AuthModal extends BaseComponent {
   firebaseConfig = {
@@ -40,6 +44,17 @@ class AuthModal extends BaseComponent {
       document.querySelector(".choose-action-container").children
     );
     this.component.addEventListener("click", this.handleEvents.bind(this));
+    this.authListenerInit();
+  }
+  authListenerInit() {
+    onAuthStateChanged(this.firebaseAuth, (curUser) => {
+      if (curUser) {
+        this.user = curUser;
+        this.component.dispatchEvent(new LogInEvent());
+      } else {
+        this.component.dispatchEvent(new LogOutEvent());
+      }
+    });
   }
   display() {
     document.body.style.height = "100vh";
@@ -114,7 +129,9 @@ class AuthModal extends BaseComponent {
     try {
       await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
       this.hide();
-      // renderNotification("Account created, you are now logged in!");
+      document.dispatchEvent(
+        new NotificationEvent("Account created! You are now logged in")
+      );
     } catch (error) {
       throwError(error.code);
     }
@@ -133,8 +150,6 @@ class AuthModal extends BaseComponent {
         password
       );
       this.hide();
-      // user = logIn.user;
-      // console.log(user);
     } catch (error) {
       throwError(error.code);
     }
@@ -150,7 +165,6 @@ class AuthModal extends BaseComponent {
     try {
       const targetEmail = user?.email || email;
       await sendPasswordResetEmail(this.firebaseAuth, targetEmail);
-      // renderNotification("Password reset email sent, check your inbox!");
     } catch (error) {
       throwError(error.code);
     }

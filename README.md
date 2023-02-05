@@ -1,4 +1,4 @@
-#Omnifood
+# Omnifood
 
 Live version: https://omnifood-custom-version.web.app/
 
@@ -74,8 +74,8 @@ Mention: The App aims to use AI (spoiler: it doens't) to suggest meals to the us
 
 #### [Plan Creation](https://omnifood-custom-version.web.app/up_/plan/create-plan/)
 
-  Here the user has acces to previously liked recipes which will be used to create a meal plan for the next 1 month from today's date.
-  The page has one calendar component to switch between days of the month, a section with the like drecipes and a component with 2 meal placeholders where recipes can be dragged.
+  Here the user has acces to previously liked recipes which will be used to create a meal plan for the next 1 month starting from today's date.
+  The page has one calendar component to switch between days of the month, a section with the liked recipes and a component with 2 meal placeholders where recipes can be dragged and dropped.
   The plan is stored in [Firebase Live Database](https://firebase.google.com/docs/database).
   
 #### [Account Console](https://omnifood-custom-version.web.app/up_/account/)
@@ -97,7 +97,19 @@ Here the user can check and change account relevant data (Name, Email, Phone, Ad
   Screens:
   ![image](https://user-images.githubusercontent.com/95532233/216842546-869c1e04-2467-4b83-8d3f-55af10d81fe3.png)
 
-####[Recruiter Console]()
+#### [Recruiter Console](http://localhost:1234/up_/recruiter/)
+
+   This page is not avalable to the users who are not Recruiters or Admins.
+   All the data is fteched form Firebase if the account has Recruiter/Admin claim. After the data is rendered, the Recruiter/Admin can:
+  - see all jobs
+  - edit jobs
+  - change job's status
+  - export aplicants
+  - delete jobs
+  
+  Screens:
+  ![image](https://user-images.githubusercontent.com/95532233/216844689-795299ae-2221-4426-9b76-cf944ded53d4.png)
+
 # Setup
 
 To run the the app on your machine and play around, just clone the repo and run npm install command in your terminal, then run npm run start command (which is a npm script - can be found in package.json) to start a development server - and you're done.

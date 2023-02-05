@@ -136,45 +136,19 @@
       <p>Please log in to access this page</p>
       <button class="auth-me">Log In / Sign Up</button>
     </div>
+    <!-- Breadcrumbs must be an separate component -->
     <div class="breadcrumbs hidden">
-      <button class="breadcrumb breadcrumb__first active">
+      <a href="../ingredients/index.html" class="breadcrumb breadcrumb__first">
         Choose Ingredients
-      </button>
-      <button class="breadcrumb breadcrumb__second">Choose Recipes</button>
-      <button class="display-evaluated-ingredients-btn">
-        See your evaluated ingredients
-      </button>
-      <button class="display-liked-recipes-btn hidden">
-        See the meals you liked
-      </button>
+      </a>
+      <a href="#" class="breadcrumb breadcrumb__second active"
+        >Choose Recipes</a
+      >
+      <a href="../create-plan/index.html" class="breadcrumb breadcrumb__third"
+        >Create Plan</a
+      >
+      <button class="display-liked-recipes-btn">See the meals you liked</button>
     </div>
-    <section class="ingredients-wrapper hidden">
-      <div class="evaluated-ingredients-wrapper window">
-        <div class="close-evaluated-ingredients-window hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <div class="evaluated-ingredients evaluated-ingredients__liked">
-          <div class="evaluated-ingredients__list"></div>
-        </div>
-        <div class="evaluated-ingredients evaluated-ingredients__disliked">
-          <div class="evaluated-ingredients__list"></div>
-        </div>
-      </div>
-      <div class="ingredients-to-evaluate"></div>
-    </section>
     <section class="recipe-suggestions-wrapper hidden">
       <div class="liked-recipes window">
         <div class="close-liked-recipes-window hidden">

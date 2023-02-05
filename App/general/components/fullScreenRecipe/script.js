@@ -2,6 +2,7 @@ import {
   toTitleCase,
   extractRecipeId,
   throwError,
+  displayNotification,
 } from "../../js/reusableFunctions.js";
 import Component from "../baseComponent/script.js";
 
@@ -13,6 +14,25 @@ class FullscreenRecipe extends Component {
     this.ingredientsList = this.component.querySelector(".list");
     this.recipeImage = this.component.querySelector(".front-image");
     this.recipeSearchResults = [];
+    this.addEventListeners();
+  }
+
+  //must refactor event listeners code
+  addEventListeners() {
+    console.log(document.querySelector(".save-btn"));
+    document
+      .querySelector(".save-btn")
+      .addEventListener("click", this.saveRecipe.bind(this));
+  }
+  saveRecipe(e) {
+    const saveBtn = e.target.closest(".save-btn");
+    saveBtn.classList.toggle("filled");
+    displayNotification(
+      saveBtn.classList.contains("filled")
+        ? "Recipe saved to favorites"
+        : "Recipe removed from favorites"
+    );
+    //handle saving to firebase
   }
 
   open(e) {
@@ -58,6 +78,7 @@ class FullscreenRecipe extends Component {
 
   prevRecipe() {
     try {
+      console.log("pppspbs");
       this.currentRecipeIndex--;
       this.updateProperties(this.recipeSearchResults[this.currentRecipeIndex]);
       this.display();

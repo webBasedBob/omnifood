@@ -14,3 +14,15 @@
 //   "notification",
 //   Notification.display.bind(Notification)
 // );
+import authComponent from "../components/authModal/script";
+import { cleanStrFromSymbolsAndUselessSpaces } from "./reusableFunctions";
+import { LogOutEvent } from "./customEvents";
+export const globalEventsHandler = (e) => {
+  const targetEvent = e.target.dataset.event;
+  console.log(targetEvent);
+  switch (targetEvent) {
+    case "display-auth-modal":
+      authComponent.display();
+      break;
+  }
+};

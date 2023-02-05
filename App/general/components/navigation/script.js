@@ -2,7 +2,7 @@ import Component from "../baseComponent/script";
 import { LogOutEvent } from "../../js/customEvents";
 import authModal from "../authModal/script.js";
 import { getUserImage } from "../../js/liveDatabaseFunctions.js";
-import { hasCustomRole } from "../../js/reusableFunctions";
+import { hasCustomRole, displayNotification } from "../../js/reusableFunctions";
 class Navigation extends Component {
   constructor() {
     super();
@@ -10,8 +10,9 @@ class Navigation extends Component {
     this.accountOptionsBox = document.querySelector(".account-options");
     this.profilePic = document.querySelector(".header-user-profile__img");
     this.profileName = document.querySelector(".header-user-profile__text");
-    // this.component.addEventListener("click", this.handleClickEvents.bind(this));
     this.handleComponentEvents();
+    this.accOptionsVisibilityBoundHandler =
+      this.accOptionsVisibilityUnboundHandler.bind(this);
   }
   getHTML() {
     return `<p class="hidden"></p`;
@@ -56,11 +57,30 @@ class Navigation extends Component {
           elm.classList.remove("hidden");
         });
         break;
+      case "reset":
+        [
+          document.querySelector(".main-nav-link.admin"),
+          document.querySelector(".main-nav-link.recruiter"),
+        ].forEach((elm) => {
+          elm.classList.add("hidden");
+        });
+        break;
     }
   }
   handleComponentEvents() {
     document.addEventListener("logged-in", this.renderAuthBasedUI.bind(this));
     document.addEventListener("logged-out", this.renderAuthBasedUI.bind(this));
+  }
+  accOptionsVisibilityUnboundHandler(e) {
+    const event = e.target.dataset.event;
+    switch (event) {
+      case "toggle-account-box":
+        this.accOptionsVisibilityHandler();
+        break;
+      case "log-out":
+        authModal.logOut();
+        this.accountOptionsBox.classList.add("hidden");
+    }
   }
   async renderAuthBasedUI(e) {
     const authState = e.type;
@@ -68,9 +88,9 @@ class Navigation extends Component {
       const user = authModal.user;
       const userName = user.displayName;
       const userImg = await getUserImage();
-      const userRole = hasCustomRole(user, "admin")
+      const userRole = (await hasCustomRole(user, "admin"))
         ? "admin"
-        : hasCustomRole(user, "recruiter")
+        : (await hasCustomRole(user, "recruiter"))
         ? "recruiter"
         : "basic";
 
@@ -78,33 +98,21 @@ class Navigation extends Component {
       this.updateProfileName(userName);
       this.renderRoleBasedUI(userRole);
 
-      this.component.addEventListener("click", (e) => {
-        const event = e.target.dataset.event;
-        switch (event) {
-          case "toggle-account-box":
-            this.accOptionsVisibilityHandler();
-            break;
-          case "log-out":
-            authModal.logOut();
-        }
-      });
+      this.component.addEventListener(
+        "click",
+        this.accOptionsVisibilityBoundHandler
+      );
       document.querySelector(".header-log-in-btn").classList.add("hidden");
       document.querySelector(".header-user-profile").classList.remove("hidden");
     }
     if (authState === "logged-out") {
-      // [
-      //   document.querySelector(".main-nav-link.admin"),
-      //   document.querySelector(".main-nav-link.recruiter"),
-      //   document.querySelector(".header-user-profile__text"),
-      //   document.querySelector(".header-user-profile__icon"),
-      //   document.querySelector(".account-options"),
-      // ].forEach((elm) => {
-      //   elm.classList.add("hidden");
-      // });
-      // updateProfilePic();
-      // document.querySelector(".header-log-in-btn").classList.remove("hidden");
+      this.renderRoleBasedUI("reset");
       document.querySelector(".header-log-in-btn").classList.remove("hidden");
       document.querySelector(".header-user-profile").classList.add("hidden");
+      this.component.removeEventListener(
+        "click",
+        this.accOptionsVisibilityBoundHandler
+      );
     }
   }
 }

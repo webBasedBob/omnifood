@@ -7,7 +7,7 @@ import {
   sendPasswordResetEmail,
   onAuthStateChanged,
 } from "firebase/auth";
-import { throwError, renderNotification } from "../../js/reusableFunctions.js";
+import { throwError, displayNotification } from "../../js/reusableFunctions.js";
 import BaseComponent from "../baseComponent/script";
 import {
   LogInEvent,
@@ -129,9 +129,7 @@ class AuthModal extends BaseComponent {
     try {
       await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
       this.hide();
-      document.dispatchEvent(
-        new NotificationEvent("Account created! You are now logged in")
-      );
+      displayNotification("Account created! You are now logged in");
     } catch (error) {
       throwError(error.code);
     }
@@ -150,6 +148,7 @@ class AuthModal extends BaseComponent {
         password
       );
       this.hide();
+      displayNotification("You are now logged in");
     } catch (error) {
       throwError(error.code);
     }
@@ -165,6 +164,7 @@ class AuthModal extends BaseComponent {
     try {
       const targetEmail = user?.email || email;
       await sendPasswordResetEmail(this.firebaseAuth, targetEmail);
+      displayNotification("Password reset email sent");
     } catch (error) {
       throwError(error.code);
     }
@@ -172,6 +172,7 @@ class AuthModal extends BaseComponent {
   // actions
   async logOut() {
     await signOut(this.firebaseAuth);
+    displayNotification("You are now logged out");
   }
   getHTML() {
     return `
@@ -242,21 +243,11 @@ class AuthModal extends BaseComponent {
         </form>
       </div>
         <div class="overlay">
-          <svg
-            name="close-circle-outline"
-            data-event = "close-auth-modal"
-            class="auth-modal-close-btn"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-              clip-rule="evenodd"
-            />
-          </svg>
+        <div class="auth-modal-close-btn" data-event ="close-auth-modal">
+        <svg data-event ="close-auth-modal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path data-event ="close-auth-modal" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+          </div>
         </div>
       </div>`;
   }

@@ -1,0 +1,105 @@
+@media (min-width: 1800px) {
+  html {
+    font-size: 75% !important;
+  }
+}
+@media (max-width: 1100px) {
+  html {
+    font-size: 50% !important;
+  }
+  .ingredients-wrapper {
+    height: 86vh;
+  }
+  .evaluation-btn {
+    height: 6.6rem;
+    width: 6.6rem;
+    & svg {
+      height: 4.4rem;
+      width: 4.4rem;
+    }
+  }
+}
+@media (max-width: 800px) {
+  .evaluated-ingredients-wrapper {
+    display: none;
+    width: fit-content;
+    padding: 4rem;
+    padding-top: 3rem;
+    margin: 0;
+    // margin-top: 3rem;
+    height: 80vh !important;
+  }
+  .ingredients-to-evaluate {
+    width: fit-content;
+    padding: 4rem;
+    transform: translateY(-0%);
+    padding-top: 3rem;
+    height: 95%;
+    margin-top: 2rem;
+  }
+  .ingredients-wrapper {
+    grid-template-columns: auto;
+    width: 100%;
+    padding-top: 1rem;
+  }
+  .display-evaluated-ingredients-btn {
+    display: inline-block;
+  }
+}
+@media (max-width: 600px) {
+  .display-evaluated-ingredients-btn {
+    padding: 1.6rem;
+    width: 50%;
+  }
+  .evaluated-ingredients-wrapper {
+    // display: none;
+    width: fit-content;
+    padding: 1rem;
+    padding-top: 3rem;
+    margin: 0;
+    margin-top: 3rem;
+    height: 80vh !important;
+  }
+}
+@media (max-width: 450px) {
+  .ingredients-to-evaluate {
+    padding: 5rem;
+  }
+  .display-evaluated-ingredients-btn {
+    width: 60%;
+  }
+  .evaluated-ingredients {
+    & .ingredient {
+      width: 15rem;
+      &__img {
+        height: 3.4rem;
+        width: 3.4rem;
+      }
+      &__text {
+        width: 9rem;
+      }
+    }
+  }
+  .evaluation-component {
+    gap: 5px;
+    & .ingredient {
+      width: auto;
+      gap: 5px;
+      &__img {
+        height: 4.4rem;
+        width: 4.4rem;
+        &__text {
+        }
+      }
+    }
+  }
+  .evaluation-btn {
+    height: 5rem;
+    width: 5rem;
+    box-shadow: 0 0 10px 5px rgba(51, 51, 51, 0.151);
+    & svg {
+      height: 4rem;
+      width: 4rem;
+    }
+  }
+}

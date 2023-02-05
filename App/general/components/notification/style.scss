@@ -1,9 +1,10 @@
 .action-result-notification-pop-up {
-  position: absolute;
-  bottom: 0;
-  left: 10rem;
+  position: fixed;
+  bottom: 2%;
+  left: 2%;
   width: 48rem;
   height: 10rem;
+  z-index: 3000;
   /* transform: translateY(2rem); */
   background-color: #fff;
   display: flex;
@@ -11,8 +12,10 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 0px 20px rgba(0, 0, 0, 0.2);
+  border: 2px solid #00b258;
+  border-radius: 20px;
   & .checkmark-icon {
-    color: green;
+    color: #00b258;
     width: 3.6rem;
     height: 3.6rem;
   }

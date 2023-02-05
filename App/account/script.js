@@ -37,6 +37,9 @@ import {
   throwError,
   displayNotification,
 } from "../general/js/reusableFunctions";
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);
+
 const mobileNavFunctionality = function () {
   const btnNavEl = document.querySelector(".btn-mobile-nav");
   const headerEl = document.querySelector(".header");

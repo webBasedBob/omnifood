@@ -146,5 +146,5 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let user;
 
-import { handleComponentsRelatedEvents } from "../general/js/test";
-document.addEventListener("click", handleComponentsRelatedEvents);
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);

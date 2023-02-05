@@ -1,0 +1,92 @@
+@media (min-width: 1800px) {
+  html {
+    font-size: 75% !important;
+  }
+  .swiper-component {
+    transform: scale(1.2);
+    translate: 0 5%;
+  }
+}
+
+@media (max-width: 950px) {
+  .recipe-suggestions-wrapper {
+    grid-template-columns: 39rem auto;
+  }
+  .liked-recipes {
+    grid-template-columns: auto;
+    padding: 5rem;
+    padding-top: 7rem;
+    // height: 83vh;
+  }
+}
+@media (max-width: 700px) {
+  html {
+    font-size: 56.25%;
+  }
+  .display-liked-recipes-btn {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 1rem;
+    width: 50%;
+    display: inline-block;
+  }
+  .liked-recipes {
+    display: none;
+    // padding: 8rem;
+    margin: 0;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2rem;
+    max-width: 90vw;
+    // height: 100%;
+  }
+  .swiper-component {
+    margin-top: 9rem;
+  }
+  .recipe-suggestions-wrapper {
+    grid-template-columns: auto;
+    height: 85vh;
+  }
+  .img-and-title-component {
+    // height: 30rem;
+
+    &__title {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 50% !important;
+  }
+
+  .action-btns {
+    &__btn {
+      height: 6rem;
+      width: 6rem;
+      & svg {
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+  }
+  .recipe-card-component {
+    height: 42rem;
+  }
+  .swiper-component {
+    height: 53rem;
+    justify-content: space-between;
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -35%);
+  }
+  .liked-recipes {
+    padding: 5rem;
+    padding-top: 8rem;
+    grid-template-columns: auto;
+  }
+  .img-and-title-component {
+    height: 20rem;
+  }
+}

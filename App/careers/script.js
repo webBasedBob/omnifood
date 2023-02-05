@@ -4,6 +4,7 @@ import {
   toTitleCase,
   enableCarouselFunctionality,
   pulapulapizdapizda,
+  displayNotification,
 } from "../general/js/reusableFunctions.js";
 import { storeUserResume } from "../general/js/firebaseStorageFunctions.js";
 
@@ -15,6 +16,9 @@ import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
+
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);
 
 // const app = initializeApp(firebaseConfig);
 // const storage = getStorage(app);
@@ -657,6 +661,10 @@ const renderUserResumes = async function () {
 };
 
 const completeJobApplication = function (e) {
+  //do the backend stuff
+  const resume = e.target.closest(".resume");
+  if (!resume) return;
+  displayNotification("Application sent successfully");
   e.target.closest(".upload-resume__overlay").classList.add("hidden");
 };
 
@@ -721,6 +729,16 @@ const addEventListeners = function () {
     }
   });
 
+  const handleJobShare = async function () {
+    try {
+      const jobLink = window.location.href;
+      await navigator.clipboard.writeText(jobLink);
+      displayNotification("Link copied to clipboard");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   mainSearchBtn.addEventListener("click", jobSearch);
   searchResultsContainer.addEventListener("click", handleJobResultClick);
   document.addEventListener("keydown", (e) => {
@@ -750,10 +768,15 @@ const addEventListeners = function () {
     filter.click();
   });
   const closeFullScreenJobBtn = document.querySelector(
-    ".full-screen-close-btn"
+    ".full-screen-nav-btns.close-btn"
   );
 
   closeFullScreenJobBtn.addEventListener("click", closeFullScreenJob);
+  const shareJobBbtn = document.querySelector(
+    ".full-screen-nav-btns.share-btn"
+  );
+
+  shareJobBbtn.addEventListener("click", handleJobShare);
   const resumeModalVisibilitySwitchers = [
     document.querySelector(".full-screen-apply-btn"),
     document.querySelector(".upload-resume__overlay"),

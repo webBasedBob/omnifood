@@ -45,7 +45,8 @@ import {
   storeRecipe,
   getRecipes,
 } from "../general/js/liveDatabaseFunctions.js";
-
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);
 //hiding the carousel for now
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -298,6 +299,7 @@ const storeImgAndReturnUrl = async function (imgSrc, imgName) {
 };
 
 const handleSaveRecipe = async function (e) {
+  return;
   if (!user) {
     throwError("log-in-required");
     return;

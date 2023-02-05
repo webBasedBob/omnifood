@@ -133,14 +133,25 @@
         </svg>
       </button>
     </header>
+    <div class="not-logged-in-screen hidden">
+      <h3>You are not logged in</h3>
+      <p>Please log in to access this page</p>
+      <button class="auth-me">Log In / Sign Up</button>
+    </div>
+    <!-- Breadcrumbs must be an separate component -->
+    <div class="breadcrumbs">
+      <a href="../ingredients/index.html" class="breadcrumb breadcrumb__first">
+        Choose Ingredients
+      </a>
+      <a href="../meals/index.html" class="breadcrumb breadcrumb__second"
+        >Choose Recipes</a
+      >
+      <a href="#" class="breadcrumb breadcrumb__third active">Create Plan</a>
+    </div>
     <main class="main-content-layout">
       <div class="liked-recipes"></div>
       <div class="calendar-component"></div>
       <div class="week-plan-component">
-        <div class="breadcrumbs">
-          <div class="active breadcrumb breadcrumb__first"></div>
-          <div class="breadcrumb breadcrumb__second"></div>
-        </div>
         <div class="choose-meal-section">
           <div class="chosen-meal-component-wrapper">
             <div class="chosen-meal-component chosen-meal-component__first">

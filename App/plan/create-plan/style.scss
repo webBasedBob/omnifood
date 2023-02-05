@@ -42,7 +42,10 @@ $height-recipe-card: 20rem;
 @import "../../general/components/errorModal/style.scss";
 @import "../../general/components/notification/style.scss";
 @import "../../general/components/navigation/style.scss";
-
+@import "../../general/components/breadcrumbs/style.scss";
+.breadcrumbs {
+  padding: 0 0rem 0rem 6.4rem;
+}
 html {
   /* font-size: 10px; */
 
@@ -75,7 +78,7 @@ svg[name="chevron-down"] {
   gap: 1rem;
   padding: 0 3rem;
   background-color: $color-background;
-  height: 87vh;
+  height: 85vh;
   overflow: hidden;
   position: relative;
   max-width: 130rem;
@@ -143,20 +146,6 @@ svg[name="chevron-down"] {
   height: fit-content;
 }
 
-.breadcrumbs {
-  display: none;
-  gap: 2rem;
-  grid-column: 1/-1;
-}
-.breadcrumb {
-  display: inline-block;
-  padding: 0.7rem;
-  border-radius: 50%;
-  border: #e67e22 solid 2px;
-}
-.breadcrumb.active {
-  background-color: #e67e22;
-}
 .calendar-component {
   display: flex;
   grid-column: 1/-1;
@@ -462,9 +451,6 @@ $height-recipe-card: 36rem;
   .liked-recipes {
     grid-row: 2/3;
   }
-  .breadcrumbs {
-    display: flex;
-  }
   .chosen-meal-component__second {
     display: none;
   }
@@ -479,9 +465,6 @@ $height-recipe-card: 36rem;
     z-index: 25;
     background-color: $color-background;
   }
-  .breadcrumbs {
-    display: none;
-  }
   .chosen-meal-component__second {
     display: flex;
   }
@@ -494,9 +477,6 @@ $height-recipe-card: 36rem;
 }
 
 @media (max-width: 500px) {
-  .breadcrumbs {
-    display: flex;
-  }
   .chosen-meal-component__second {
     display: none;
   }

@@ -12,7 +12,8 @@ import { initializeApp } from "firebase/app";
 import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
-
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",

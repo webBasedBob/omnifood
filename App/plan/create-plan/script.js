@@ -29,7 +29,8 @@ import {
 import Notification from "../../general/components/notification/script.js";
 import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
-
+import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
+document.addEventListener("click", globalEventsHandler);
 //
 //to do:
 //handle errors
@@ -55,8 +56,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
-
+document.querySelector(".account-options").style.zIndex = `${20}`;
 let user;
+const hidePageContent = function () {
+  const pageContent = [
+    document.querySelector(".recipe-suggestions-wrapper"),
+    document.querySelector(".breadcrumbs"),
+  ];
+  pageContent.forEach((section) => {
+    section.classList.add("hidden");
+  });
+};
+
+const displayPageContent = function () {
+  const pageContent = [
+    document.querySelector(".breadcrumbs"),
+    document.querySelector(".recipe-suggestions-wrapper"),
+  ];
+  pageContent.forEach((section) => {
+    section.classList.remove("hidden");
+  });
+};
+const displayNotLoggedInScreen = function () {
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.remove("hidden");
+};
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     user = curUser;
@@ -65,6 +89,7 @@ onAuthStateChanged(auth, async (curUser) => {
     renderPlan();
     addEventListeners();
   } else {
+    // displayNotLoggedInScreen();
   }
 });
 

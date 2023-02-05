@@ -1,6 +1,6 @@
 .full-screen-recipe {
   position: absolute;
-  z-index: 90;
+  z-index: 2000;
   top: 0;
   left: 0;
   height: 100vh;
@@ -17,7 +17,7 @@
     transform: scale(1.5);
     & svg {
       display: inline-block;
-      color: #fff;
+      color: #fdf2e9f5;
     }
   }
   & .save-btn,
@@ -25,7 +25,7 @@
   & .prev-btn {
     position: absolute;
     cursor: pointer;
-    color: #fff;
+    color: #fdf2e9f5;
     z-index: 90;
   }
   & .next-btn,
@@ -34,7 +34,7 @@
     transform: scale(1.5);
   }
   & .save-btn {
-    right: -1%;
+    right: -3%;
     top: 19.5%;
     opacity: 1 !important;
     &::after {
@@ -44,11 +44,10 @@
       top: 0;
       height: 2.1rem;
       width: 3.2rem;
-      background-color: white;
+      background-color: #fdf2e9f5;
       clip-path: polygon(75% 8%, 75% 51%, 75% 92%, 4% 96%, 20% 50%, 2% 4%);
-
       transform: rotate(-90deg) translate(-2px, -1px);
-      opacity: 1;
+      opacity: 0;
     }
   }
   & .next-btn {
@@ -85,7 +84,7 @@
   }
   & .title {
     align-self: center;
-    color: #fff;
+    color: #fdf2e9f5;
     font-size: 3.6rem;
     font-weight: 300;
     max-width: 70rem;
@@ -108,7 +107,7 @@
     gap: 1rem;
     margin: 3rem 0 2rem 0;
     padding: 2rem 5rem;
-    color: #fff;
+    color: #fdf2e9f5;
     background-color: #fdf2e941;
     border-radius: 10px;
     display: grid;
@@ -157,6 +156,14 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.full-screen-recipe {
+  & .save-btn.filled {
+    &::after {
+      opacity: 1;
     }
   }
 }

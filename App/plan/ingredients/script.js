@@ -22,6 +22,7 @@ import {
   storeRecipe,
   getRecipes,
 } from "../../general/js/liveDatabaseFunctions.js";
+import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
@@ -53,6 +54,7 @@ const displayPageContent = function () {
   pageContent.forEach((section) => {
     section.classList.remove("hidden");
   });
+  document.querySelector(".not-logged-in-screen")?.classList.add("hidden");
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);

@@ -29,6 +29,7 @@ import {
 import Notification from "../../general/components/notification/script.js";
 import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
+import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 document.addEventListener("click", globalEventsHandler);
 //
@@ -60,27 +61,41 @@ document.querySelector(".account-options").style.zIndex = `${20}`;
 let user;
 const hidePageContent = function () {
   const pageContent = [
-    document.querySelector(".recipe-suggestions-wrapper"),
+    document.querySelector(".main-content-layout"),
     document.querySelector(".breadcrumbs"),
   ];
   pageContent.forEach((section) => {
     section.classList.add("hidden");
   });
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.remove("hidden");
 };
 
 const displayPageContent = function () {
   const pageContent = [
     document.querySelector(".breadcrumbs"),
-    document.querySelector(".recipe-suggestions-wrapper"),
+    document.querySelector(".main-content-layout"),
   ];
   pageContent.forEach((section) => {
     section.classList.remove("hidden");
   });
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.add("hidden");
 };
 const displayNotLoggedInScreen = function () {
   const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
   notLoggedInScreen.classList.remove("hidden");
 };
+
+onAuthStateChanged(auth, async (curUser) => {
+  if (curUser) {
+    displayPageContent();
+    user = curUser;
+  } else {
+    displayNotLoggedInScreen();
+    hidePageContent();
+  }
+});
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
     user = curUser;
@@ -489,9 +504,11 @@ const initCalendarComponent = function () {
     ${weekCalendarHtml}
     </div>
     `;
-  document
-    .querySelector(".calendar-component")
-    .insertAdjacentHTML("afterbegin", html);
+  const calendarComponentContainer = document.querySelector(
+    ".calendar-component"
+  );
+  calendarComponentContainer.innerHTML = "";
+  calendarComponentContainer.insertAdjacentHTML("afterbegin", html);
 };
 
 const handleWeeksWindowOutsideClick = function (e) {

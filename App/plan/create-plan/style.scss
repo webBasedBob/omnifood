@@ -43,6 +43,7 @@ $height-recipe-card: 20rem;
 @import "../../general/components/notification/style.scss";
 @import "../../general/components/navigation/style.scss";
 @import "../../general/components/breadcrumbs/style.scss";
+@import "../../general/components/notLoggedInScreen/style.scss";
 .breadcrumbs {
   padding: 0 0rem 0rem 6.4rem;
 }
@@ -67,6 +68,7 @@ body {
   /* Only works if there is nothing absolutely positioned in relation to body */
   overflow-x: hidden;
   background-color: $color-background;
+  height: 100vh;
 }
 svg[name="chevron-down"] {
   height: 2rem;

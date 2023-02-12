@@ -55,9 +55,9 @@ const db = getDatabase(app);
 const jobsRef = ref(db, "jobOpenings");
 const pula = async function () {
   onValue(jobsRef, (snapshot) => {
-    responseData = snapshot.val();
+    let responseData = snapshot.val();
     jobs = [];
-    for (jobId in responseData) {
+    for (let jobId in responseData) {
       jobs.push({ [jobId]: responseData[jobId] });
     }
     console.log(jobs);

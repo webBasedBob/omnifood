@@ -24,6 +24,7 @@ import Notification from "../../general/components/notification/script.js";
 import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
+import NotLoggedInScreen from "../../general/components/notLoggedInScreen/script";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -44,6 +45,8 @@ const hidePageContent = function () {
   pageContent.forEach((section) => {
     section.classList.add("hidden");
   });
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.remove("hidden");
 };
 
 const displayPageContent = function () {
@@ -54,6 +57,8 @@ const displayPageContent = function () {
   pageContent.forEach((section) => {
     section.classList.remove("hidden");
   });
+  const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
+  notLoggedInScreen.classList.add("hidden");
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);

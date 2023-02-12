@@ -137,7 +137,6 @@ const createUrl = function () {
 const retreiveRecipesFromApi = async function (url) {
   const rawResult = await fetch(url);
   const jsonResult = await rawResult.json();
-  console.log(rawResult, jsonResult);
   let recipesArr = jsonResult.hits.map((result) => result.recipe);
   return recipesArr;
 };
@@ -210,8 +209,6 @@ const recipeSearch = async function () {
   const recipesArray = await retreiveRecipesFromApi(url);
   storeRecipesGlobally(recipesArray);
   createRelevanceScores(recipesArray);
-
-  console.log(recipesArray);
   renderResults(recipesArray);
   sortResults();
   hideLoader();
@@ -307,9 +304,7 @@ const handleSaveRecipe = async function (e) {
   const recipeCard = document.querySelector(".full-screen-recipe");
   const recipeName = recipeCard.querySelector(".title").innerText;
   const recipeImageSrc = recipeCard.querySelector("img").src;
-  console.log("imgsrc", recipeImageSrc);
   const recipeID = recipeCard.dataset.recipeid;
-  console.log("recipeid", recipeID);
   // renderLikedRecipe(recipeImageSrc, recipeName, recipeID);
   // recipeCard.remove();
   // renderNextRecipeCard();

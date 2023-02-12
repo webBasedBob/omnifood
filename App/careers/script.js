@@ -702,6 +702,7 @@ const resetModal = function () {
   uploadModal.classList.add("hidden");
   uploadModal.querySelector(".resume-container").innerHTML = "";
 };
+const filtersSizeInfo = {};
 
 const addEventListeners = function () {
   const searchResultsContainer = document.querySelector(".search-results");
@@ -726,7 +727,25 @@ const addEventListeners = function () {
       jobSearch();
       toggleAppliedFilterVisibility(e);
       highlightCarouselFilter(e);
+      return;
     }
+    const filterExpanderArrow = e.target.closest(".filters-expander");
+    if (!filterExpanderArrow) return;
+    const filterContent =
+      filterExpanderArrow.parentElement.parentElement.children[1];
+    const filterName =
+      filterExpanderArrow.parentElement.parentElement.children[0].children[0]
+        .innerText;
+    if (filterExpanderArrow.classList.contains("open")) {
+      const height = parseInt(window.getComputedStyle(filterContent).height);
+      filtersSizeInfo[filterName] = height;
+      hideBySlidingDown(filterContent, 500);
+      filterExpanderArrow.classList.remove("open");
+    } else {
+      displayBySlidingDown(filterContent, 500, filtersSizeInfo[filterName]);
+      filterExpanderArrow.classList.add("open");
+    }
+    rotate180deg(filterExpanderArrow, 500);
   });
 
   const handleJobShare = async function () {
@@ -819,3 +838,9 @@ const init = async function () {
   addEventListeners();
 };
 init();
+
+import {
+  hideBySlidingDown,
+  displayBySlidingDown,
+  rotate180deg,
+} from "../general/js/animations";

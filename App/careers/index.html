@@ -259,69 +259,74 @@ icon clean-search-field" name="close-outline" xmlns="http://www.w3.org/2000/svg"
             <div class="filters-overview">
               <div class="filter-name">
                 <p>Filters</p>
-               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+               <div class="filters-expander open"><svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-</svg>
+</svg> </div>
 
               </div>
-              <div class="applied-filters"></div>
-              <button class="remove-filters">Remove filters</button>
+              <div class="filter-content-wrapper">
+                <div class="applied-filters"></div>
+                <button class="remove-filters">Remove filters</button>
+              </div>
             </div>
             <div class="city-filters filter-container">
               <div class="filter-name">
                 <p>City</p>
-               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+               <div class="filters-expander open"><svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-</svg>
+</svg> </div>
 
               </div>
-              <ul class="filters-list">
-                <li class="individual-filter">
-                  <input type="checkbox" name="remote" id="location-remote" />
-                  <label for="location-remote">Remote</label>
-                </li>
-                <li class="individual-filter">
-                  <input
+              <div class="filter-content-wrapper">
+                <ul class="filters-list">
+                  <li class="individual-filter">
+                    <input type="checkbox" name="remote" id="location-remote" />
+                    <label for="location-remote">Remote</label>
+                  </li>
+                  <li class="individual-filter">
+                    <input
                     type="checkbox"
                     name="San-Francisco"
                     id="location-San-Francisco"
-                  />
-                  <label for="location-San-Francisco">San Francisco</label>
-                </li>
-              </ul>
+                    />
+                    <label for="location-San-Francisco">San Francisco</label>
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="category-filters filter-container">
               <div class="filter-name">
                 <p>Category</p>
-               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+               <div class="filters-expander open"><svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-</svg>
+</svg> </div>
 
               </div>
-              <ul class="filters-list test-hide-filters">
-                <li class="individual-filter">
-                  <input
+              <div class="filter-content-wrapper">
+                <ul class="filters-list test-hide-filters">
+                  <li class="individual-filter">
+                    <input
                     type="checkbox"
                     name="management"
                     id="category-management"
-                  />
-                  <label for="category-management">Management</label>
-                </li>
+                    />
+                    <label for="category-management">Management</label>
+                  </li>
                 <li class="individual-filter">
                   <input
-                    type="checkbox"
-                    name="information-technology"
-                    id="category-information-technology"
+                  type="checkbox"
+                  name="information-technology"
+                  id="category-information-technology"
                   />
                   <label for="category-information-technology"
-                    >Information Technology</label
+                  >Information Technology</label
                   >
                 </li>
                 <li class="individual-filter">
                   <input
-                    type="checkbox"
-                    name="human-resources"
-                    id="category-human-resources"
+                  type="checkbox"
+                  name="human-resources"
+                  id="category-human-resources"
                   />
                   <label for="category-human-resources">Human Resources</label>
                 </li>
@@ -331,38 +336,40 @@ icon clean-search-field" name="close-outline" xmlns="http://www.w3.org/2000/svg"
                 </li>
                 <li class="individual-filter">
                   <input
-                    type="checkbox"
+                  type="checkbox"
                     name="marketing"
                     id="category-marketing"
-                  />
-                  <label for="category-marketing">Marketing</label>
-                </li>
-                <li class="individual-filter">
-                  <input type="checkbox" name="sales" id="category-sales" />
-                  <label for="category-sales">Sales</label>
-                </li>
-                <li class="individual-filter">
-                  <input type="checkbox" name="others" id="category-others" />
-                  <label for="category-others">Others</label>
-                </li>
-              </ul>
-            </div>
+                    />
+                    <label for="category-marketing">Marketing</label>
+                  </li>
+                  <li class="individual-filter">
+                    <input type="checkbox" name="sales" id="category-sales" />
+                    <label for="category-sales">Sales</label>
+                  </li>
+                  <li class="individual-filter">
+                    <input type="checkbox" name="others" id="category-others" />
+                    <label for="category-others">Others</label>
+                  </li>
+                </ul>
+              </div>
+              </div>
             <div class="experience-filters filter-container">
               <div class="filter-name">
                 <p>Experience</p>
-               <svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <div class="filters-expander open"><svg class= "icon" name="chevron-up-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-</svg>
+</svg> </div>
 
               </div>
-              <ul class="filters-list">
-                <li class="individual-filter">
-                  <input type="checkbox" name="none" id="experience-none" />
-                  <label for="experience-none">No Experience</label>
-                </li>
-                <li class="individual-filter">
-                  <input type="checkbox" name="entry" id="experience-entry" />
-                  <label for="experience-entry"
+              <div class="filter-content-wrapper">
+                <ul class="filters-list">
+                  <li class="individual-filter">
+                    <input type="checkbox" name="none" id="experience-none" />
+                    <label for="experience-none">No Experience</label>
+                  </li>
+                  <li class="individual-filter">
+                    <input type="checkbox" name="entry" id="experience-entry" />
+                    <label for="experience-entry"
                     >Entry-Level ( &lt; 2 years )</label
                   >
                 </li>
@@ -375,6 +382,7 @@ icon clean-search-field" name="close-outline" xmlns="http://www.w3.org/2000/svg"
                   <label for="experience-senior">Senior ( &gt; 5 years )</label>
                 </li>
               </ul>
+            </div>
             </div>
             <div class="mobile-filters-search-btn-wrapper">
               <button class="mobile-filters-search-btn">

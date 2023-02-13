@@ -18,7 +18,6 @@ import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
 
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
-document.addEventListener("click", globalEventsHandler);
 
 // const app = initializeApp(firebaseConfig);
 // const storage = getStorage(app);
@@ -820,7 +819,7 @@ const addEventListeners = function () {
 //
 // actual function calls and their sequence
 //
-
+import Loader from "../general/components/loader/script";
 const urlCheckForJobId = function () {
   if (!window.location.hash) return;
   const id = window.location.hash.slice(1);
@@ -830,8 +829,11 @@ const urlCheckForJobId = function () {
   displayFullscreenJob();
 };
 const init = async function () {
+  Loader.display();
+  document.addEventListener("click", globalEventsHandler);
   await retrieveJobsFromFirebase();
   urlCheckForJobId();
+  Loader.hide();
   filtersCarouselInit();
   mobileNavFunctionality();
   insertAppliedFiltersInHTML();

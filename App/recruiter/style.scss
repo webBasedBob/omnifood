@@ -28,6 +28,7 @@ $color-secondary-text: #fff;
 @import "../general/components/notification/style.scss";
 @import "../general/components/notLoggedInScreen/style.scss";
 @import "../general/components/uploadResumeModal/style.scss";
+@import "../general/components/loader/style.scss";
 @mixin search-bar-btns {
   cursor: pointer;
   font-weight: 600;

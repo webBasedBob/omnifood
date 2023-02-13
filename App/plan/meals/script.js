@@ -10,6 +10,7 @@ import {
   toTitleCase,
   extractRecipeId,
   debounce,
+  imagesAreLoaded,
 } from "../../general/js/reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
@@ -25,6 +26,7 @@ import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 import NotLoggedInScreen from "../../general/components/notLoggedInScreen/script";
+import Loader from "../../general/components/loader/script";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -77,15 +79,20 @@ const displayNotLoggedInScreen = function () {
   notLoggedInScreen.classList.remove("hidden");
 };
 
+Loader.display();
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
+    Loader.display();
     displayPageContent();
     user = curUser;
-    renderFirebaseRecipes();
-    recipeSwiperInit();
+    await renderFirebaseRecipes();
+    await recipeSwiperInit();
+    await imagesAreLoaded(".recipe-suggestions-wrapper img");
+    Loader.hide();
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
+    Loader.hide();
   }
 });
 

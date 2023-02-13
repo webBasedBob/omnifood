@@ -12,6 +12,7 @@ import { initializeApp } from "firebase/app";
 import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
+import Loader from "../general/components/loader/script.js";
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
@@ -31,21 +32,25 @@ const auth = getAuth(app);
 let usersArr;
 const functions = getFunctions();
 let user;
-
+Loader.display();
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
+    Loader.display();
     user = curUser;
     if (await hasCustomRole(curUser, "admin")) {
       await getUsersFromFirebase();
       renderUsers(usersArr);
       displayPageContent();
+      Loader.hide();
     } else {
       NotAuthorizedScreen.display("admin");
       hidePageContent();
+      Loader.hide();
     }
   } else {
     // displayNotLoggedInScreen();
     hidePageContent();
+    Loader.hide();
   }
 });
 

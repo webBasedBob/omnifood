@@ -14,6 +14,7 @@ import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
+import Loader from "../general/components/loader/script.js";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -32,42 +33,45 @@ const auth = getAuth(app);
 let jobsArr;
 const functions = getFunctions();
 let job;
-
-onAuthStateChanged(auth, async (curJob) => {
-  if (curJob) {
-    job = curJob;
+let user;
+Loader.display();
+onAuthStateChanged(auth, async (currUser) => {
+  if (currUser) {
+    Loader.display();
+    user = currUser;
     if (
-      (await hasCustomRole(curJob, "admin")) ||
-      (await hasCustomRole(curJob, "recruiter"))
+      (await hasCustomRole(currUser, "admin")) ||
+      (await hasCustomRole(currUser, "recruiter"))
     ) {
+      let jobs = await pula();
+      renderJobs(jobs);
       displayPageContent();
+      Loader.hide();
     } else {
       displayNotAuthorizedScreen("admin/recruiter");
       hidePageContent();
+      Loader.hide();
     }
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
+    Loader.hide();
   }
 });
 let jobs = [];
 const db = getDatabase(app);
 const jobsRef = ref(db, "jobOpenings");
 const pula = async function () {
-  onValue(jobsRef, (snapshot) => {
-    let responseData = snapshot.val();
-    jobs = [];
-    for (let jobId in responseData) {
-      jobs.push({ [jobId]: responseData[jobId] });
-    }
-    console.log(jobs);
-    renderJobs(jobs);
+  return new Promise((resolve, reject) => {
+    onValue(jobsRef, (snapshot) => {
+      let responseData = snapshot.val();
+      jobs = [];
+      for (let jobId in responseData) {
+        jobs.push({ [jobId]: responseData[jobId] });
+      }
+      resolve(jobs);
+    });
   });
-};
-pula();
-//to delete
-const getJobsFromFirebase = async function () {
-  return jobs;
 };
 
 const renderJobs = function (jobsArr) {

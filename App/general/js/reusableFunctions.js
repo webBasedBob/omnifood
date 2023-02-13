@@ -154,3 +154,23 @@ export const debounce = function (callback, timeout = 100) {
     timer = setTimeout(callback, timeout);
   };
 };
+export const imagesAreLoaded = function (imagesSelector) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 3000);
+    const images = document.querySelectorAll(imagesSelector);
+    const imgCount = images.length;
+    let counter = 0;
+    const imgLoadHandler = function (e) {
+      counter++;
+      if (counter === imgCount) {
+        resolve("");
+      }
+      e.target.removeEventListener("load", imgLoadHandler);
+    };
+    images.forEach((img) => {
+      img.addEventListener("load", imgLoadHandler);
+    });
+  });
+};

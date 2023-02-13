@@ -5,6 +5,7 @@ import {
   throwError,
   displayNotification,
   extractRecipeId,
+  imagesAreLoaded,
 } from "../general/js/reusableFunctions.js";
 
 import { initializeApp } from "firebase/app";
@@ -30,7 +31,7 @@ import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script";
 import ErrorPopup from "../general/components/errorModal/script";
 import FullscreenRecipe from "../general/components/FullscreenRecipe/script";
-
+import Loader from "../general/components/loader/script";
 import {
   getStorage,
   ref,
@@ -116,7 +117,9 @@ const createUrl = function () {
   userImputKeywords = cleanStrFromSymbolsAndUselessSpaces(
     searchInputField.value
   );
-
+  const searchInfo =
+    userImputKeywords || dietFilter || cuisineFilter || mealTypeFilter;
+  if (!searchInfo) return null;
   userImputKeywords &&
     resultUrl.push(
       `q=${userImputKeywords
@@ -195,22 +198,33 @@ const emptyOutResultsContainer = function () {
   recipeResultsContainer.innerHTML = "";
 };
 const showLoader = function () {
-  const loader = document.querySelector(".loader");
-  loader.classList.remove("hidden");
+  const recipeResultsContainer = document.querySelector(".recipe-results");
+  recipeResultsContainer.classList.add("hidden");
+  const targetContainer = document.querySelector(
+    ".recipe-results__placeholder"
+  );
+  Loader.display(targetContainer);
 };
 const hideLoader = function () {
-  const loader2 = document.querySelector(".loader");
-  loader2.classList.add("hidden");
+  Loader.hide();
+  const recipeResultsContainer = document.querySelector(".recipe-results");
+  recipeResultsContainer.classList.remove("hidden");
 };
+
 const recipeSearch = async function () {
-  emptyOutResultsContainer();
-  showLoader();
   const url = createUrl();
+  if (!url) return;
+  showLoader();
+  emptyOutResultsContainer();
   const recipesArray = await retreiveRecipesFromApi(url);
-  storeRecipesGlobally(recipesArray);
-  createRelevanceScores(recipesArray);
-  renderResults(recipesArray);
-  sortResults();
+  if (recipesArray.length) {
+    storeRecipesGlobally(recipesArray);
+    createRelevanceScores(recipesArray);
+    renderResults(recipesArray);
+    console.log("puls");
+    await imagesAreLoaded(".recipe-results>div>img");
+    sortResults();
+  }
   hideLoader();
 };
 
@@ -230,7 +244,9 @@ const clearSearchInputField = function () {
   searchInputField.value = "";
 };
 const SearchByPressingEnter = function (e) {
-  if (e.key === "Enter") recipeSearch();
+  const searchInputisFocused =
+    document.activeElement.classList.contains("main-search-field");
+  if (searchInputisFocused && e.key === "Enter") recipeSearch();
 };
 
 const storeRecipesGlobally = function (recipesArr) {

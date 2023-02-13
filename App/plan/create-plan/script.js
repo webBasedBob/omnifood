@@ -2,7 +2,11 @@
 //refactor it for reusability later!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!1
 import { initializeApp } from "firebase/app";
-import { toTitleCase, debounce } from "../../general/js/reusableFunctions.js";
+import {
+  toTitleCase,
+  debounce,
+  imagesAreLoaded,
+} from "../../general/js/reusableFunctions.js";
 import {
   ActionCodeURL,
   getAuth,
@@ -31,6 +35,7 @@ import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
+import Loader from "../../general/components/loader/script";
 document.addEventListener("click", globalEventsHandler);
 //
 //to do:
@@ -87,24 +92,22 @@ const displayNotLoggedInScreen = function () {
   notLoggedInScreen.classList.remove("hidden");
 };
 
+Loader.display();
 onAuthStateChanged(auth, async (curUser) => {
+  Loader.display();
   if (curUser) {
     displayPageContent();
     user = curUser;
+    await renderFirebaseRecipes();
+    initCalendarComponent();
+    await renderPlan();
+    addEventListeners();
+    await imagesAreLoaded(".main-content-layout img");
+    Loader.hide();
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
-  }
-});
-onAuthStateChanged(auth, async (curUser) => {
-  if (curUser) {
-    user = curUser;
-    renderFirebaseRecipes();
-    initCalendarComponent();
-    renderPlan();
-    addEventListeners();
-  } else {
-    // displayNotLoggedInScreen();
+    Loader.hide();
   }
 });
 

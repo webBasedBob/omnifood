@@ -14,6 +14,7 @@ import {
   toTitleCase,
   extractRecipeId,
   debounce,
+  imagesAreLoaded,
 } from "../../general/js/reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
@@ -24,6 +25,7 @@ import {
 } from "../../general/js/liveDatabaseFunctions.js";
 import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
+import Loader from "../../general/components/loader/script";
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -75,40 +77,53 @@ const displayNotLoggedInScreen = function () {
 
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
+    Loader.display();
     displayPageContent();
     user = curUser;
     evaluatedIngredients = (await getIngredients(curUser.uid)) || {};
-    renderAllIngredients();
+    await renderAllIngredients();
+    await imagesAreLoaded(".ingredients-wrapper img");
+    Loader.hide();
   } else {
     displayNotLoggedInScreen();
     hidePageContent();
   }
 });
 
-const renderAllIngredients = async function () {
+const renderAllIngredients = function () {
   //get all ingredients from cloud and render them in the page based on
   // user's relationship to them
   //liked ingredients in their column, disliked in their column and
   //not yet evaluated in the evaluation column
-  const folder = "ingredients/";
-  const listRef = ref(storage, folder);
-  const ingredients = await listAll(listRef);
-  const ingrToEvaluateContainer = document.querySelector(
-    ".ingredients-to-evaluate"
-  );
-
-  ingredients.items.forEach(async (itemRef) => {
-    const url = await getDownloadURL(ref(storage, itemRef._location.path_));
-    const ingredientName = extractIngredientName(itemRef._location.path_);
-    if (ingredientName in evaluatedIngredients) {
-      renderEvaluatedIngredient(
-        evaluatedIngredients[ingredientName],
-        ingredientName,
-        url
-      );
-    } else {
-      renderIngredientToEvaluate(ingrToEvaluateContainer, ingredientName, url);
-    }
+  return new Promise(async (resolve, reject) => {
+    const folder = "ingredients/";
+    const listRef = ref(storage, folder);
+    const ingredients = await listAll(listRef);
+    const ingrToEvaluateContainer = document.querySelector(
+      ".ingredients-to-evaluate"
+    );
+    const _imagesURL = [];
+    ingredients.items.forEach(async (itemRef, index) => {
+      const url = await getDownloadURL(ref(storage, itemRef._location.path_));
+      _imagesURL.push(url);
+      const ingredientName = extractIngredientName(itemRef._location.path_);
+      if (ingredientName in evaluatedIngredients) {
+        renderEvaluatedIngredient(
+          evaluatedIngredients[ingredientName],
+          ingredientName,
+          url
+        );
+      } else {
+        renderIngredientToEvaluate(
+          ingrToEvaluateContainer,
+          ingredientName,
+          url
+        );
+      }
+      if (_imagesURL.length === ingredients.items.length) {
+        resolve();
+      }
+    });
   });
 };
 

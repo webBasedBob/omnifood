@@ -67,6 +67,8 @@ Medium: 11px
 @import "../general/components/notification/style.scss";
 @import "../general/components/notLoggedInScreen/style.scss";
 @import "../general/components/uploadResumeModal/style.scss";
+@import "../general/components/loader/style.scss";
+
 /**************************/
 /* HERO SECTION */
 /**************************/
@@ -241,6 +243,7 @@ svg {
   flex-direction: column;
   padding: 6rem;
   position: relative;
+  min-height: 80vh;
 }
 .choose-diet {
   grid-column: 2/2;
@@ -370,13 +373,15 @@ svg {
   color: #fff;
 }
 
-.recipe-results {
+.recipe-results,
+.recipe-results__placeholder {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-items: center;
   row-gap: 3rem;
   column-gap: 3rem;
-  // min-height: 45vh;
+  min-height: 45vh;
+  position: relative;
 }
 .recipe-result {
   width: 22vw;
@@ -404,15 +409,6 @@ svg {
 
 .recipe-result:hover {
   transform: scale(1.1);
-}
-.loader {
-  background: transparent url(../../img/loader.gif) no-repeat center center;
-  background-size: 75px;
-  height: 75px;
-  width: 75px;
-  position: absolute;
-  bottom: 25%;
-  right: 50%;
 }
 
 /* queryes */

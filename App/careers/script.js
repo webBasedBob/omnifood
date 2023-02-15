@@ -333,16 +333,6 @@ const filtersCarouselInit = function () {
   const observer = new MutationObserver(callback);
   observer.observe(targetElem, { attributes: true });
 };
-
-const mobileNavFunctionality = function () {
-  const btnNavEl = document.querySelector(".btn-mobile-nav");
-  const headerEl = document.querySelector(".header");
-
-  btnNavEl.addEventListener("click", function () {
-    headerEl.classList.toggle("nav-open");
-  });
-};
-
 const renderJobResults = function (jobsArr) {
   const searchResultsContainer = document.querySelector(".search-results");
   searchResultsContainer.innerHTML = "";
@@ -572,6 +562,11 @@ const handleMobileFiltersDisplay = function () {
   searchResults.classList.toggle("hidden");
   const mobileFiltersContainer = document.querySelector(".filters");
   mobileFiltersContainer.classList.toggle("flex");
+  if (mobileFiltersContainer.classList.contains("flex")) {
+    mobileFiltersContainer.style.zIndex = "2001";
+  } else {
+    mobileFiltersContainer.style.zIndex = "";
+  }
 };
 
 const highlightSortingCriterion = function (sortingCriterion) {
@@ -835,7 +830,6 @@ const init = async function () {
   urlCheckForJobId();
   Loader.hide();
   filtersCarouselInit();
-  mobileNavFunctionality();
   insertAppliedFiltersInHTML();
   addEventListeners();
 };

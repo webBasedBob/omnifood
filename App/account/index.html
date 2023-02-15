@@ -285,11 +285,9 @@
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Profile Picture</h4>
                 <div class="image-wrapper">
-                  <img
-                    class="acc-info-cur-data picture"
-                    src="https://edamam-product-images.s3.amazonaws.com/web-img/0c2/0c241fe12bbe84fe6a628aba0156c602.JPG?X-Amz-Security-Token=IQoJb3JpZ2luX2VjELP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQCKPOz1Js%2BuZvVW5qBlvBKoKUB6vYi6ypv4uX%2BLkneRIAIgTfqFOY%2B2tLiccpwl6AR4ozJIWgCEACBPhlWNFNTwXD4qzAQIHBAAGgwxODcwMTcxNTA5ODYiDBFipEZ786z9fDpQXSqpBJU%2BgndyhbdslNrWtw6%2BOaJQ8VpRCiClGIkCUDtn7Zk%2Bha1bjaQtt6UHhF9iMx%2BTX38YMJHyYjUZ7gcZqH%2B%2BERtR55L8XiyDTZS4HbTY%2Btz7k1tvs1JChuABt1XSNHgrgzM5AXIX9jR%2BHBOYY%2FmLS%2BitOcxA98WC0UbRlrrhLFGvRgFXqdzmv5w27YpqYLZ0XzFOlJS7HtyriXgR%2FQ11eV76dBgbC8%2B2qZVdFGhyVfxrLNJNuIoZxjfm1hH3G2XgBqRzYABrX1dSHhwAL0jEZkGcbhyHs2cVkKaAqc0v4%2B87FyPF4g2nAFsKk2kX%2FopKsVD9ZgSYVgVXwKw9HjJxTOqYIJa6RFPPvlao2nE%2Fp2SsjWNEqoqbbphpTcBwYLviXv6WNSvRjt9uv%2FF6VOhQ68nSEPcqlwiX889NqzTXCLtmKdREsoTTn6LswvsMNILaztzN5oonB2DTDshgjgEkERqjvbnSZPXflZ5Z31R60o0W4kWLT8wkxmwzlGZkyZGc9B0rdT3k6f4dkDbKw5TUdlTt%2BrNK83eKm7vGn9HQH30kK9nkm9baS6cZiFjnSt9wSJSneUt16J78oNbr5tgbcEK0VBAG3nxMVtsVOesuv3pJ8vqwvIUt8dbsDyBggap6vvtZuaEnvPzYcO2RA31cUQKFKp83T8CKGA6YKynY3VStY7W6vptFAi05eiuEH9Ddt0cMqrX5kvOMoB4H4Iix98C1NMzvWdhKkoQwp42RngY6qQFSAx2RvBBPayUUaWMcl4duR8AChAy8n4JswJzDEUri%2B0MtK9TGThjCJ07aQHNvWj40H8guDZKEFdPBWIX69MuoeEo0DbtSpOItJv4xpJfCDQLc1Dobm%2FUazVbdsucJJoLTlFqQaSvFr0HM8cpIkpzRAD1YLCCZqh4%2BoobwFZCvY93IbLyRPJpMoiG%2F1peBlsEO5r9WEzua8bXkhzsdGYkP9%2BVaA71UOyTv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230115T202229Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=ASIASXCYXIIFCCUJCYWK%2F20230115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7114a91dc9e38f60e0fa012eb6b5de459217bd2394d1d21d4bfb9e93ab4981b7"
-                    alt=""
-                  />
+                  <img class="acc-info-cur-data picture"
+                  src="https://firebasestorage.googleapis.com/v0/b/omnifood-custom-version.appspot.com/o/resources%2Fprofile-pic-placeholder.webp?alt=media&token=c7c1f91d-d2c7-4b46-9e21-513fdbda0866"
+                  "alt" ="" />
                   <button class="change-acc-photo">Change</button>
                 </div>
               </div>
@@ -298,135 +296,145 @@
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Name</h4>
                 <p class="acc-info-cur-data name"></p>
-                <button class="edit-acc-info">Edit</button>
+                <button data-id="name" class="edit-acc-info">Edit</button>
               </div>
-              <form class="edit-acc-info-section hidden">
-                <label for="change-acc-name" class="auth-input-label"
-                  >New name</label
-                >
-                <input
-                  type="text"
-                  id="change-acc-name"
-                  class="auth-text-input"
-                  autocomplete="off"
-                />
-                <button
-                  type="submit"
-                  class="edit-acc-info-save-changes change-name-btn"
-                >
-                  Save
-                </button>
-                <button type="reset" class="edit-acc-info-cancel-btn">
-                  Cancel
-                </button>
-              </form>
+              <div data-id="name" class="edit-form-wrapper">
+                <form class="edit-acc-info-section">
+                  <label for="change-acc-name" class="auth-input-label"
+                    >New name</label
+                  >
+                  <input
+                    type="text"
+                    id="change-acc-name"
+                    class="auth-text-input"
+                    autocomplete="off"
+                  />
+                  <button
+                    type="submit"
+                    class="edit-acc-info-save-changes change-name-btn"
+                  >
+                    Save
+                  </button>
+                  <button type="reset" class="edit-acc-info-cancel-btn">
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </li>
             <li>
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Email</h4>
                 <p class="acc-info-cur-data email"></p>
-                <button class="edit-acc-info">Edit</button>
+                <button data-id="email" class="edit-acc-info">Edit</button>
               </div>
-              <form class="edit-acc-info-section hidden">
-                <label for="change-acc-email" class="auth-input-label"
-                  >New email</label
-                >
-                <input
-                  type="email"
-                  id="change-acc-email"
-                  class="auth-text-input"
-                  required
-                />
-                <button
-                  type="submit"
-                  class="edit-acc-info-save-changes change-email-btn"
-                >
-                  Save
-                </button>
-                <button type="reset" class="edit-acc-info-cancel-btn">
-                  Cancel
-                </button>
-              </form>
+              <div data-id="email" class="edit-form-wrapper">
+                <form class="edit-acc-info-section">
+                  <label for="change-acc-email" class="auth-input-label"
+                    >New email</label
+                  >
+                  <input
+                    type="email"
+                    id="change-acc-email"
+                    class="auth-text-input"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    class="edit-acc-info-save-changes change-email-btn"
+                  >
+                    Save
+                  </button>
+                  <button type="reset" class="edit-acc-info-cancel-btn">
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </li>
             <li>
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Phone</h4>
                 <p class="acc-info-cur-data phone"></p>
-                <button class="edit-acc-info">Edit</button>
+                <button data-id="phone" class="edit-acc-info">Edit</button>
               </div>
-              <form class="edit-acc-info-section hidden">
-                <label for="change-acc-phone" class="auth-input-label"
-                  >New phone no.</label
-                >
-                <input
-                  type="text"
-                  id="change-acc-phone"
-                  class="auth-text-input"
-                />
-                <button
-                  type="submit"
-                  class="edit-acc-info-save-changes change-phone-btn"
-                >
-                  Save
-                </button>
-                <button type="reset" class="edit-acc-info-cancel-btn">
-                  Cancel
-                </button>
-              </form>
+              <div data-id="phone" class="edit-form-wrapper">
+                <form class="edit-acc-info-section">
+                  <label for="change-acc-phone" class="auth-input-label"
+                    >New phone no.</label
+                  >
+                  <input
+                    type="text"
+                    id="change-acc-phone"
+                    class="auth-text-input"
+                  />
+                  <button
+                    type="submit"
+                    class="edit-acc-info-save-changes change-phone-btn"
+                  >
+                    Save
+                  </button>
+                  <button type="reset" class="edit-acc-info-cancel-btn">
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </li>
             <li class="edit-section-is-open">
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Adresses</h4>
                 <div class="adresses"></div>
-                <button class="edit-acc-info">Add</button>
+                <button data-id="adress" class="edit-acc-info">Add</button>
               </div>
-              <form class="edit-acc-info-section hidden">
-                <label for="add-acc-adress" class="auth-input-label"
-                  >Add adress</label
-                >
-                <input
-                  type="text"
-                  id="add-acc-adress"
-                  class="auth-text-input"
-                  autocomplete="off"
-                />
-                <button
-                  type="submit"
-                  class="edit-acc-info-save-changes add-adress-btn"
-                >
-                  Add
-                </button>
-                <button type="reset" class="edit-acc-info-cancel-btn">
-                  Cancel
-                </button>
-              </form>
+              <div data-id="adress" class="edit-form-wrapper">
+                <form class="edit-acc-info-section">
+                  <label for="add-acc-adress" class="auth-input-label"
+                    >Add adress</label
+                  >
+                  <input
+                    type="text"
+                    id="add-acc-adress"
+                    class="auth-text-input"
+                    autocomplete="off"
+                  />
+                  <button
+                    type="submit"
+                    class="edit-acc-info-save-changes add-adress-btn"
+                  >
+                    Add
+                  </button>
+                  <button type="reset" class="edit-acc-info-cancel-btn">
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </li>
             <li class="edit-section-is-open">
               <div class="acc-info-elm">
                 <h4 class="acc-info-title">Delivery Times</h4>
                 <div class="delivery-times"></div>
-                <button class="edit-acc-info">Add</button>
+                <button data-id="delivery" class="edit-acc-info">Add</button>
               </div>
-              <form class="edit-acc-info-section hidden">
-                <label for="add-delivery-time" class="auth-input-label"
-                  >Add Delivery Time</label
-                >
-                <input
-                  type="text"
-                  id="add-delivery-time"
-                  class="auth-text-input"
-                  autocomplete="off"
-                />
-                <button
-                  type="submit"
-                  class="edit-acc-info-save-changes add-delivery-time-btn"
-                >
-                  Add
-                </button>
-                <button type="reset" class="edit-acc-info-cancel-btn">
-                  Cancel
-                </button>
-              </form>
+              <div data-id="delivery" class="edit-form-wrapper">
+                <form class="edit-acc-info-section">
+                  <label for="add-delivery-time" class="auth-input-label"
+                    >Add Delivery Time</label
+                  >
+                  <input
+                    type="text"
+                    id="add-delivery-time"
+                    class="auth-text-input"
+                    autocomplete="off"
+                  />
+                  <button
+                    type="submit"
+                    class="edit-acc-info-save-changes add-delivery-time-btn"
+                  >
+                    Add
+                  </button>
+                  <button type="reset" class="edit-acc-info-cancel-btn">
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </li>
           </ul>
         </div>

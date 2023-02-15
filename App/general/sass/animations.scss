@@ -188,29 +188,3 @@ $color-green: #00b258;
 .liked-recipe-pop {
   animation: pop 0.5s ease-out;
 }
-
-.filters-expand {
-  animation: filters-expand 0.5s ease-in;
-}
-
-@keyframes filters-expand {
-  0% {
-  }
-  100% {
-  }
-}
-
-.filters-retract {
-  animation: filters-retract 1s ease-in;
-  background-color: #00b258;
-  overflow: hidden;
-}
-
-@keyframes filters-retract {
-  0% {
-    height: fit-content;
-  }
-  100% {
-    height: 0px;
-  }
-}

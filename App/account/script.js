@@ -39,17 +39,6 @@ import {
 } from "../general/js/reusableFunctions";
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
 document.addEventListener("click", globalEventsHandler);
-
-const mobileNavFunctionality = function () {
-  const btnNavEl = document.querySelector(".btn-mobile-nav");
-  const headerEl = document.querySelector(".header");
-
-  btnNavEl.addEventListener("click", function () {
-    headerEl.classList.toggle("nav-open");
-  });
-};
-mobileNavFunctionality();
-
 // DOM manipulation code
 const renderUserInfo = async function () {
   const userName = document.querySelector(".acc-info-cur-data.name");
@@ -88,13 +77,30 @@ const openAccountSetting = function (e) {
   });
   settingContainerToDisplay.classList.remove("hidden");
 };
-
+import {
+  hideBySlidingDown,
+  displayBySlidingDown,
+} from "../general/js/animations";
+let editWindowHeights = {};
+const getEditFormsHeights = function () {
+  const editWindows = document.querySelectorAll(".edit-form-wrapper");
+  editWindows.forEach((elm) => {
+    editWindowHeights[elm.dataset.id] = elm.offsetHeight;
+    elm.classList.add("hidden");
+  });
+};
 const displayAccInfoEditForm = function (e) {
   const editWindow = e.target.parentElement.nextElementSibling;
-  editWindow.classList.remove("closing");
-  editWindow.classList.add("opening");
-  editWindow.classList.remove("hidden");
-  e.target.classList.add("hidden");
+  if (editWindow.classList.contains("hidden")) {
+    const editWindowId = e.target.dataset.id;
+    editWindow.classList.remove("hidden");
+    displayBySlidingDown(editWindow, 500, editWindowHeights[editWindowId]);
+  } else {
+    hideBySlidingDown(editWindow, 500);
+    setTimeout(() => {
+      editWindow.classList.add("hidden");
+    }, 500);
+  }
 };
 
 const hideAccInfoEditForm = function (e) {
@@ -240,6 +246,7 @@ onAuthStateChanged(auth, async (curUser) => {
     renderAdresses();
     renderDeliveryTimes();
     renderComplaints();
+    getEditFormsHeights();
   } else {
     NotLoggedInScreen.display();
     hideLogOutBtn();

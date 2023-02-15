@@ -286,6 +286,12 @@ label {
   height: 3.8rem;
   font-size: 3.6rem;
   color: #777;
+  cursor: pointer;
+  & svg {
+    width: 3.8rem;
+    height: 3.8rem;
+    cursor: pointer;
+  }
 }
 .search-panel .show-mobile-filters-btn {
   margin-left: 2rem;
@@ -295,6 +301,11 @@ label {
 }
 .show-mobile-filters-btn svg {
   transform: translate(-1.1rem, 0.2rem) scale(1.5);
+  z-index: 1000000000;
+  width: 2rem;
+}
+.show-mobile-filters-btn .icon {
+  width: 2rem;
 }
 /* ******************
 ***    main section - other filters
@@ -505,7 +516,7 @@ body {
   display: grid;
   grid-template-columns: 2fr 3fr;
   position: fixed;
-  z-index: 99;
+  z-index: 2000;
   top: 0;
   left: 0;
 }

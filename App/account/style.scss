@@ -67,48 +67,6 @@ Medium: 11px
 @import "../general/components/notLoggedInScreen/style.scss";
 @import "../general/components/complaint/style.scss";
 @import "../general/components/navigation/style.scss";
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fdf2e9;
-
-  /* Because we want header to be sticky later */
-  height: 5rem;
-  padding: 0 4.8rem;
-  position: relative;
-}
-
-.logo {
-  height: 2.2rem;
-}
-
-/**************************/
-/* NAVIGATION */
-/**************************/
-
-.main-nav-list {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 10rem;
-  background-color: #fdf2e9;
-}
-
-.main-nav-link:link,
-.main-nav-link:visited {
-  display: inline-block;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: 1.8rem;
-  transition: all 0.3s;
-}
-
-.main-nav-link:hover,
-.main-nav-link:active {
-  color: #cf711f;
-}
 
 .prompt-for-psw-overlay {
   position: absolute;
@@ -183,7 +141,7 @@ Medium: 11px
   box-sizing: inherit;
 }
 body {
-  background-color: #f0f0f0;
+  background-color: #fdf2e9;
   box-sizing: border-box;
 }
 html {
@@ -193,7 +151,7 @@ html {
 }
 
 .console-wrapper {
-  margin: 5rem auto 2rem auto;
+  margin: 2rem auto 2rem auto;
   max-width: 95vw;
   display: grid;
   grid-template-columns: 3fr 10fr;
@@ -278,7 +236,7 @@ li:not(li:first-child) .acc-info-elm {
   background-color: #fff;
   border: none;
   font-size: 1.8rem;
-  color: #216fdb;
+  color: #e67e22;
   cursor: pointer;
   padding-right: 1rem;
 }
@@ -296,7 +254,7 @@ li:not(li:first-child) .acc-info-elm {
   background-color: #fff;
   border: none;
   font-size: 2rem;
-  color: #216fdb;
+  color: #e67e22;
   cursor: pointer;
   padding: 1rem 3rem;
 }
@@ -324,13 +282,10 @@ li:not(li:first-child) .acc-info-elm {
   color: #fff;
   border: none;
   font-size: 2rem;
-  background-color: #216fdb;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
   cursor: pointer;
   border-radius: 4px;
   padding: 1rem 2rem;
-}
-.btn-overlay {
-  filter: opacity(50%);
 }
 .expanded-forgot-psw {
   padding-top: 7rem;
@@ -385,7 +340,7 @@ li:not(li:first-child) .acc-info-elm {
 .edit-acc-info-save-changes {
   grid-column: 2/3;
   grid-row: 2/2;
-  background-color: #216fdb;
+  background: linear-gradient(to right, #e67e22, #e35a5c);
   color: #fff;
 }
 .edit-acc-info-cancel-btn {

@@ -39,10 +39,13 @@
   & tr:not(tr:last-child) {
     border-bottom: 2px solid rgba(153, 153, 153, 0.233);
   }
+  & tr {
+  }
   &__header {
   }
   &__complaint-name {
     font-weight: 300;
+    cursor: pointer;
   }
   &__complaint-status {
     text-align: center;
@@ -83,7 +86,8 @@
   background-color: #fff;
   padding: 5rem 3rem;
   border-radius: 15px;
-  width: 80vw;
+  min-width: 50rem;
+  max-width: 75rem;
 }
 .complaint-modal__close-btn svg {
   height: 3rem;

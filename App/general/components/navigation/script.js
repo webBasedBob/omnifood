@@ -10,6 +10,7 @@ class Navigation extends Component {
     this.accountOptionsBox = document.querySelector(".account-options");
     this.profilePic = document.querySelector(".header-user-profile__img");
     this.profileName = document.querySelector(".header-user-profile__text");
+    this.enableMobileNav();
     this.handleComponentEvents();
     this.accOptionsVisibilityBoundHandler =
       this.accOptionsVisibilityUnboundHandler.bind(this);
@@ -17,6 +18,13 @@ class Navigation extends Component {
   getHTML() {
     return `<p class="hidden"></p`;
   }
+  enableMobileNav() {
+    const btnNavEl = document.querySelector(".btn-mobile-nav");
+    btnNavEl.addEventListener("click", () => {
+      this.component.classList.toggle("nav-open");
+    });
+  }
+
   accOptionsVisibilityHandler() {
     if (this.accountOptionsBox.classList.contains("hidden")) {
       this.accountOptionsBox.classList.remove("hidden");

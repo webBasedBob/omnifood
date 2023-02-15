@@ -72,17 +72,6 @@ onAuthStateChanged(auth, async (curUser) => {
 });
 
 document.querySelector("#trending-foods").classList.add("hidden");
-
-const mobileNavFunctionality = function () {
-  const btnNavEl = document.querySelector(".btn-mobile-nav");
-  const headerEl = document.querySelector(".header");
-
-  btnNavEl.addEventListener("click", function () {
-    headerEl.classList.toggle("nav-open");
-  });
-};
-mobileNavFunctionality();
-
 enableCarouselFunctionality(
   "filter-carousel",
   "cuisine-carousel-item",
@@ -203,12 +192,15 @@ const showLoader = function () {
   const targetContainer = document.querySelector(
     ".recipe-results__placeholder"
   );
+  targetContainer.classList.remove("hidden");
   Loader.display(targetContainer);
 };
 const hideLoader = function () {
-  Loader.hide();
   const recipeResultsContainer = document.querySelector(".recipe-results");
   recipeResultsContainer.classList.remove("hidden");
+  const placeholder = document.querySelector(".recipe-results__placeholder");
+  placeholder.classList.add("hidden");
+  Loader.hide();
 };
 
 const recipeSearch = async function () {

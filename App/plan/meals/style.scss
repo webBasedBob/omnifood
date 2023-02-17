@@ -30,6 +30,7 @@ $width-panel: 15rem;
 @import "../../general/components/notification/style.scss";
 @import "../../general/components/navigation/style.scss";
 @import "../../general/components/breadcrumbs/style.scss";
+@import "../../general/components/fullScreenRecipe/style.scss";
 @import "../../general/components/loader/style.scss";
 @import "./queries.scss";
 
@@ -56,7 +57,7 @@ $height-recipe-card: 37rem;
   height: 82vh;
 }
 .liked-recipes {
-  z-index: 3000;
+  z-index: 1000;
   background-color: #fdf2e9;
   position: relative;
   margin-left: 5rem;

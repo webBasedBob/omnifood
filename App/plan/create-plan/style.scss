@@ -439,6 +439,26 @@ $height-recipe-card: 36rem;
   color: $color-background;
 }
 
+.meal-breadcrumbs {
+  display: flex;
+  gap: 2rem;
+  display: none;
+}
+.meal-breadcrumb {
+  padding: 7px;
+  background-color: #fdf2e9;
+  border-radius: 50%;
+  border: 1px solid #e67e22;
+  cursor: pointer;
+  &__first {
+  }
+  &__second {
+  }
+  &.active {
+    background-color: #e67e22;
+  }
+}
+
 @media (max-width: 1200px) {
   html {
     font-size: 56.25%;
@@ -456,6 +476,9 @@ $height-recipe-card: 36rem;
   }
   .chosen-meal-component__second {
     display: none;
+  }
+  .meal-breadcrumbs {
+    display: flex;
   }
 }
 

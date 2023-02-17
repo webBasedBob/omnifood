@@ -11,6 +11,7 @@ import {
   extractRecipeId,
   debounce,
   imagesAreLoaded,
+  throwError,
 } from "../../general/js/reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
@@ -26,7 +27,10 @@ import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 import NotLoggedInScreen from "../../general/components/notLoggedInScreen/script";
+import { firebaseConfig, EDAMAM_ACCOUNTS } from "../../general/js/CONFIG.js";
+import ErrorPopup from "../../general/components/errorModal/script";
 import Loader from "../../general/components/loader/script";
+let edamamApiAccountIndex = 0;
 document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -101,7 +105,6 @@ const retreiveRecipesFromApi = async function (url) {
   //return an array
   const rawResult = await fetch(url);
   const jsonResult = await rawResult.json();
-  // console.log(rawResult, jsonResult);
   let recipesArr = jsonResult.hits.map((result) => result.recipe);
   return recipesArr;
 };
@@ -156,10 +159,6 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   const likedIngredientsSecondary = likedIngrArr.filter((ingr) => {
     return !mainIngredientsCollection.includes(ingr);
   });
-  console.log("oled ingr", likedIngrArr);
-  console.log("likedIngredientsmain", likedIngredientsMain);
-  console.log("likedIngredientsSecondary", likedIngredientsSecondary);
-
   //because from all liked ingredients only one main ingr wil be used
   //the resulting array length will be calculated based on secondary ingr + the main one
   const numberOfMainIngrToInclude = likedIngredientsMain.length ? 1 : 0;
@@ -174,8 +173,8 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   const indexes = new Set();
 
   while (indexes.size < 1 && likedIngredientsMain.length) {
-    const index = getRandomInt(0, likedIngredientsMain.length - 1);
-    if (mainIngredientsCollection.includes(likedIngredientsMain[index])) {
+    const index = getRandomInt(0, likedIngrArr.length - 1);
+    if (mainIngredientsCollection.includes(likedIngrArr[index])) {
       indexes.add(index);
     }
   }
@@ -187,7 +186,7 @@ const modifyLikedIngrArr = function (likedIngrArr) {
   }
   let result = [];
   indexes.forEach((val) => {
-    result.push(likedIngrArr[val]);
+    result.push(likedIngredientsSecondary[val]);
   });
   return result;
 };
@@ -198,6 +197,13 @@ const randomizeArray = function (arr) {
     let randIndex = getRandomInt(0, i);
     [arr[i], arr[randIndex]] = [arr[randIndex], arr[i]];
   }
+};
+
+const storeRecipesGlobally = function (recipesArr) {
+  const transformedRecipes = recipesArr.map((recipe) => {
+    return { ...recipe, id: extractRecipeId(recipe) };
+  });
+  FullscreenRecipe.recipeSearchResults.push(...transformedRecipes);
 };
 
 const getRecipesBasedOnUsersIngredients = async function (userId, noOfResults) {
@@ -218,13 +224,13 @@ const getRecipesBasedOnUsersIngredients = async function (userId, noOfResults) {
       mayo: "liked",
       potatoes: "disliked",
     };
-    console.log("ce pula mea");
+    edamamApiAccountIndex = 0;
     const ingredientsObj = await getIngredients(userId);
-    console.log("ingr obj", ingredientsObj);
+
     const ingredientsArr = ingredientsObj
       ? Object.entries(ingredientsObj)
       : Object.entries(dummyData);
-    console.log(ingredientsArr);
+
     const likedIngredients = ingredientsArr
       .filter((ingr) => {
         return ingr[1] === "liked";
@@ -258,19 +264,36 @@ const getRecipesBasedOnUsersIngredients = async function (userId, noOfResults) {
           return ingr;
         }
       });
-    console.log(likedIngredients);
-    console.log(dislikedIngredients);
 
     while (recipesToEvaluate.length < noOfResults) {
-      const url = createIngredientsBasedUrl(
-        modifyLikedIngrArr(likedIngredients),
-        dislikedIngredients
-      );
-      const recipes = await retreiveRecipesFromApi(url);
-      await checkAgainstEvaluatedRecipes(user.uid, recipes);
+      try {
+        const url = createIngredientsBasedUrl(
+          modifyLikedIngrArr(likedIngredients),
+          dislikedIngredients
+        );
+        const recipes = await retreiveRecipesFromApi(url);
+        await checkAgainstEvaluatedRecipes(user.uid, recipes);
+      } catch (error) {
+        if (error.message === "Failed to fetch") {
+          if (edamamApiAccountIndex < EDAMAM_ACCOUNTS.length - 1) {
+            edamamApiAccountIndex++;
+          } else {
+            throw new Error(error.message);
+          }
+        }
+      }
     }
   } catch (error) {
-    console.error(error);
+    if (error.message === "Failed to fetch") {
+      const renderedRecipes = document.querySelectorAll(
+        ".recipe-card-component"
+      );
+      if (recipesToEvaluate.length === 0 && renderedRecipes.length === 0) {
+        throwError(error.message);
+        const actionBtns = document.querySelector(".action-btns");
+        actionBtns.classList.add("hidden");
+      }
+    }
   }
 };
 
@@ -282,9 +305,8 @@ const checkAgainstEvaluatedRecipes = async function (userId, apiRecipesResult) {
 
   const evaluatedRecipes = await getRecipes(userId);
   if (!evaluatedRecipes || Object.keys(evaluatedRecipes).length === 0) {
-    apiRecipesResult.forEach((recipe) => {
-      recipesToEvaluate.push(recipe);
-    });
+    recipesToEvaluate.push(...apiRecipesResult);
+    storeRecipesGlobally(recipesToEvaluate);
   } else {
     apiRecipesResult.forEach((recipe) => {
       const recipeId = extractRecipeId(recipe);
@@ -293,6 +315,7 @@ const checkAgainstEvaluatedRecipes = async function (userId, apiRecipesResult) {
         recipesToEvaluate.push(recipe);
       }
     });
+    storeRecipesGlobally(recipesToEvaluate);
   }
   randomizeArray(recipesToEvaluate);
 };
@@ -301,8 +324,8 @@ const createIngredientsBasedUrl = function (likedIngr, dislikedIngr) {
   //creates the complete Edamam API url to feed the Fetch method when needed
 
   let resultUrl = [`https://api.edamam.com/api/recipes/v2?type=any`];
-  const appId = "a5cea2be";
-  const appKey = "95cea576a8a53c23997c5ec6c40084b7";
+  const appId = EDAMAM_ACCOUNTS[edamamApiAccountIndex].id;
+  const appKey = EDAMAM_ACCOUNTS[edamamApiAccountIndex].key;
   likedIngr.length &&
     resultUrl.push(
       `q=${likedIngr.reduce((acc, curVal) => acc + "%20" + curVal)}`
@@ -512,7 +535,7 @@ const renderRecipeCard = function (recipe) {
   ${getIngredientsHTML(recipe)}
 
   </div>
-  <button class="recipe-card-component__button">
+  <button data-event="open-full-screen-recipe" class="recipe-card-component__button">
   See All Ingredients
   </button>
   </figure>
@@ -602,5 +625,23 @@ const addEventListeners = function () {
     toggleLikedRecipesVisibility
   );
   window.addEventListener("resize", debounce(handleCloseBtnsVisibility));
+  const swiperComponent = document.querySelector(".swiper-component");
+  swiperComponent.addEventListener("click", (e) => {
+    const openFullScreenRecipeBtnWasClicked =
+      e.target.closest(".recipe-card-component__button")?.dataset.event ===
+      "open-full-screen-recipe";
+    if (openFullScreenRecipeBtnWasClicked) {
+      const recipeId = e.target.closest(".recipe-card-component").dataset
+        .recipeid;
+      FullscreenRecipe.open(recipeId, false);
+    }
+  });
+  const likedRecipesContainer = document.querySelector(".liked-recipes");
+  likedRecipesContainer.addEventListener("click", (e) => {
+    const recipeId = e.target.closest(".img-and-title-component")?.dataset
+      .recipeid;
+    if (!recipeId) return;
+    FullscreenRecipe.open(recipeId, false);
+  });
 };
 addEventListeners();

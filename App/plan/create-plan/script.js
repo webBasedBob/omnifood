@@ -721,15 +721,18 @@ const handleSaveBtnClick = function () {
 //   mealToDisplay.classList.remove("hidden");
 //   mealToHide.classList.remove("flex");
 // };
+//this must be finetuned
 const handleBreadcrumbsClick = function (e) {
-  const breadcrumbs = e.target.closest(".breadcrumbs").querySelectorAll("div");
+  const breadcrumbs = e.target
+    .closest(".meal-breadcrumbs")
+    .querySelectorAll("div");
   breadcrumbs.forEach((breadcrumb) => {
     breadcrumb.classList.remove("active");
   });
   e.target.classList.add("active");
 
-  const targetMealModifier = e.target.classList[1].slice(
-    e.target.classList[1].indexOf("__") + 2
+  const targetMealModifier = e.target.classList[0].slice(
+    e.target.classList[0].indexOf("__") + 2
   );
   const mealToDisplayClass = `chosen-meal-component__${targetMealModifier}`;
   const mealComponents = document.querySelectorAll(".chosen-meal-component");
@@ -901,8 +904,8 @@ const addEventListeners = function () {
   saveBtn.addEventListener("click", handleSaveBtnClick);
   const resetBtn = document.querySelector(".chosen-meal-btns__btn__reset");
   resetBtn.addEventListener("click", resetPlanMeals);
-  const firstBreadcrumb = document.querySelector(".breadcrumb__first");
-  const secondBreadcrumb = document.querySelector(".breadcrumb__second");
+  const firstBreadcrumb = document.querySelector(".meal-breadcrumb__first");
+  const secondBreadcrumb = document.querySelector(".meal-breadcrumb__second");
   firstBreadcrumb.addEventListener("click", handleBreadcrumbsClick);
   secondBreadcrumb.addEventListener("click", handleBreadcrumbsClick);
   window.addEventListener("resize", debounce(handleViewportResize));

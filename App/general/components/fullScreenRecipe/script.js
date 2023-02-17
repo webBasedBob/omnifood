@@ -5,7 +5,7 @@ import {
   displayNotification,
 } from "../../js/reusableFunctions.js";
 import Component from "../baseComponent/script.js";
-
+import { getRecipeById } from "../../js/recipesApiFunctions";
 class FullscreenRecipe extends Component {
   constructor() {
     super();
@@ -14,15 +14,18 @@ class FullscreenRecipe extends Component {
     this.ingredientsList = this.component.querySelector(".list");
     this.recipeImage = this.component.querySelector(".front-image");
     this.recipeSearchResults = [];
+    this.closeBtn = document.querySelector(".full-screen-recipe .close-btn");
+    this.navigationBtns = document.querySelectorAll(".full-screen-recipe-btn");
     this.addEventListeners();
   }
 
   //must refactor event listeners code
   addEventListeners() {
-    console.log(document.querySelector(".save-btn"));
     document
       .querySelector(".save-btn")
       .addEventListener("click", this.saveRecipe.bind(this));
+
+    this.closeBtn.addEventListener("click", this.hide.bind(this));
   }
   saveRecipe(e) {
     const saveBtn = e.target.closest(".save-btn");
@@ -35,16 +38,25 @@ class FullscreenRecipe extends Component {
     //handle saving to firebase
   }
 
-  open(e) {
-    const recipeId = e.target.closest(".recipe-result").dataset.recipeid;
-    const targetRecipe = this.recipeSearchResults.find((recipe, index) => {
+  async open(recipeId, enableBtns = true) {
+    let targetRecipe = this.recipeSearchResults.find((recipe, index) => {
       this.currentRecipeIndex = index;
       return recipe.id === recipeId;
     });
+    if (!targetRecipe) {
+      targetRecipe = await getRecipeById(recipeId);
+    }
     this.updateProperties(targetRecipe);
+    if (!enableBtns) {
+      this.hideNavigationBtns();
+    }
     this.display();
   }
-
+  hideNavigationBtns() {
+    this.navigationBtns.forEach((btn) => {
+      btn.classList.add("hidden");
+    });
+  }
   display() {
     this.resetFields();
     this.component.dataset.recipeid = this.currentRecipeID;
@@ -132,7 +144,7 @@ class FullscreenRecipe extends Component {
         </svg>
       </div>
       <div class="text">
-        <div class="save-btn">
+        <div class="save-btn full-screen-recipe-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -149,7 +161,7 @@ class FullscreenRecipe extends Component {
           </svg>
         </div>
 
-        <div class="next-btn">
+        <div class="next-btn full-screen-recipe-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -165,7 +177,7 @@ class FullscreenRecipe extends Component {
             />
           </svg>
         </div>
-        <div class="prev-btn">
+        <div class="prev-btn full-screen-recipe-btn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

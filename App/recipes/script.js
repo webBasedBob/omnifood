@@ -335,17 +335,11 @@ const addEventListeners = function () {
 
   //events for full screen recipe
   const resultsContainer = document.querySelector(".recipe-results");
-  resultsContainer.addEventListener(
-    "click",
-    FullscreenRecipe.open.bind(FullscreenRecipe)
-  );
-  const fullscreenCloseBtn = document.querySelector(
-    ".full-screen-recipe .close-btn"
-  );
-  fullscreenCloseBtn.addEventListener(
-    "click",
-    FullscreenRecipe.hide.bind(FullscreenRecipe)
-  );
+  resultsContainer.addEventListener("click", (e) => {
+    const recipeId = e.target.closest(".recipe-result").dataset.recipeid;
+    FullscreenRecipe.open(recipeId);
+  });
+
   const saveBtn = document.querySelector(".save-btn");
   const nextBtn = document.querySelector(".next-btn");
   const prevBtn = document.querySelector(".prev-btn");

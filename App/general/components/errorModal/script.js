@@ -20,6 +20,8 @@ class ErrorPopup extends BaseComponent {
       "You got to the end of results, there are no recipes after this one",
     "no-recipes-left-beginning":
       "You got to the first result, there are no recipes before this one",
+    "Failed to fetch":
+      "A problem occurred with our database, please come back in a few minutes",
   };
 
   constructor() {

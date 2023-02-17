@@ -7,6 +7,9 @@
   width: 100vw;
   background-color: #fdf2e9;
   overflow: hidden;
+  & svg {
+    height: 3rem !important;
+  }
   & .close-btn {
     cursor: pointer;
     position: absolute;

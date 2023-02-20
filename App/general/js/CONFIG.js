@@ -1,14 +1,14 @@
-export const firebaseConfig = {
-  apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
-  authDomain: "omnifood-custom-version.firebaseapp.com",
-  databaseURL:
-    "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "omnifood-custom-version",
-  storageBucket: "omnifood-custom-version.appspot.com",
-  messagingSenderId: "1094073505469",
-  appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
-  measurementId: "G-1DT1EYNVPW",
-};
+// export const firebaseConfig = {
+//   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
+//   authDomain: "omnifood-custom-version.firebaseapp.com",
+//   databaseURL:
+//     "https://omnifood-custom-version-default-rtdb.europe-west1.firebasedatabase.app",
+//   projectId: "omnifood-custom-version",
+//   storageBucket: "omnifood-custom-version.appspot.com",
+//   messagingSenderId: "1094073505469",
+//   appId: "1:1094073505469:web:92153bcbde9d51536f49d4",
+//   measurementId: "G-1DT1EYNVPW",
+// };
 
 export const EDAMAM_ACCOUNTS = [
   { id: "a5cea2be", key: "95cea576a8a53c23997c5ec6c40084b7" },

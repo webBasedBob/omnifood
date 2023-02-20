@@ -27,7 +27,7 @@ import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 import NotLoggedInScreen from "../../general/components/notLoggedInScreen/script";
-import { firebaseConfig, EDAMAM_ACCOUNTS } from "../../general/js/CONFIG.js";
+import { EDAMAM_ACCOUNTS } from "../../general/js/CONFIG.js";
 import ErrorPopup from "../../general/components/errorModal/script";
 import Loader from "../../general/components/loader/script";
 let edamamApiAccountIndex = 0;
@@ -627,21 +627,23 @@ const addEventListeners = function () {
   window.addEventListener("resize", debounce(handleCloseBtnsVisibility));
   const swiperComponent = document.querySelector(".swiper-component");
   swiperComponent.addEventListener("click", (e) => {
-    const openFullScreenRecipeBtnWasClicked =
-      e.target.closest(".recipe-card-component__button")?.dataset.event ===
-      "open-full-screen-recipe";
-    if (openFullScreenRecipeBtnWasClicked) {
-      const recipeId = e.target.closest(".recipe-card-component").dataset
-        .recipeid;
+    const recipeCard = e.target.closest(".recipe-card-component");
+    if (recipeCard) {
+      Loader.display();
+      const recipeId = recipeCard.dataset.recipeid;
       FullscreenRecipe.open(recipeId, false);
+      Loader.hide();
     }
   });
   const likedRecipesContainer = document.querySelector(".liked-recipes");
-  likedRecipesContainer.addEventListener("click", (e) => {
+  likedRecipesContainer.addEventListener("click", async (e) => {
     const recipeId = e.target.closest(".img-and-title-component")?.dataset
       .recipeid;
     if (!recipeId) return;
-    FullscreenRecipe.open(recipeId, false);
+    Loader.display();
+    await FullscreenRecipe.open(recipeId, false);
+    await imagesAreLoaded(".front-image");
+    Loader.hide();
   });
 };
 addEventListeners();

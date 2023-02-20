@@ -73,10 +73,6 @@ $height-recipe-card: 37rem;
   overflow: scroll;
   row-gap: 3rem;
   column-gap: 3rem;
-  // position: relative;
-  &:hover .img-and-title-component:not(:hover) {
-    opacity: 0.5;
-  }
   &::-webkit-scrollbar {
     display: none;
   }
@@ -103,6 +99,7 @@ $height-recipe-card: 37rem;
   display: flex;
   align-items: flex-end;
   transition: all 0.5s;
+  cursor: pointer;
   &__img {
     border-radius: 9px;
     height: 100%;
@@ -123,15 +120,8 @@ $height-recipe-card: 37rem;
     display: block;
     margin: 0 auto;
   }
-  &:hover &__img {
-    transform: translateY(-4.4rem);
-    box-shadow: 0 -10px 30px 5px rgba(85, 85, 85, 0.2);
-  }
-  &:hover {
-    transform: scale(1.2);
-    box-shadow: 0 10px 30px 5px rgba(85, 85, 85, 0.2);
-  }
 }
+
 .display-liked-recipes-btn {
   padding: 1.2rem 3rem;
   background: linear-gradient(to right, #e67e22, #e35a5c);
@@ -172,7 +162,7 @@ $height-recipe-card: 37rem;
 }
 .recipe-card-component {
   border-radius: 12px;
-
+  cursor: pointer;
   width: $width-recipe-card;
   height: $height-recipe-card;
   background: $gradient-main;
@@ -222,6 +212,7 @@ $height-recipe-card: 37rem;
     padding-left: 3rem;
   }
   &__button {
+    cursor: pointer;
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -250,10 +241,6 @@ $height-recipe-card: 37rem;
       transition: all 0.3s;
       background-color: #fff;
     }
-    &:hover::after {
-      transform: scaleX(1.5) scaleY(1.7);
-      opacity: 0;
-    }
   }
 }
 .action-btns {
@@ -261,6 +248,7 @@ $height-recipe-card: 37rem;
   gap: 5rem;
   z-index: 20;
   &__btn {
+    cursor: pointer;
     height: 4.8rem;
     width: 4.8rem;
     border-radius: 1000px;

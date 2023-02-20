@@ -326,10 +326,7 @@ const addEventListeners = function () {
   const ingredientsEvaluationContainer = document.querySelector(
     ".ingredients-to-evaluate"
   );
-  ingredientsEvaluationContainer.addEventListener(
-    "pointerdown",
-    evaluateIngredient
-  );
+  ingredientsEvaluationContainer.addEventListener("click", evaluateIngredient);
   const displayEvaluatedIngrBtn = document.querySelector(
     ".display-evaluated-ingredients-btn"
   );

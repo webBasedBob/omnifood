@@ -217,7 +217,7 @@ class AuthModal extends BaseComponent {
             class="auth-text-input"
             required
             pattern="(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Password must contain: 1 lowercase, 1 uppercase, 1 number"
+            title="8 characters long, incliding: 1 lowercase, 1 uppercase, 1 number"
           />
           <input
             type="submit"

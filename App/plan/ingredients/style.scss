@@ -4,6 +4,7 @@
 @import "../../general/components/navigation/style.scss";
 @import "../../general/components/breadcrumbs/style.scss";
 @import "../../general/components/loader/style.scss";
+@import "../../general/components/notLoggedInScreen/style.scss";
 
 // gradients for main color https://mycolor.space/?hex=%23E67E22&sub=1
 $color-background: #fdf2e9;
@@ -71,6 +72,7 @@ body {
   gap: 1.6rem;
   align-items: center;
   width: fit-content;
+  transition: all 0.2s;
   & .ingredient {
     z-index: 10;
     display: flex;
@@ -195,9 +197,6 @@ body {
         cursor: pointer;
       }
       transition: all 0.3s;
-      &:hover {
-        transform: scale(1.1);
-      }
     }
   }
   &.evaluated-ingredients__liked {
@@ -253,44 +252,5 @@ body {
     margin-top: 2rem;
     font-size: 3rem;
     letter-spacing: 3px;
-  }
-}
-.auth-me {
-  margin-top: 5rem;
-  background-color: #e67e22;
-  border: none;
-  font-size: 2rem;
-  padding: 1.6rem 3.2rem;
-  border-radius: 9px;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s;
-  position: relative;
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: translateY(7px);
-    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
-  }
-  &::after {
-    border-radius: 9px;
-    content: "";
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: all 0.3s;
-    background-color: #e67e22;
-  }
-  &:hover::after {
-    transform: scaleX(1.5) scaleY(1.7);
-    opacity: 0;
   }
 }

@@ -16,6 +16,7 @@
   "scripts": {
     "start": "parcel App/home/index.html",
     "build": "parcel build App/home/index.html",
-    "start-no-cache": "parcel App/home/index.html --no-cache"
+    "start-no-cache": "parcel App/home/index.html --no-cache",
+    "build-no-cache": "parcel build App/home/index.html --no-cache"
   }
 }

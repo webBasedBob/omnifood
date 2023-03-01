@@ -14,6 +14,7 @@ import {
 import ErrorPopup from "../general/components/errorModal/script.js";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
@@ -31,5 +32,4 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let user;
 
-import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
 document.addEventListener("click", globalEventsHandler);

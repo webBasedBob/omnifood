@@ -3,11 +3,9 @@ import { getDatabase, ref, onValue, set } from "firebase/database";
 import {
   toTitleCase,
   enableCarouselFunctionality,
-  pulapulapizdapizda,
   displayNotification,
 } from "../general/js/reusableFunctions.js";
 import { storeUserResume } from "../general/js/firebaseStorageFunctions.js";
-
 import {
   storeResumeNameOnly,
   getUserResumes,
@@ -16,17 +14,13 @@ import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import Notification from "../general/components/notification/script.js";
 import Navigation from "../general/components/navigation/script.js";
 import AuthModal from "../general/components/authModal/script.js";
-
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
-
-// const app = initializeApp(firebaseConfig);
-// const storage = getStorage(app);
-// const storageRef = ref(storage, "ingredients/");
-
-//
-//firebase related code
-//
-
+import {
+  hideBySlidingDown,
+  displayBySlidingDown,
+  rotate180deg,
+} from "../general/js/animations";
+import Loader from "../general/components/loader/script";
 let database = [];
 
 const firebaseConfig = {
@@ -49,20 +43,8 @@ const auth = getAuth(app);
 let user;
 onAuthStateChanged(auth, async (curUser) => {
   if (curUser) {
-    // displayPageContent();
     user = curUser;
   }
-  //   evaluatedIngredients = (await getIngredients(curUser.uid)) || {};
-  //   console.log(evaluatedIngredients);
-  //   renderAllIngredients();
-  //   renderFirebaseRecipes();
-  //   await checkAgainstEvaluatedRecipes(curUser.uid, []);
-  //   await getRecipesBasedOnUsersIngredients(curUser.uid);
-  //   renderNextRecipeCard();
-  // } else {
-  //   displayNotLoggedInScreen();
-  //   hidePageContent();
-  // }
 });
 
 const addMissingData = function (incompleteJobs) {
@@ -151,7 +133,7 @@ const createSearchCriteria = function () {
     ? document.querySelector(".main-search-field")
     : document.querySelector(".first-interaction-search-field");
   const filtersCheckboxes = document.querySelectorAll(
-    "filters input[type ='checkbox']"
+    ".filters input[type ='checkbox']"
   );
   const SearchCriteriaObj = {
     location: [],
@@ -669,7 +651,6 @@ const handleResumeUpload = function (e) {
 
 const handleDragOver = (e) => {
   e.preventDefault();
-  console.log(e);
   e.target.closest(".upload-resume").classList.add("drag-over");
 };
 const handleDragLeave = (e) => {
@@ -814,7 +795,7 @@ const addEventListeners = function () {
 //
 // actual function calls and their sequence
 //
-import Loader from "../general/components/loader/script";
+
 const urlCheckForJobId = function () {
   if (!window.location.hash) return;
   const id = window.location.hash.slice(1);
@@ -834,9 +815,3 @@ const init = async function () {
   addEventListeners();
 };
 init();
-
-import {
-  hideBySlidingDown,
-  displayBySlidingDown,
-  rotate180deg,
-} from "../general/js/animations";

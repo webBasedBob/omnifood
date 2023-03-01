@@ -1,11 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  listAll,
-  uploadBytes,
-} from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import {
   toTitleCase,
   extractRecipeId,
@@ -15,7 +9,6 @@ import {
 } from "../../general/js/reusableFunctions.js";
 import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
-  storeIngredient,
   getIngredients,
   storeRecipe,
   getRecipes,
@@ -31,7 +24,6 @@ import { EDAMAM_ACCOUNTS } from "../../general/js/CONFIG.js";
 import ErrorPopup from "../../general/components/errorModal/script";
 import Loader from "../../general/components/loader/script";
 let edamamApiAccountIndex = 0;
-document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -71,13 +63,10 @@ const storage = getStorage(app);
 const storageRef = ref(storage, "ingredients/");
 const auth = getAuth();
 
-//
-//global vars
-//
 let user;
 let currentRecipeIndex = 0;
 let recipesToEvaluate = [];
-//
+
 const displayNotLoggedInScreen = function () {
   const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
   notLoggedInScreen.classList.remove("hidden");
@@ -357,7 +346,7 @@ const saveBlobToFirebase = async function (blob, blobName) {
     const blobRef = ref(storage, `recipeImages/${blobName}.jpeg`);
     await uploadBytes(blobRef, blob);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -370,7 +359,7 @@ const getImgUrl = async function (imgName) {
     const url = await getDownloadURL(imgRef);
     return url;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 const functions = getFunctions();
@@ -606,6 +595,7 @@ const recipeSwiperInit = async function () {
 };
 
 const addEventListeners = function () {
+  document.addEventListener("click", globalEventsHandler);
   const swipeRightBtn = document.querySelector(".action-btns__btn__like");
   const swipeLeftBtn = document.querySelector(".action-btns__btn__dislike");
   swipeRightBtn.addEventListener("click", swipeRight);

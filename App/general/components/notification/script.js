@@ -21,7 +21,6 @@ class Notification extends BaseComponent {
     document.addEventListener("notification", this.display.bind(this));
   }
   display(notificationEvent) {
-    console.log("ce pula mea");
     const notificationText = notificationEvent.detail.notificationText;
     this.messageContainer.innerText = notificationText;
     super.display();

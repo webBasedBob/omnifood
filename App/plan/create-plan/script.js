@@ -1,34 +1,11 @@
-//code from choose meals
-//refactor it for reusability later!!!!!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!1
 import { initializeApp } from "firebase/app";
 import {
-  toTitleCase,
   debounce,
   imagesAreLoaded,
 } from "../../general/js/reusableFunctions.js";
-import {
-  ActionCodeURL,
-  getAuth,
-  linkWithRedirect,
-  onAuthStateChanged,
-} from "firebase/auth";
-import {
-  storeIngredient,
-  getIngredients,
-  storeRecipe,
-  getRecipes,
-} from "../../general/js/liveDatabaseFunctions.js";
-import {
-  getDatabase,
-  set,
-  ref,
-  get,
-  onValue,
-  child,
-  push,
-  update,
-} from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getRecipes } from "../../general/js/liveDatabaseFunctions.js";
+import { getDatabase, set, ref, onValue } from "firebase/database";
 
 import Notification from "../../general/components/notification/script.js";
 import Navigation from "../../general/components/navigation/script.js";
@@ -36,18 +13,7 @@ import AuthModal from "../../general/components/authModal/script.js";
 import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 import Loader from "../../general/components/loader/script";
-document.addEventListener("click", globalEventsHandler);
-//
-//to do:
-//handle errors
-//
-//
-//
-// document.body.style.touchAction = "none";
-// document.querySelector(".liked-recipes").style.touchAction = "none";
-// document
-//   .querySelectorAll(".chosen-meal-component")
-//   .forEach((component) => (component.style.touchAction = "none"));
+
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -171,89 +137,6 @@ const appendMealPlaceholder = function (container) {
   container.insertAdjacentHTML("afterbegin", html);
 };
 
-// let finalPosition = {};
-// let initialPosition = {};
-// let actionAborted = false;
-// const updatePointerPositionObj = function (e) {
-//   finalPosition.X = e.clientX;
-//   finalPosition.Y = e.clientY;
-// };
-// const abortAction = function () {
-//   actionAborted = true;
-//   document.removeEventListener("pointerup", abortAction);
-//   document.removeEventListener("pointermove", updatePointerPositionObj);
-// };
-// const handleStart = () => {
-//   console.log("start");
-// };
-// const handleEnd = () => {
-//   console.log("end");
-// };
-// const handleCancel = (e) => {
-//   e.preventDefault();
-//   console.log("cancel");
-// };
-// const handleMove = () => {
-//   console.log("move");
-// };
-// const handlecontextmenu = (e) => {
-//   e.preventDefault();
-//   document.querySelector(".liked-recipes").style.touchAction = "none";
-//   console.log("context");
-//   console.log(e);
-//   e.target.dispatchEvent(
-//     new MouseEvent("mousedown", { clientX: e.clientX, clientY: e.clientY })
-//   );
-//   // dragMeal(e);
-// };
-// document.addEventListener("contextmenu", handlecontextmenu);
-// const handleDragPula = function (e) {
-//   console.log(e);
-//   e.preventDefault();
-//   document.querySelector(".liked-recipes").style.touchAction = "none";
-//   document.addEventListener("touchstart", handleStart);
-//   document.addEventListener("touchend", handleEnd);
-//   document.addEventListener("touchcancel", handleCancel);
-//   document.addEventListener("touchmove", handleMove);
-//   document.addEventListener("contextmenu", handlecontextmenu);
-
-//   if (e.pointerType === "touch") {
-//     initialPosition.X = e.clientX;
-//     initialPosition.Y = e.clientY;
-//     updatePointerPositionObj(e);
-//     document.addEventListener("pointermove", updatePointerPositionObj);
-//     document.addEventListener("pointerup", abortAction);
-//     console.log(finalPosition, initialPosition, actionAborted);
-//     setTimeout(() => {
-//       // document.dispatchEvent(new PointerEvent("pointerup"));
-//       const pointerNotMoved =
-//         initialPosition.X > finalPosition.X - 10 &&
-//         initialPosition.X < finalPosition.X + 10 &&
-//         initialPosition.Y > finalPosition.Y - 10 &&
-//         initialPosition.Y < finalPosition.Y + 10;
-//       const dragMustStart = !actionAborted && pointerNotMoved;
-//       console.log(finalPosition, initialPosition, actionAborted);
-//       document.removeEventListener("pointermove", updatePointerPositionObj);
-//       // document.querySelector(".liked-recipes").style.touchAction = "";
-//       if (dragMustStart) {
-//         dragMeal(e);
-//       }
-//       document.removeEventListener("pointermove", updatePointerPositionObj);
-//     }, 500);
-//   }
-// };
-
-// const handleDrag = function (e) {
-//   // document.querySelector(".liked-recipes").style.touchAction = "pan-y";
-
-//   console.log(e);
-//   if (e.pointerType === "mouse" || true) {
-//     dragMeal(e);
-//   } else {
-//     document.addEventListener("contextmenu", handlecontextmenu);
-//   }
-// };
-
 const dragMeal = function (e) {
   //handles all it takes to enable drag and drop for meal components
 
@@ -331,19 +214,6 @@ const dragMeal = function (e) {
     appendMealPlaceholder(recipeContainer);
   } else {
     recipeClone = clickedRecipe.cloneNode(true);
-    // const handleCancelss = (e) => {
-    //   e.preventDefault();
-    //   console.log("cancel", e);
-    //   recipeClone.click();
-    //   e.target.dispatchEvent(
-    //     new PointerEvent("pointerdown", {
-    //       clientX: e.clientX,
-    //       clientY: e.clientY,
-    //     })
-    //   );
-    // };
-    // document.addEventListener("pointercancel", handleCancelss);
-    // recipeClone.style.touchAction = "none";
     draggedMealClass = "dragging-liked";
   }
 
@@ -363,9 +233,6 @@ const dragMeal = function (e) {
   document.addEventListener("pointermove", updateClonePosition);
 
   document.addEventListener("pointerup", handleDrop);
-  // document.addEventListener("pointercancel", () => {
-  //   console.log("canceled");
-  // });
 };
 
 const toDateStringOptions = {
@@ -709,18 +576,8 @@ const handleSaveBtnClick = function () {
       nextWeek.click();
     }
   }
-  // const firstBreadcrumb = document.querySelector(".breadcrumb__first");
-  // firstBreadcrumb.click();
 };
 
-// const handleFirstBreadcrumbClick = function (e) {
-//   const mealToDisplay = document.querySelector(".chosen-meal-component__first");
-//   const mealToHide = document.querySelector(".chosen-meal-component__second");
-//   mealToDisplay.classList.add("flex");
-//   mealToHide.classList.add("hidden");
-//   mealToDisplay.classList.remove("hidden");
-//   mealToHide.classList.remove("flex");
-// };
 //this must be finetuned
 const handleBreadcrumbsClick = function (e) {
   const breadcrumbs = e.target
@@ -768,15 +625,6 @@ const openLikedRecipesWindow = function (e) {
   likedRecipesContainer.addEventListener("click", selectRecipe);
 };
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
 const dragMealTouch = function (e) {
   e.preventDefault();
   //handles all it takes to enable drag and drop for meal components
@@ -811,17 +659,12 @@ const dragMealTouch = function (e) {
 
   const updateClonePosition = function (event) {
     //makes the clone follow the pointer
-    console.log(event);
     recipeClone.style.top = `${
       parseInt(event.changedTouches[0].pageY) - parseInt(shiftY)
     }px`;
     recipeClone.style.left = `${
       parseInt(event.changedTouches[0].pageX) - parseInt(shiftX)
     }px`;
-    console.log(
-      `${parseInt(event.changedTouches[0].pageY) - parseInt(shiftY)}px`,
-      `${parseInt(event.changedTouches[0].pageX) - parseInt(shiftX)}px`
-    );
     updateElemBelow(event);
 
     //if pointer is on top of meal placeholder, placeholder is highlighted
@@ -839,7 +682,6 @@ const dragMealTouch = function (e) {
 
   const handleDrop = function (e) {
     // document.removeEventListener("pointermove", updateClonePosition);
-    console.log("dropped");
     const onDroppableArea =
       elemBelow &&
       (elemBelow.closest(".meal-component.meal-placeholder") ||
@@ -891,9 +733,7 @@ const addEventListeners = function () {
   const chosenRecipesContainer = document.querySelector(
     ".chosen-meal-component-wrapper"
   );
-  // chosenRecipesContainer.addEventListener("pointerdown", dragMeal);
   chosenRecipesContainer.addEventListener("pointerdown", dragMeal);
-  // chosenRecipesContainer.addEventListener("touchstart", dragMeal);
   const chooseWeekBtn = document.querySelector(".current-week");
   chooseWeekBtn.addEventListener("click", handleWeeksWindowDisplay);
   const weeksWindow = document.querySelector(".available-weeks");
@@ -913,6 +753,7 @@ const addEventListeners = function () {
     ".chosen-meal-component-wrapper"
   );
   mealPlaceholdersContainer.addEventListener("click", openLikedRecipesWindow);
+  document.addEventListener("click", globalEventsHandler);
 };
 // addEventListeners();
 const handleViewportResize = function () {
@@ -928,27 +769,9 @@ const handleViewportResize = function () {
   const likedRecipesContainer = document.querySelector(".liked-recipes");
   if (viewportWidth >= 700) {
     likedRecipesContainer.addEventListener("pointerdown", dragMeal);
-    // likedRecipesContainer.addEventListener("touchstart", dragMeal);
   } else {
     likedRecipesContainer.removeEventListener("pointerdown", dragMeal``);
-    // likedRecipesContainer.removeEventListener("touchstart", dragMeal);
   }
 };
 
 handleViewportResize();
-// const handleStart = () => {
-//   console.log("start");
-// };
-// const handleEnd = () => {
-//   console.log("end");
-// };
-// const handleCancel = () => {
-//   console.log("cancel");
-// };
-// const handleMove = () => {
-//   console.log("move");
-// };
-// document.addEventListener("touchstart", handleStart);
-// document.addEventListener("touchend", handleEnd);
-// document.addEventListener("touchcancel", handleCancel);
-// document.addEventListener("touchmove", handleMove);

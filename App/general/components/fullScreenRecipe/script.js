@@ -90,7 +90,6 @@ class FullscreenRecipe extends Component {
 
   prevRecipe() {
     try {
-      console.log("pppspbs");
       this.currentRecipeIndex--;
       this.updateProperties(this.recipeSearchResults[this.currentRecipeIndex]);
       this.display();

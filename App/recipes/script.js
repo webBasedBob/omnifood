@@ -1,30 +1,13 @@
 import {
   enableCarouselFunctionality,
   cleanStrFromSymbolsAndUselessSpaces,
-  toTitleCase,
   throwError,
-  displayNotification,
   extractRecipeId,
   imagesAreLoaded,
 } from "../general/js/reusableFunctions.js";
 
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-  updateProfile,
-  updatePhoneNumber,
-  updateEmail,
-  updatePassword,
-  sendPasswordResetEmail,
-  deleteUser,
-  reauthenticateWithCredential,
-  EmailAuthProvider,
-  verifyIdToken,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import Notification from "../general/components/notification/script";
 import Navigation from "../general/components/navigation/script.js";
@@ -32,23 +15,11 @@ import AuthModal from "../general/components/authModal/script";
 import ErrorPopup from "../general/components/errorModal/script";
 import FullscreenRecipe from "../general/components/FullscreenRecipe/script";
 import Loader from "../general/components/loader/script";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  listAll,
-  uploadBytes,
-} from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
-import {
-  storeIngredient,
-  getIngredients,
-  storeRecipe,
-  getRecipes,
-} from "../general/js/liveDatabaseFunctions.js";
+import { storeRecipe } from "../general/js/liveDatabaseFunctions.js";
 import { globalEventsHandler } from "../general/js/crossSiteFunctionality.js";
-document.addEventListener("click", globalEventsHandler);
-//hiding the carousel for now
+
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -213,7 +184,6 @@ const recipeSearch = async function () {
     storeRecipesGlobally(recipesArray);
     createRelevanceScores(recipesArray);
     renderResults(recipesArray);
-    console.log("puls");
     await imagesAreLoaded(".recipe-results>div>img");
     sortResults();
   }
@@ -247,13 +217,6 @@ const storeRecipesGlobally = function (recipesArr) {
   });
 };
 
-//
-//
-//the fowwlowing code is copyed from choosemeals.js
-//
-//
-//
-
 const saveBlobToFirebase = async function (blob, blobName) {
   //takes a blob and stores it to firebase cloud storage
   //firebase cloud storage accepts only blobs or files
@@ -262,7 +225,7 @@ const saveBlobToFirebase = async function (blob, blobName) {
     const blobRef = ref(storage, `recipeImages/${blobName}.jpeg`);
     await uploadBytes(blobRef, blob);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -275,7 +238,7 @@ const getImgUrl = async function (imgName) {
     const url = await getDownloadURL(imgRef);
     return url;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -324,6 +287,7 @@ const handleSaveRecipe = async function (e) {
 };
 
 const addEventListeners = function () {
+  document.addEventListener("click", globalEventsHandler);
   const filtersContainer = document.querySelector(".carousels-container");
   const searchBtn = document.querySelector(".btn-search");
   const clearSearchBarBtn = document.querySelector(".clean-search-field");

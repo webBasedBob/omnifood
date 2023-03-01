@@ -271,7 +271,6 @@ const jobActionOptions = {
       console.error(err);
     } finally {
       if (actionType === "single") {
-        console.log("ppp");
         await pula();
         renderJobs(jobs);
       }
@@ -286,7 +285,6 @@ const jobActionOptions = {
       console.error(err);
     } finally {
       if (actionType === "single") {
-        console.log("ppp");
         await pula();
         renderJobs(jobs);
       }
@@ -330,7 +328,6 @@ const handleJobOptions = async function (e) {
 
   actionType = "single";
   const actionToTake = e.target.dataset.action;
-  console.log(actionToTake);
   jobActionOptions[actionToTake]();
 };
 const toggleBulkOptionsWindow = function () {
@@ -353,7 +350,6 @@ const handleBulkActions = function (e) {
   const emails = checkedRows.map((row) => {
     return row.children[2].children[0].innerText;
   });
-  console.log(emails);
   emails.forEach((email) => {
     moreOptionsTargetEmail = email;
     jobActionOptions[actionToTake]();

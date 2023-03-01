@@ -3,16 +3,9 @@ import Navigation from "../../general/components/navigation/script.js";
 import AuthModal from "../../general/components/authModal/script.js";
 
 import { initializeApp } from "firebase/app";
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  listAll,
-  uploadBytes,
-} from "firebase/storage";
+import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 import {
   toTitleCase,
-  extractRecipeId,
   debounce,
   imagesAreLoaded,
 } from "../../general/js/reusableFunctions.js";
@@ -20,13 +13,10 @@ import { getAuth, linkWithRedirect, onAuthStateChanged } from "firebase/auth";
 import {
   storeIngredient,
   getIngredients,
-  storeRecipe,
-  getRecipes,
 } from "../../general/js/liveDatabaseFunctions.js";
 import { NotLoggedInScreen } from "../../general/components/notLoggedInScreen/script.js";
 import { globalEventsHandler } from "../../general/js/crossSiteFunctionality.js";
 import Loader from "../../general/components/loader/script";
-document.addEventListener("click", globalEventsHandler);
 const firebaseConfig = {
   apiKey: "AIzaSyCuCBob9JTkZveeOtZa2oRfLtZKf5aODek",
   authDomain: "omnifood-custom-version.firebaseapp.com",
@@ -63,13 +53,9 @@ const storage = getStorage(app);
 const storageRef = ref(storage, "ingredients/");
 const auth = getAuth();
 
-//
-//global vars
-//
 let user;
 let evaluatedIngredients;
 
-//
 const displayNotLoggedInScreen = function () {
   const notLoggedInScreen = document.querySelector(".not-logged-in-screen");
   notLoggedInScreen.classList.remove("hidden");
@@ -346,5 +332,6 @@ const addEventListeners = function () {
     ".evaluated-ingredients-wrapper"
   );
   evaluatedIngrContainer.addEventListener("click", removeEvaluatedIngredient);
+  document.addEventListener("click", globalEventsHandler);
 };
 addEventListeners();
